@@ -91,6 +91,7 @@ function renderReport({ universe, universeErr, scrapes, pageMap, avgMs, projecti
   const L = [];
   const p = (...x) => L.push(...x);
   const b = (v) => (v ? '✅' : '❌');
+  const indiaCount = universe ? (universe.by_exchange?.NS || 0) + (universe.by_exchange?.BO || 0) : null;
 
   p('# valueinvesting.io DCF — Scraper & Universe Strategy (Prompt 2)', '');
   p(`- Generated: \`${new Date().toISOString()}\` on GitHub Actions \`${process.env.RUNNER_OS || '?'}\`, Node \`${process.version}\``);
@@ -100,7 +101,7 @@ function renderReport({ universe, universeErr, scrapes, pageMap, avgMs, projecti
   p('## TL;DR', '');
   p(`- **Data carrier: embedded JSON in an inline \`<script>\` (\`window.most\`)** — robust field dictionary, NOT brittle DOM scraping. We parse the blob.`);
   p(`- **One fetch per company** returns the **entire DCF family** (growth-exit & ebitda-exit × 5y/10y) + EPV/DDM/multiples. The "gated" 10y/ebitda *pages* (403) are redundant — their data is in the free 5y page's blob.`);
-  p(`- **Universe: ${universe?.total ?? '?'} tickers** enumerated from ${universe?.sub_sitemaps?.length ?? '?'} sitemap(s).`);
+  p(`- **Universe: ${universe?.total ?? '?'} tickers** from ${universe?.sub_sitemaps?.length ?? '?'} sitemap(s) — but **${indiaCount === 0 ? '0 are Indian (.NS/.BO)' : indiaCount + ' Indian'}**. The public sitemap is global **ex-India**; India needs an alternate enumeration source (see Q3). ⚠️ blocker for the India-focused universe.`);
   p(`- **Projected full run: ~${projection ? projection.parallel_8_hours : '?'} h @ 8-way (${projection ? projection.serial_hours : '?'} h serial), avg ${avgMs ?? '?'} ms/company** → comfortably weekly.`);
   p('');
 
@@ -128,6 +129,14 @@ function renderReport({ universe, universeErr, scrapes, pageMap, avgMs, projecti
     p(`- Sample: ${universe.tickers.slice(0, 12).map((t) => '`' + t.ticker + '`').join(', ')}`);
     if (universe.rejected_segment_sample?.length) p(`- Non-ticker segments skipped (sample): ${universe.rejected_segment_sample.slice(0, 12).map((s) => '`' + s + '`').join(', ')}`);
     p(`- Written to \`public/data/universe.json\`. **Names** are not in sitemaps → backfilled from each scraped doc's \`name\` during the full run (Prompt 3); the 4 test docs already carry names.`);
+    if (indiaCount === 0) {
+      p('');
+      p('> ⚠️ **CRITICAL for an India-focused product: the sitemap contains ZERO Indian (`.NS`/`.BO`) tickers.** Coverage is global *ex-India* (London/US/EU/Canada/China/…). Individual Indian pages work (all 4 test tickers 200), so India exists on the site but is **not in the public sitemap**. Options to enumerate the Indian universe in Prompt 3:');
+      p('> 1. **typeahead data source** — the page loads `/static/js/typeahead.js`; inspect it for a static all-tickers JSON (may include India).');
+      p('> 2. **NSE/BSE master list** — seed from the official NSE/BSE equity lists (CSV) and probe each on valueinvesting.io.');
+      p('> 3. **peer-graph crawl** — each doc carries `peers` (e.g. RELIANCE→IOC.NS/BPCL.NS/HINDPETRO.NS); BFS from Indian seeds.');
+      p('> 4. **hidden/region sitemaps** — probe `sitemap3.xml`, `sitemap-in.xml`, etc. not listed in the index.');
+    }
   }
   p('');
 
@@ -178,7 +187,7 @@ function renderReport({ universe, universeErr, scrapes, pageMap, avgMs, projecti
   p('- #7 fail after push retries exhausted → workflow exits non-zero if commit-back never pushes.');
   p('- #8 per-entry isolation → each ticker parsed independently; per-variant `try/catch`; no cross-ticker signal bleed.');
   p('- #10 token-safe numbers → structured field lookup + `cleanNum()` (no substring number matching).');
-  p('- #1/#2/#4 (recon trace/heuristic/RSC) → N/A to a structured-blob scraper; the recon files were also patched and threads resolved.');
+  p('- #1/#2/#4 (recon trace-source / branch-order / RSC dump) → specific to the recon heuristic; N/A to a structured-blob scraper. The recon spike is superseded by this scraper for data extraction and its verdict was independently hand-verified, so these never affected it. Threads resolved with that disposition (recon spike not retrofitted).');
   p('- Plus: per-variant `try/catch`, `null`/stub on failure, and a `_debug` block in every output.', '');
 
   return L.join('\n');

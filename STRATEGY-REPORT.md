@@ -8,7 +8,7 @@
 
 - **Data carrier: embedded JSON in an inline `<script>` (`window.most`)** — robust field dictionary, NOT brittle DOM scraping. We parse the blob.
 - **One fetch per company** returns the **entire DCF family** (growth-exit & ebitda-exit × 5y/10y) + EPV/DDM/multiples. The "gated" 10y/ebitda *pages* (403) are redundant — their data is in the free 5y page's blob.
-- **Universe: 8391 tickers** enumerated from 2 sitemap(s).
+- **Universe: 8391 tickers** from 2 sitemap(s) — but **0 are Indian (.NS/.BO)**. The public sitemap is global **ex-India**; India needs an alternate enumeration source (see Q3). ⚠️ blocker for the India-focused universe.
 - **Projected full run: ~0.02 h @ 8-way (0.17 h serial), avg 72 ms/company** → comfortably weekly.
 
 ## Q1 — Data carrier
@@ -44,6 +44,12 @@ Page-level HTTP status (anonymous, `RELIANCE.NS`):
 - Sample: `1SN.L`, `24STOR.ST`, `2CRSI.PA`, `2CUREX.ST`, `2MX.PA`, `3IN.L`, `3KR.ST`, `4BB.L`, `4C.ST`, `4GBL.L`, `7DIG.L`, `888.L`
 - Non-ticker segments skipped (sample): `forgot`, `ideas`, `APR.UN.TO`, `AW.UN.TO`, `BEI.UN.TO`, `BPF.UN.TO`, `BTB.UN.TO`, `CAR.UN.TO`, `CHE.UN.TO`, `CIQ.UN.TO`, `CSH.UN.TO`, `CUF.UN.TO`
 - Written to `public/data/universe.json`. **Names** are not in sitemaps → backfilled from each scraped doc's `name` during the full run (Prompt 3); the 4 test docs already carry names.
+
+> ⚠️ **CRITICAL for an India-focused product: the sitemap contains ZERO Indian (`.NS`/`.BO`) tickers.** Coverage is global *ex-India* (London/US/EU/Canada/China/…). Individual Indian pages work (all 4 test tickers 200), so India exists on the site but is **not in the public sitemap**. Options to enumerate the Indian universe in Prompt 3:
+> 1. **typeahead data source** — the page loads `/static/js/typeahead.js`; inspect it for a static all-tickers JSON (may include India).
+> 2. **NSE/BSE master list** — seed from the official NSE/BSE equity lists (CSV) and probe each on valueinvesting.io.
+> 3. **peer-graph crawl** — each doc carries `peers` (e.g. RELIANCE→IOC.NS/BPCL.NS/HINDPETRO.NS); BFS from Indian seeds.
+> 4. **hidden/region sitemaps** — probe `sitemap3.xml`, `sitemap-in.xml`, etc. not listed in the index.
 
 ## Q4 — Runtime
 
@@ -123,5 +129,5 @@ Variant-agnostic; every DCF family member fits the same shape. One document per 
 - #7 fail after push retries exhausted → workflow exits non-zero if commit-back never pushes.
 - #8 per-entry isolation → each ticker parsed independently; per-variant `try/catch`; no cross-ticker signal bleed.
 - #10 token-safe numbers → structured field lookup + `cleanNum()` (no substring number matching).
-- #1/#2/#4 (recon trace/heuristic/RSC) → N/A to a structured-blob scraper; the recon files were also patched and threads resolved.
+- #1/#2/#4 (recon trace-source / branch-order / RSC dump) → specific to the recon heuristic; N/A to a structured-blob scraper. The recon spike is superseded by this scraper for data extraction and its verdict was independently hand-verified, so these never affected it. Threads resolved with that disposition (recon spike not retrofitted).
 - Plus: per-variant `try/catch`, `null`/stub on failure, and a `_debug` block in every output.
