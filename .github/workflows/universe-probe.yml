@@ -1,0 +1,49 @@
+name: universe-probe
+
+# One-shot discovery: find a source for the INDIAN ticker universe (VI search
+# source / hidden sitemaps / NSE-BSE list loading from the runner). Echoes a
+# report to the log and commits recon/universe-probe.json back.
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - claude/optimistic-sagan-hmur0e
+    paths:
+      - 'scraper/probe-universe-sources.mjs'
+      - '.github/workflows/universe-probe.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: universe-probe-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Probe universe sources
+        run: node scraper/probe-universe-sources.mjs
+      - name: Commit probe diagnostics
+        if: always()
+        run: |
+          set -e
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f recon/universe-probe.json || true
+          if git diff --cached --quiet; then echo "no diagnostics to commit"; exit 0; fi
+          git commit -m "universe-probe: source discovery diagnostics [skip ci]"
+          BR="${{ github.ref_name }}"; n=0
+          until [ "$n" -ge 5 ]; do
+            git push origin "HEAD:$BR" && break
+            n=$((n+1)); git fetch origin "$BR" || true; git rebase "origin/$BR" || git rebase --abort || true; sleep "$((2**n))"
+          done
