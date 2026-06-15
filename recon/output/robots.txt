@@ -1,0 +1,24 @@
+User-agent: Googlebot
+Disallow: /*epv$
+Disallow: /*dcf-ebitda-exit-5y$
+Disallow: /*dcf-ebitda-exit-10y$
+Disallow: /*dcf-growth-exit-10y$
+Disallow: /*ddm-stable$
+Disallow: /*ddm-growth$
+Disallow: /*overview$
+Disallow: /*financials$
+Disallow: /*compare$
+Disallow: /*historical-price$
+Disallow: /*insider-transaction$
+Disallow: /*people$
+Disallow: /*all-watchlists$
+Disallow: /*updatelastweb$
+Disallow: /*valuation-overview$
+Disallow: /*valuation-metrics$
+Disallow: /*short-interest$
+Disallow: /*institutional-portfolios
+Disallow: /*l10n.js$
+Disallow: /discover
+
+
+sitemap: https://valueinvesting.io/sitemap.xml

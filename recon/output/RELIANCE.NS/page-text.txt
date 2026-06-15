@@ -1,0 +1,78 @@
+Search tickers (stock/ETF/mutual fund)...
+Screener
+Watchlist
+Charts
+Gurus
+Filings Search
+Register
+RELIANCE.NSReliance Industries LtdPrice:  1,293 INRVolume:  11,988,785
+India | Oil, Gas & Consumable Fuels
+Add to Watchlist
+ValuationOverviewFinancialsForecastCompareHistorical PriceDividendsTransactionsPeople
+Valuation Summary
+Discounted Cash Flow
+Trading Multiples
+Peter Lynch Fair Value
+Earnings Power Value
+Dividend Discount Model
+WACC
+Similar Stocks to RELIANCE.NS
+IOC.NS
+Indian Oil Corporation Ltd
+5020.T
+Eneos Holdings Inc
+BPCL.NS
+Bharat Petroleum Corporation Ltd
+5019.T
+Idemitsu Kosan Co Ltd
+HINDPETRO.NS
+Hindustan Petroleum Corp Ltd
+5021.T
+Cosmo Energy Holdings Co Ltd
+RELIANCE.NS DCF Valuation - Growth Exit 5Y
+Growth Exit - 5Y 
+-46.3 %
+Upside
+What is the DCF valuation of RELIANCE.NS?
+
+The Discounted Cash Flow (DCF) valuation of Reliance Industries Ltd (RELIANCE.NS) is 694.05 INR. With the latest stock price at 1,293.00 INR, the upside of Reliance Industries Ltd based on DCF is -46.3%.
+
+Is RELIANCE.NS a buy or a sell?
+
+Based on the latest price of 1,293.00 INR and our DCF valuation, Reliance Industries Ltd (RELIANCE.NS) is a sell. Selling RELIANCE.NS stocks now will result in a potential gain of 46.3%.
+
+	Range	Selected
+WACC / Discount Rate	12.4% - 15.2%	13.8%
+Long-term Growth Rate	1.0% - 3.0%	2.0%
+Fair Price	565.88 - 887.46	694.05
+Upside	-56.2% - -31.4%	-46.3%
+1,293.00 INR
+Stock Price
+694.05 INR
+Fair Price
+REVENUE & EXPENSESCAPEXD&AWORKING CAPITALTERMINAL VALUE
+RELIANCE.NS DCF Valuation: Revenue & Expenses Forecast
+(INR in millions)		Projections
+
+	03-2026	03-2027	03-2028	03-2029	03-2030	03-2031
+
+Revenue	10,756,750	11,970,732	12,710,803	12,678,439	13,924,977	15,284,755
+% Growth	10%	11%	6%	0%	10%	10%
+
+Cost of goods sold	(7,381,350)	(8,050,104)	(8,376,833)	(8,188,394)	(8,813,603)	(9,480,769)
+% of Revenue	69%	67%	66%	65%	63%	62%
+
+Selling, G&A expenses	(1,617,570)	(1,800,125)	(1,911,415)	(1,906,548)	(2,093,999)	(2,298,479)
+% of Revenue	15%	15%	15%	15%	15%	15%
+
+Research & Development	0	0	0	0	0	0
+% of Revenue	0%	0%	0%	0%	0%	0%
+
+Net interest & other expenses	(526,210)	(585,597)	(621,800)	(620,217)	(681,197)	(747,716)
+% of Revenue	5%	5%	5%	5%	5%	5%
+
+Tax expense	(275,520)	(343,367)	(402,838)	(439,196)	(522,615)	(616,933)
+Tax rate	22%	22%	22%	22%	22%	22%
+	
+Net profit	956,100	1,191,539	1,397,916	1,524,083	1,813,562	2,140,858
+% Margin	9%	10%	11%	12%	13%	14%

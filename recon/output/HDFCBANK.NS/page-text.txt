@@ -1,0 +1,180 @@
+Search tickers (stock/ETF/mutual fund)...
+Screener
+Watchlist
+Charts
+Gurus
+Filings Search
+Register
+HDFCBANK.NSHDFC Bank LtdPrice:  772.45 INRVolume:  36,088,160
+India | Banks
+Add to Watchlist
+ValuationOverviewFinancialsForecastCompareHistorical PriceDividendsTransactionsPeople
+Valuation Summary
+Trading Multiples
+Peter Lynch Fair Value
+Dividend Discount Model
+WACC
+Similar Stocks to HDFCBANK.NS
+ICICIBANK.NS
+ICICI Bank Ltd
+SBIN.NS
+State Bank of India
+KOTAKBANK.NS
+Kotak Mahindra Bank Ltd
+AXISBANK.NS
+Axis Bank Ltd
+BANKBARODA.NS
+Bank of Baroda Ltd
+PNB.NS
+Punjab National Bank
+HDFCBANK.NS WACC - Weighted Average Cost of Capital
+
+The WACC of HDFC Bank Ltd (HDFCBANK.NS) is 12.3%.
+
+The Cost of Equity of HDFC Bank Ltd (HDFCBANK.NS) is 16.55%.
+The Cost of Debt of HDFC Bank Ltd (HDFCBANK.NS) is 5%.
+
+	Range	Selected
+Cost of equity	15.1% - 18.0%	16.55%
+Tax rate	23.2% - 24.2%	23.7%
+Cost of debt	5.0% - 5.0%	5%
+WACC	11.4% - 13.3%	12.3%
+WACC
+HDFCBANK.NS WACC calculation
+Category	Low	High
+
+Long-term bond rate	6.9%	7.4%
+Equity market risk premium	8.3%	9.3%
+Adjusted beta	0.99	1.09
+
+Additional risk adjustments	0.0%	0.5%
+Cost of equity	15.1%	18.0%
+
+Tax rate	23.2%	24.2%
+Debt/Equity ratio	0.49	0.49
+Cost of debt	5.0%	5.0%
+
+After-tax WACC	11.4%	13.3%
+
+
+Selected WACC	12.3%	
+
+HDFCBANK.NS WACC - Detailed calculations of Beta
+		Debt/Equity		Unlevered
+Peers	Company Name	ratio	Beta	beta
+
+HDFCBANK.NS	HDFC Bank Ltd	0.49	1.1	0.8
+
+AXISBANK.NS
+	
+Axis Bank Ltd
+	
+0.67
+	
+1.29
+	
+0.86
+
+
+BANKBARODA.NS
+	
+Bank of Baroda Ltd
+	
+1.2
+	
+1.11
+	
+0.58
+
+
+BANKINDIA.NS
+	
+Bank of India Ltd
+	
+1.81
+	
+0.98
+	
+0.41
+
+
+ICICIBANK.NS
+	
+ICICI Bank Ltd
+	
+0.23
+	
+1
+	
+0.85
+
+
+INDUSINDBK.NS
+	
+Indusind Bank Ltd
+	
+0.6
+	
+1.4
+	
+0.96
+
+
+KOTAKBANK.NS
+	
+Kotak Mahindra Bank Ltd
+	
+0.22
+	
+0.97
+	
+0.84
+
+
+PNB.NS
+	
+Punjab National Bank
+	
+0.9
+	
+1.36
+	
+0.81
+
+
+SBIN.NS
+	
+State Bank of India
+	
+0.86
+	
+0.82
+	
+0.5
+
+
+SOUTHBANK.NS
+	
+South Indian Bank Ltd
+	
+0.32
+	
+0.62
+	
+0.5
+	Low	High
+
+Unlevered beta	0.71	0.82
+Relevered beta	0.99	1.13
+Adjusted relevered beta	0.99	1.09
+HDFCBANK.NS's CAPM model and how its cost of Equity is calculated
+
+The Cost of Equity reflects the return a company needs to deliver to shareholders to justify the risk of investing in its shares. It’s computed using the Capital Asset Pricing Model (CAPM), which blends the risk-free rate, the stock’s beta, and the market risk premium.
+
+This method evaluates the stock’s risk compared to a safe investment and the market’s overall volatility.
+
+Here’s how we figure out the cost of equity for HDFCBANK.NS:
+
+cost_of_equity (16.55%) = risk_free_rate (7.15%) + equity_risk_premium (8.80%) * adjusted_beta (0.99) + risk_adjustments (0.25%)
+
+We include the risk adjustments, which range from 0% to 1%, to keep our WACC conservatives, especially for companies traded in developing markets.
