@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0.0",
+  "scraped_at": "2026-06-15T07:51:46.903Z",
+  "ticker": "ASHIMASYN.NS",
+  "name": null,
+  "exchange": null,
+  "currency": null,
+  "country": null,
+  "sector": null,
+  "industry": null,
+  "as_of": null,
+  "price_current": null,
+  "shares_outstanding": null,
+  "net_debt": null,
+  "market_cap": null,
+  "revenue_ttm": null,
+  "net_income_ttm": null,
+  "ebitda_current": null,
+  "eps_ttm": null,
+  "beta": null,
+  "is_financial": false,
+  "wacc": null,
+  "shared_projection": [],
+  "assumptions_raw": null,
+  "model_tables": {},
+  "variants": {},
+  "other_valuations": {},
+  "source": {
+    "carrier": null,
+    "url": "https://valueinvesting.io/ASHIMASYN.NS/valuation/dcf-growth-exit-5y",
+    "fetched_via": "fetch",
+    "raw_ref": "https://valueinvesting.io/ASHIMASYN.NS/valuation/dcf-growth-exit-5y"
+  },
+  "_debug": {
+    "html_bytes": 0,
+    "carrier_found": false,
+    "field_count": 0,
+    "warnings": [
+      "fetch failed: HTTP 429"
+    ],
+    "variant_status": {},
+    "fetch_ms": null,
+    "http_status": null,
+    "error": "fetch failed: HTTP 429"
+  }
+}

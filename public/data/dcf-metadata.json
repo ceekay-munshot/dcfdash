@@ -1,0 +1,96 @@
+{
+  "generated_at": "2026-06-15T07:51:50.745Z",
+  "universe_total": 1134,
+  "start_at": 0,
+  "slice": 100,
+  "next_cursor": 100,
+  "attempted": 100,
+  "succeeded": 79,
+  "no_dcf": 2,
+  "failed": 19,
+  "stale_kept": 0,
+  "avg_ms_per_company": 521,
+  "duration_s": 52.1,
+  "failures": [
+    {
+      "ticker": "ACCURACY.NS",
+      "reason": "fetch failed: HTTP 429"
+    },
+    {
+      "ticker": "ADL.NS",
+      "reason": "fetch failed: HTTP 429"
+    },
+    {
+      "ticker": "ADOR.NS",
+      "reason": "fetch failed: HTTP 429"
+    },
+    {
+      "ticker": "ACE.NS",
+      "reason": "fetch failed: HTTP 429"
+    },
+    {
+      "ticker": "ALANKIT.NS",
+      "reason": "fetch failed: HTTP 429"
+    },
+    {
+      "ticker": "AJANTPHARM.NS",
+      "reason": "fetch failed: HTTP 429"
+    },
+    {
+      "ticker": "ALBERTDAVD.NS",
+      "reason": "fetch failed: HTTP 429"
+    },
+    {
+      "ticker": "ALEMBICLTD.NS",
+      "reason": "fetch failed: HTTP 429"
+    },
+    {
+      "ticker": "ALICON.NS",
+      "reason": "fetch failed: HTTP 429"
+    },
+    {
+      "ticker": "ALIVUS.NS",
+      "reason": "fetch failed: HTTP 429"
+    },
+    {
+      "ticker": "ANGELONE.NS",
+      "reason": "fetch failed: HTTP 429"
+    },
+    {
+      "ticker": "ANIKINDS.NS",
+      "reason": "fetch failed: HTTP 429"
+    },
+    {
+      "ticker": "ANMOL.NS",
+      "reason": "fetch failed: HTTP 429"
+    },
+    {
+      "ticker": "ANTGRAPHIC.NS",
+      "reason": "fetch failed: HTTP 429"
+    },
+    {
+      "ticker": "ANTHEM.NS",
+      "reason": "fetch failed: HTTP 429"
+    },
+    {
+      "ticker": "ASHIMASYN.NS",
+      "reason": "fetch failed: HTTP 429"
+    },
+    {
+      "ticker": "ASHIANA.NS",
+      "reason": "fetch failed: HTTP 429"
+    },
+    {
+      "ticker": "ASHOKA.NS",
+      "reason": "fetch failed: HTTP 429"
+    },
+    {
+      "ticker": "ASHOKLEY.NS",
+      "reason": "fetch failed: HTTP 429"
+    }
+  ],
+  "no_dcf_sample": [
+    "ALLTIME.NS",
+    "ARIS.NS"
+  ]
+}

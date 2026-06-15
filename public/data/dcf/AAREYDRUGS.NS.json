@@ -1,0 +1,1780 @@
+{
+  "schema_version": "1.0.0",
+  "scraped_at": "2026-06-15T07:50:59.673Z",
+  "ticker": "AAREYDRUGS.NS",
+  "name": "Aarey Drugs and Pharmaceuticals Ltd",
+  "exchange": "National Stock Exchange of India",
+  "currency": "INR",
+  "country": "India",
+  "sector": "Pharmaceuticals",
+  "industry": "Manufacturing",
+  "as_of": "2026-03-31",
+  "price_current": 77.88,
+  "shares_outstanding": 28.35,
+  "net_debt": 485.63,
+  "market_cap": 2207.898,
+  "revenue_ttm": 3700.607,
+  "net_income_ttm": 45.22,
+  "ebitda_current": -889.395,
+  "eps_ttm": 1.5950618,
+  "beta": 2.1640189,
+  "is_financial": false,
+  "wacc": {
+    "selected": 0.118230484,
+    "after_tax_range": {
+      "low": 0.105,
+      "high": 0.132
+    },
+    "build": {
+      "long_term_bond_rate": {
+        "low": 0.069,
+        "high": 0.07400000000000001
+      },
+      "equity_risk_premium": {
+        "low": 0.083,
+        "high": 0.09300000000000001
+      },
+      "adjusted_beta": {
+        "low": 0.59,
+        "high": 0.65
+      },
+      "additional_risk_adjustment": {
+        "low": 0,
+        "high": 0.005
+      },
+      "cost_of_equity": {
+        "low": 0.11800000000000001,
+        "high": 0.139
+      },
+      "tax_rate": {
+        "low": 0.311,
+        "high": 0.34299999999999997
+      },
+      "debt_equity_ratio": {
+        "low": 0.23,
+        "high": 0.23
+      },
+      "cost_of_debt": {
+        "low": 0.07,
+        "high": 0.153
+      }
+    },
+    "cost_of_equity_selected": 0.12818101,
+    "cost_of_debt_selected": 0.11134394,
+    "beta": 2.1640189,
+    "market_risk_premium": 0.0831
+  },
+  "shared_projection": [
+    {
+      "year": 2027,
+      "revenue": 4980,
+      "pretax_profit": 153,
+      "net_interest": -53,
+      "da": 48,
+      "ebitda": 254,
+      "ebit": 206,
+      "nopat": 135.847,
+      "tax": 52,
+      "capex": 46,
+      "change_nwc": 172,
+      "fcf": -17,
+      "timing": 0.5,
+      "discount_factor": 0.945659,
+      "pv_fcf": -16
+    },
+    {
+      "year": 2028,
+      "revenue": 5080,
+      "pretax_profit": 252,
+      "net_interest": -54,
+      "da": 55,
+      "ebitda": 361,
+      "ebit": 306,
+      "nopat": 201.792,
+      "tax": 86,
+      "capex": 47,
+      "change_nwc": -2,
+      "fcf": 230,
+      "timing": 1.5,
+      "discount_factor": 0.845674,
+      "pv_fcf": 194
+    },
+    {
+      "year": 2029,
+      "revenue": 5182,
+      "pretax_profit": 353,
+      "net_interest": -55,
+      "da": 63,
+      "ebitda": 471,
+      "ebit": 408,
+      "nopat": 269.056,
+      "tax": 120,
+      "capex": 48,
+      "change_nwc": 14,
+      "fcf": 289,
+      "timing": 2.5,
+      "discount_factor": 0.756261,
+      "pv_fcf": 218
+    },
+    {
+      "year": 2030,
+      "revenue": 5285,
+      "pretax_profit": 455,
+      "net_interest": -56,
+      "da": 63,
+      "ebitda": 574,
+      "ebit": 511,
+      "nopat": 336.979,
+      "tax": 155,
+      "capex": 49,
+      "change_nwc": 57,
+      "fcf": 313,
+      "timing": 3.5,
+      "discount_factor": 0.676302,
+      "pv_fcf": 212
+    },
+    {
+      "year": 2031,
+      "revenue": 5486,
+      "pretax_profit": 570,
+      "net_interest": -58,
+      "da": 48,
+      "ebitda": 676,
+      "ebit": 628,
+      "nopat": 414.135,
+      "tax": 194,
+      "capex": 51,
+      "change_nwc": 41,
+      "fcf": 390,
+      "timing": 4.5,
+      "discount_factor": 0.604796,
+      "pv_fcf": 236
+    },
+    {
+      "year": 2032,
+      "revenue": 5595,
+      "pretax_profit": 582,
+      "net_interest": -59,
+      "da": 49,
+      "ebitda": 690,
+      "ebit": 641,
+      "nopat": 422.708,
+      "tax": 198,
+      "capex": 52,
+      "change_nwc": 23,
+      "fcf": 417,
+      "timing": 5.5,
+      "discount_factor": 0.540851,
+      "pv_fcf": 226
+    },
+    {
+      "year": 2033,
+      "revenue": 5825,
+      "pretax_profit": 605,
+      "net_interest": -62,
+      "da": 50,
+      "ebitda": 717,
+      "ebit": 667,
+      "nopat": 439.853,
+      "tax": 206,
+      "capex": 54,
+      "change_nwc": 54,
+      "fcf": 404,
+      "timing": 6.5,
+      "discount_factor": 0.483667,
+      "pv_fcf": 195
+    },
+    {
+      "year": 2034,
+      "revenue": 6078,
+      "pretax_profit": 632,
+      "net_interest": -64,
+      "da": 52,
+      "ebitda": 748,
+      "ebit": 696,
+      "nopat": 458.977,
+      "tax": 215,
+      "capex": 56,
+      "change_nwc": 52,
+      "fcf": 425,
+      "timing": 7.5,
+      "discount_factor": 0.432529,
+      "pv_fcf": 184
+    },
+    {
+      "year": 2035,
+      "revenue": 6200,
+      "pretax_profit": 644,
+      "net_interest": -66,
+      "da": 54,
+      "ebitda": 764,
+      "ebit": 710,
+      "nopat": 468.21,
+      "tax": 219,
+      "capex": 57,
+      "change_nwc": 27,
+      "fcf": 461,
+      "timing": 8.5,
+      "discount_factor": 0.386798,
+      "pv_fcf": 178
+    },
+    {
+      "year": 2036,
+      "revenue": 6359,
+      "pretax_profit": 661,
+      "net_interest": -67,
+      "da": 55,
+      "ebitda": 784,
+      "ebit": 729,
+      "nopat": 480.739,
+      "tax": 225,
+      "capex": 59,
+      "change_nwc": 35,
+      "fcf": 465,
+      "timing": 9.5,
+      "discount_factor": 0.345901,
+      "pv_fcf": 161
+    }
+  ],
+  "assumptions_raw": {
+    "timing_dcf": [
+      0.5,
+      1.5,
+      2.5,
+      3.5,
+      4.5,
+      5.5,
+      6.5,
+      7.5,
+      8.5,
+      9.5
+    ],
+    "sga_ratio": -0.011988294806561516,
+    "RD_ratio": 0,
+    "interest_other_ratio": -0.014157397584850986,
+    "tax_rate_dcf": 0.34054966485848676,
+    "avg_capex_ratio": 0.009209042707868102,
+    "past_capex": [
+      -10.44,
+      -7.223,
+      -52.044,
+      -124.108
+    ],
+    "dr": [
+      124.39699860849815,
+      109.12916808801947,
+      111.24389893584497,
+      114.92335521078753,
+      111.76547407821732,
+      112.64424274161661,
+      113.11102401020715,
+      112.50691361001368,
+      112.75406012061246,
+      112.79066591361111
+    ],
+    "dp": [
+      89.91992794587918,
+      78.81410002421983,
+      78.08517936328504,
+      82.27306911112801,
+      79.72411616621095,
+      80.027454880208,
+      80.67488005251566,
+      80.14215036631153,
+      80.2814950996784,
+      80.3661751728352
+    ],
+    "di": [
+      41.04178310099456,
+      43.67526487492921,
+      39.35781284218812,
+      41.35828693937063,
+      41.463788218829315,
+      40.72662933346268,
+      41.182901497220875,
+      41.124439683170955,
+      41.01132350461817,
+      41.10622156167
+    ],
+    "current_nwc": 896.019,
+    "month_left": 12,
+    "net_interest_ratio": -0.010590997927028877,
+    "rating": "D",
+    "current_reporting_period": "2026-03-31",
+    "current_FY_end": "2026-03-31",
+    "future_cogs_ratio": [
+      -0.9431422769650347,
+      -0.924279431425734,
+      -0.9057938427972193,
+      -0.8876779659412749,
+      -0.8699244066224494,
+      -0.8699244066224494,
+      -0.8699244066224494,
+      -0.8699244066224494,
+      -0.8699244066224494,
+      -0.8699244066224494
+    ],
+    "tax_good": 1,
+    "int_exp_ttm": 50.018,
+    "spread_excel": 0.2,
+    "current_payout_ratio": 0,
+    "global_cod": 0.0644,
+    "global_cod_no_finance": 0.0644,
+    "long_grow_arr": [
+      0.01,
+      0.03
+    ],
+    "chosen_tax_arr": [
+      0.2671862879095711,
+      0.34054966485848676,
+      0.1233974059031612,
+      0.3725039936102236,
+      0.34695912263210366
+    ],
+    "cod1_good": "yes",
+    "cod2_good": "yes",
+    "chosen_6_past_debt": [
+      141.6,
+      377.181,
+      313.523,
+      348.56,
+      499.616
+    ],
+    "chosen_6_past_int": [
+      20,
+      28.671,
+      43.753,
+      46.644,
+      50.018
+    ],
+    "capex_9_years": [
+      124.108,
+      52.044,
+      7.223,
+      10.44,
+      22.01,
+      28.79,
+      9.19,
+      12.28,
+      6.21
+    ],
+    "low_add_coe": 0,
+    "high_add_coe": 0.005,
+    "add_cod2": 0,
+    "last_time": 1781332522.0597415,
+    "beta_peers": [
+      "SUNPHARMA.NS",
+      "DRREDDY.NS",
+      "CIPLA.NS",
+      "GLAND.NS",
+      "CADILAHC.NS",
+      "TORNTPHARM.NS",
+      "ALKEM.NS",
+      "ABBOTINDIA.NS",
+      "LUPIN.NS",
+      "AUROPHARMA.NS"
+    ],
+    "low_cod": 0.07,
+    "high_cod": 0.15268789137910738,
+    "negative_coverage_ratio": 1,
+    "coe_arr": [
+      0.11756601921632878,
+      0.13879600940326445
+    ],
+    "ddm_future_net_inc": [
+      100.86946643803958,
+      166.07834221971126,
+      232.5661189224357,
+      300.358384675271,
+      375.97666141971956
+    ],
+    "avg_long_growth": 0.02,
+    "normalized_earning": 38.901199883174385,
+    "ttm_net_income_2_periods": [
+      {
+        "2026-03-31": 45.22
+      },
+      {
+        "2025-12-31": 34.347
+      }
+    ],
+    "annual_net_debt_2_periods": [
+      {
+        "2026-03-31": 485.63
+      },
+      {
+        "2025-09-30": 435.876
+      }
+    ],
+    "high_bond_yield": 0.07365000000000001,
+    "high_risk_premium": 0.0931,
+    "low_beta": 0.5886404237825364,
+    "high_beta": 0.6460366208728725,
+    "coe": 0.12818101430979661,
+    "avg_tax": 0.32715888102342705,
+    "tax_arr": [
+      0.3112043140789205,
+      0.3431134479679335
+    ],
+    "low_d_e": 0.22628561076135692,
+    "effective_interest_rate": 0.15268789137910738,
+    "synthetic_ratings_cod": 0.07,
+    "avg_cod": 0.11134394568955369,
+    "selected_wacc": 0.11823048391032454,
+    "wacc_arr": [
+      0.10476885381542808,
+      0.131692114005221
+    ],
+    "beta": 2.16402,
+    "ebit_ttm": -917.9249999999997
+  },
+  "model_tables": {
+    "revenue": {
+      "R1": [
+        "(INR in millions)",
+        "Projections"
+      ],
+      "R2": [
+        "",
+        "03-2026",
+        "03-2027",
+        "03-2028",
+        "03-2029",
+        "03-2030",
+        "03-2031",
+        "03-2032",
+        "03-2033",
+        "03-2034",
+        "03-2035",
+        "03-2036"
+      ],
+      "R3": [
+        "Revenue",
+        "4,723",
+        "4,980",
+        "5,080",
+        "5,182",
+        "5,285",
+        "5,486",
+        "5,595",
+        "5,825",
+        "6,078",
+        "6,200",
+        "6,359"
+      ],
+      "R4": [
+        "% Growth",
+        "0%",
+        "5%",
+        "2%",
+        "2%",
+        "2%",
+        "4%",
+        "2%",
+        "4%",
+        "4%",
+        "2%",
+        "3%"
+      ],
+      "R5": [
+        "Cost of goods sold",
+        "(4,545)",
+        "(4,697)",
+        "(4,695)",
+        "(4,694)",
+        "(4,692)",
+        "(4,772)",
+        "(4,868)",
+        "(5,067)",
+        "(5,288)",
+        "(5,394)",
+        "(5,532)"
+      ],
+      "R6": [
+        "% of Revenue",
+        "96%",
+        "94%",
+        "92%",
+        "91%",
+        "89%",
+        "87%",
+        "87%",
+        "87%",
+        "87%",
+        "87%",
+        "87%"
+      ],
+      "R7": [
+        "Selling, G&A expenses",
+        "(57)",
+        "(60)",
+        "(61)",
+        "(62)",
+        "(63)",
+        "(66)",
+        "(67)",
+        "(70)",
+        "(73)",
+        "(74)",
+        "(76)"
+      ],
+      "R8": [
+        "% of Revenue",
+        "1%",
+        "1%",
+        "1%",
+        "1%",
+        "1%",
+        "1%",
+        "1%",
+        "1%",
+        "1%",
+        "1%",
+        "1%"
+      ],
+      "R9": [
+        "Research & Development",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0"
+      ],
+      "R10": [
+        "% of Revenue",
+        "0%",
+        "0%",
+        "0%",
+        "0%",
+        "0%",
+        "0%",
+        "0%",
+        "0%",
+        "0%",
+        "0%",
+        "0%"
+      ],
+      "R11": [
+        "Net interest & other expenses",
+        "(67)",
+        "(71)",
+        "(72)",
+        "(73)",
+        "(75)",
+        "(78)",
+        "(79)",
+        "(82)",
+        "(86)",
+        "(88)",
+        "(90)"
+      ],
+      "R12": [
+        "% of Revenue",
+        "1%",
+        "1%",
+        "1%",
+        "1%",
+        "1%",
+        "1%",
+        "1%",
+        "1%",
+        "1%",
+        "1%",
+        "1%"
+      ],
+      "R13": [
+        "Tax expense",
+        "(14)",
+        "(52)",
+        "(86)",
+        "(120)",
+        "(155)",
+        "(194)",
+        "(198)",
+        "(206)",
+        "(215)",
+        "(219)",
+        "(225)"
+      ],
+      "R14": [
+        "Tax rate",
+        "27%",
+        "34%",
+        "34%",
+        "34%",
+        "34%",
+        "34%",
+        "34%",
+        "34%",
+        "34%",
+        "34%",
+        "34%"
+      ],
+      "R15": [
+        "Net profit",
+        "40",
+        "101",
+        "166",
+        "233",
+        "300",
+        "376",
+        "383",
+        "399",
+        "417",
+        "425",
+        "436"
+      ],
+      "R16": [
+        "% Margin",
+        "1%",
+        "2%",
+        "3%",
+        "4%",
+        "6%",
+        "7%",
+        "7%",
+        "7%",
+        "7%",
+        "7%",
+        "7%"
+      ]
+    },
+    "capex": {
+      "R1": [
+        "(INR in millions)",
+        "Projections"
+      ],
+      "R2": [
+        "",
+        "03-2027",
+        "03-2028",
+        "03-2029",
+        "03-2030",
+        "03-2031",
+        "03-2032",
+        "03-2033",
+        "03-2034",
+        "03-2035",
+        "03-2036"
+      ],
+      "R3": [
+        "Capex",
+        "46",
+        "47",
+        "48",
+        "49",
+        "51",
+        "52",
+        "54",
+        "56",
+        "57",
+        "59"
+      ],
+      "R4": [
+        "% of Revenue",
+        "1%",
+        "1%",
+        "1%",
+        "1%",
+        "1%",
+        "1%",
+        "1%",
+        "1%",
+        "1%",
+        "1%"
+      ],
+      "R5": [
+        "Historical"
+      ],
+      "R6": [
+        "",
+        "03-2022",
+        "03-2023",
+        "03-2024",
+        "03-2025",
+        "03-2026",
+        "5y Avg"
+      ],
+      "R7": [
+        "Capex",
+        "22",
+        "10",
+        "7",
+        "52",
+        "124",
+        "43"
+      ],
+      "R8": [
+        "% of Revenue",
+        "0%",
+        "0%",
+        "0%",
+        "1%",
+        "3%",
+        "0.9%"
+      ]
+    },
+    "da": {
+      "R1": [
+        "Average useful life (years):",
+        5
+      ],
+      "R2": [
+        "(INR in millions)",
+        "Projections"
+      ],
+      "R3": [
+        "",
+        "03-2027",
+        "03-2028",
+        "03-2029",
+        "03-2030",
+        "03-2031",
+        "03-2032",
+        "03-2033",
+        "03-2034",
+        "03-2035",
+        "03-2036"
+      ],
+      "R4": [
+        "For CAPEX in"
+      ],
+      "R19": [
+        "Total depreciation & amortization",
+        "48",
+        "55",
+        "63",
+        "63",
+        "48",
+        "49",
+        "50",
+        "52",
+        "54",
+        "55"
+      ],
+      "R5": [
+        2023,
+        "2",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "R6": [
+        2024,
+        "1",
+        "1",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "R7": [
+        2025,
+        "10",
+        "10",
+        "10",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "R8": [
+        2026,
+        "25",
+        "25",
+        "25",
+        "25",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "R9": [
+        "2027",
+        "9",
+        "9",
+        "9",
+        "9",
+        "9",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "R10": [
+        "2028",
+        "",
+        "9",
+        "9",
+        "9",
+        "9",
+        "9",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "R11": [
+        "2029",
+        "",
+        "",
+        "10",
+        "10",
+        "10",
+        "10",
+        "10",
+        "",
+        "",
+        ""
+      ],
+      "R12": [
+        "2030",
+        "",
+        "",
+        "",
+        "10",
+        "10",
+        "10",
+        "10",
+        "10",
+        "",
+        ""
+      ],
+      "R13": [
+        "2031",
+        "",
+        "",
+        "",
+        "",
+        "10",
+        "10",
+        "10",
+        "10",
+        "10",
+        ""
+      ],
+      "R14": [
+        "2032",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "10",
+        "10",
+        "10",
+        "10",
+        "10"
+      ],
+      "R15": [
+        "2033",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "11",
+        "11",
+        "11",
+        "11"
+      ],
+      "R16": [
+        "2034",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "11",
+        "11",
+        "11"
+      ],
+      "R17": [
+        "2035",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "11",
+        "11"
+      ],
+      "R18": [
+        "2036",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "12"
+      ]
+    },
+    "working_capital": {
+      "R1": [
+        "(INR in millions except days)",
+        "Projections"
+      ],
+      "R2": [
+        "",
+        "Historical Avg",
+        "03-2026",
+        "03-2027",
+        "03-2028",
+        "03-2029",
+        "03-2030",
+        "03-2031",
+        "03-2032",
+        "03-2033",
+        "03-2034",
+        "03-2035",
+        "03-2036"
+      ],
+      "R3": [
+        "Days receivables",
+        "124",
+        "",
+        "124",
+        "109",
+        "111",
+        "115",
+        "112",
+        "113",
+        "113",
+        "113",
+        "113",
+        "113"
+      ],
+      "R4": [
+        "Trade receivables",
+        "",
+        "1,297",
+        "1,697",
+        "1,519",
+        "1,579",
+        "1,664",
+        "1,680",
+        "1,727",
+        "1,805",
+        "1,874",
+        "1,915",
+        "1,965"
+      ],
+      "R5": [
+        "Days payables",
+        "90",
+        "",
+        "90",
+        "79",
+        "78",
+        "82",
+        "80",
+        "80",
+        "81",
+        "80",
+        "80",
+        "80"
+      ],
+      "R6": [
+        "Trade payables",
+        "",
+        "(816)",
+        "(1,157)",
+        "(1,014)",
+        "(1,004)",
+        "(1,058)",
+        "(1,042)",
+        "(1,067)",
+        "(1,120)",
+        "(1,161)",
+        "(1,186)",
+        "(1,218)"
+      ],
+      "R7": [
+        "Days inventory",
+        "41",
+        "",
+        "41",
+        "44",
+        "39",
+        "41",
+        "41",
+        "41",
+        "41",
+        "41",
+        "41",
+        "41"
+      ],
+      "R8": [
+        "Inventory",
+        "",
+        "415",
+        "528",
+        "562",
+        "506",
+        "532",
+        "542",
+        "543",
+        "572",
+        "596",
+        "606",
+        "623"
+      ],
+      "R9": [
+        "Net working capital",
+        "",
+        "896",
+        "1,068",
+        "1,067",
+        "1,081",
+        "1,138",
+        "1,180",
+        "1,203",
+        "1,257",
+        "1,308",
+        "1,335",
+        "1,370"
+      ],
+      "R10": [
+        "Change in NWC",
+        "",
+        "",
+        "172",
+        "(2)",
+        "14",
+        "57",
+        "41",
+        "23",
+        "54",
+        "52",
+        "27",
+        "35"
+      ]
+    },
+    "terminal": {
+      "typical_5": [
+        "Terminal",
+        "459",
+        "(56)",
+        "58",
+        "574",
+        "156",
+        "49",
+        "38",
+        "331",
+        5,
+        "1,964"
+      ],
+      "typical_10": [
+        "Terminal",
+        "646",
+        "(66)",
+        "54",
+        "765",
+        "220",
+        "57",
+        "38",
+        "450",
+        10,
+        "1,530"
+      ],
+      "typical_ebitda_5": [
+        "Terminal",
+        "459",
+        "(56)",
+        "58",
+        "574",
+        "",
+        "",
+        "",
+        "",
+        5,
+        "4,954"
+      ],
+      "typical_ebitda_10": [
+        "Terminal",
+        "646",
+        "(66)",
+        "54",
+        "765",
+        "",
+        "",
+        "",
+        "",
+        10,
+        "3,779"
+      ],
+      "R1": [
+        "(INR in millions)",
+        "",
+        "2027",
+        "2028",
+        "2029",
+        "2030",
+        "2031",
+        "2032",
+        "2033",
+        "2034",
+        "2035",
+        "2036"
+      ],
+      "R2": [
+        "Profit before tax",
+        "",
+        "153",
+        "252",
+        "353",
+        "455",
+        "570",
+        "582",
+        "605",
+        "632",
+        "644",
+        "661"
+      ],
+      "R3": [
+        "(-) Net interest income/expense",
+        "",
+        "(53)",
+        "(54)",
+        "(55)",
+        "(56)",
+        "(58)",
+        "(59)",
+        "(62)",
+        "(64)",
+        "(66)",
+        "(67)"
+      ],
+      "R4": [
+        "(+) Depreciation & Armortization",
+        "",
+        "48",
+        "55",
+        "63",
+        "63",
+        "48",
+        "49",
+        "50",
+        "52",
+        "54",
+        "55"
+      ],
+      "R5": [
+        "EBITDA",
+        "",
+        "254",
+        "361",
+        "471",
+        "574",
+        "676",
+        "690",
+        "717",
+        "748",
+        "764",
+        "784"
+      ],
+      "R6": [
+        "(-) Tax",
+        "",
+        "52",
+        "86",
+        "120",
+        "155",
+        "194",
+        "198",
+        "206",
+        "215",
+        "219",
+        "225"
+      ],
+      "R7": [
+        "(-) Capex",
+        "",
+        "46",
+        "47",
+        "48",
+        "49",
+        "51",
+        "52",
+        "54",
+        "56",
+        "57",
+        "59"
+      ],
+      "R8": [
+        "(-) Change in NWC",
+        "",
+        "172",
+        "(2)",
+        "14",
+        "57",
+        "41",
+        "23",
+        "54",
+        "52",
+        "27",
+        "35"
+      ],
+      "R9": [
+        "Free Cash Flow (FCF)",
+        "",
+        "(17)",
+        "230",
+        "289",
+        "313",
+        "390",
+        "417",
+        "404",
+        "425",
+        "461",
+        "465"
+      ],
+      "R10": [
+        "Peers' EBITDA Multiples",
+        "15.1x"
+      ],
+      "R11": [
+        "Terminal value",
+        [
+          [
+            "3,434",
+            "4,676"
+          ],
+          [
+            "8,663",
+            "11,554"
+          ]
+        ]
+      ],
+      "R12": [
+        "WACC / Discount rate",
+        "11.8%"
+      ],
+      "R13": [
+        "Long-term growth rate",
+        "2.0%"
+      ],
+      "R14": [
+        "Timing of FCF (mid year)",
+        "",
+        0.5,
+        1.5,
+        2.5,
+        3.5,
+        4.5,
+        5.5,
+        6.5,
+        7.5,
+        8.5,
+        9.5
+      ],
+      "R15": [
+        "Present value of FCF",
+        "",
+        "(16)",
+        "194",
+        "218",
+        "212",
+        "236",
+        "226",
+        "195",
+        "184",
+        "178",
+        "161"
+      ],
+      "R_end_5": {
+        "R16": [
+          "Enterprise value",
+          "2,809"
+        ],
+        "R17": [
+          "Projection period",
+          "845",
+          "30.1%"
+        ],
+        "R18": [
+          "Terminal value",
+          "1,964",
+          "69.9%"
+        ],
+        "R19": [
+          "(-) Current net debt",
+          "486"
+        ],
+        "R20": [
+          "Equity value",
+          "2,323"
+        ],
+        "R21": [
+          "(/) Outstanding shares",
+          "28"
+        ],
+        "R22": [
+          "Fair price",
+          "82"
+        ],
+        "TrueFair": []
+      },
+      "R_end_10": {
+        "R16": [
+          "Enterprise value",
+          "3,318"
+        ],
+        "R17": [
+          "Projection period",
+          "1,789",
+          "53.9%"
+        ],
+        "R18": [
+          "Terminal value",
+          "1,530",
+          "46.1%"
+        ],
+        "R19": [
+          "(-) Current net debt",
+          "486"
+        ],
+        "R20": [
+          "Equity value",
+          "2,833"
+        ],
+        "R21": [
+          "(/) Outstanding shares",
+          "28"
+        ],
+        "R22": [
+          "Fair price",
+          "100"
+        ],
+        "TrueFair": []
+      },
+      "R_end_ebitda_5": {
+        "R16": [
+          "Enterprise value",
+          "5,799"
+        ],
+        "R17": [
+          "Projection period",
+          "845",
+          "14.6%"
+        ],
+        "R18": [
+          "Terminal value",
+          "4,954",
+          "85.4%"
+        ],
+        "R19": [
+          "(-) Current net debt",
+          "486"
+        ],
+        "R20": [
+          "Equity value",
+          "5,314"
+        ],
+        "R21": [
+          "(/) Outstanding shares",
+          "28"
+        ],
+        "R22": [
+          "Fair price",
+          "187"
+        ],
+        "TrueFair": []
+      },
+      "R_end_ebitda_10": {
+        "R16": [
+          "Enterprise value",
+          "5,568"
+        ],
+        "R17": [
+          "Projection period",
+          "1,789",
+          "32.1%"
+        ],
+        "R18": [
+          "Terminal value",
+          "3,779",
+          "67.9%"
+        ],
+        "R19": [
+          "(-) Current net debt",
+          "486"
+        ],
+        "R20": [
+          "Equity value",
+          "5,082"
+        ],
+        "R21": [
+          "(/) Outstanding shares",
+          "28"
+        ],
+        "R22": [
+          "Fair price",
+          "179"
+        ],
+        "TrueFair": []
+      }
+    },
+    "wacc": {
+      "R1": [
+        "Category",
+        "Low",
+        "High"
+      ],
+      "R2": [
+        "Long-term bond rate",
+        "6.9%",
+        "7.4%"
+      ],
+      "R3": [
+        "Equity market risk premium",
+        "8.3%",
+        "9.3%"
+      ],
+      "R4": [
+        "Adjusted beta",
+        0.59,
+        0.65
+      ],
+      "R0": [
+        "Additional risk adjustments",
+        "0.0%",
+        "0.5%"
+      ],
+      "R5": [
+        "Cost of equity",
+        "11.8%",
+        "13.9%"
+      ],
+      "R6": [
+        "Tax rate",
+        "31.1%",
+        "34.3%"
+      ],
+      "R7": [
+        "Debt/Equity ratio",
+        0.23,
+        0.23
+      ],
+      "R8": [
+        "Cost of debt",
+        "7.0%",
+        "15.3%"
+      ],
+      "R9": [
+        "After-tax WACC",
+        "10.5%",
+        "13.2%"
+      ],
+      "R10": [
+        "Selected WACC",
+        "11.8%"
+      ]
+    },
+    "eps": [
+      {
+        "2026-03-31": 39.676
+      },
+      {
+        "2025-03-31": 40.239
+      },
+      {
+        "2024-03-31": 46.836
+      },
+      {
+        "2023-03-31": 37.71
+      },
+      {
+        "2022-03-31": 65.4
+      },
+      {
+        "2021-03-31": 65.1
+      }
+    ]
+  },
+  "variants": {
+    "dcf-growth-exit-5y": {
+      "gated_page": false,
+      "data_available": true,
+      "horizon_years": 5,
+      "terminal": {
+        "method": "perpetuity_growth",
+        "perp_growth": 0.02,
+        "perp_growth_range": {
+          "low": 0.01,
+          "high": 0.03
+        },
+        "exit_multiple": null,
+        "exit_year": 5,
+        "terminal_value_pv": 1964
+      },
+      "wacc_selected": 0.11800000000000001,
+      "enterprise_value": 2809,
+      "pv_projection": 845,
+      "pv_projection_pct": 0.301,
+      "pv_terminal": 1964,
+      "pv_terminal_pct": 0.6990000000000001,
+      "net_debt": 486,
+      "equity_value": 2323,
+      "shares_outstanding": 28,
+      "fair_value_per_share": 81.94039,
+      "fair_value_bridge_rounded": 82,
+      "upside_pct": 0.0521,
+      "sensitivity": {
+        "fair_price_range": {
+          "low": 63.73,
+          "high": 111.46
+        },
+        "wacc_range": {
+          "low": 0.105,
+          "high": 0.132
+        },
+        "growth_range": {
+          "low": 0.01,
+          "high": 0.03
+        },
+        "terminal_value_grid": [
+          [
+            "3,434",
+            "4,676"
+          ],
+          [
+            "8,663",
+            "11,554"
+          ]
+        ]
+      },
+      "summary_squares": [
+        5.2,
+        "77.88",
+        "81.94"
+      ]
+    },
+    "dcf-growth-exit-10y": {
+      "gated_page": true,
+      "data_available": true,
+      "horizon_years": 10,
+      "terminal": {
+        "method": "perpetuity_growth",
+        "perp_growth": 0.02,
+        "perp_growth_range": {
+          "low": 0.01,
+          "high": 0.03
+        },
+        "exit_multiple": null,
+        "exit_year": 10,
+        "terminal_value_pv": 1530
+      },
+      "wacc_selected": 0.11800000000000001,
+      "enterprise_value": 3318,
+      "pv_projection": 1789,
+      "pv_projection_pct": 0.539,
+      "pv_terminal": 1530,
+      "pv_terminal_pct": 0.461,
+      "net_debt": 486,
+      "equity_value": 2833,
+      "shares_outstanding": 28,
+      "fair_value_per_share": 99.91428,
+      "fair_value_bridge_rounded": 100,
+      "upside_pct": 0.2829,
+      "sensitivity": {
+        "fair_price_range": {
+          "low": 80.34,
+          "high": 131.01
+        },
+        "wacc_range": {
+          "low": 0.105,
+          "high": 0.132
+        },
+        "growth_range": {
+          "low": 0.01,
+          "high": 0.03
+        },
+        "terminal_value_grid": [
+          [
+            "3,434",
+            "4,676"
+          ],
+          [
+            "8,663",
+            "11,554"
+          ]
+        ]
+      },
+      "summary_squares": [
+        28.3,
+        "77.88",
+        "99.91"
+      ]
+    },
+    "dcf-ebitda-exit-5y": {
+      "gated_page": true,
+      "data_available": true,
+      "horizon_years": 5,
+      "terminal": {
+        "method": "exit_multiple",
+        "perp_growth": null,
+        "perp_growth_range": null,
+        "exit_multiple": 15.1,
+        "exit_year": 5,
+        "terminal_value_pv": 4954
+      },
+      "wacc_selected": 0.11800000000000001,
+      "enterprise_value": 5799,
+      "pv_projection": 845,
+      "pv_projection_pct": 0.146,
+      "pv_terminal": 4954,
+      "pv_terminal_pct": 0.8540000000000001,
+      "net_debt": 486,
+      "equity_value": 5314,
+      "shares_outstanding": 28,
+      "fair_value_per_share": 187.42795,
+      "fair_value_bridge_rounded": 187,
+      "upside_pct": 1.4066,
+      "sensitivity": {
+        "fair_price_range": {
+          "low": 156.79,
+          "high": 221.37
+        },
+        "wacc_range": {
+          "low": 0.105,
+          "high": 0.132
+        },
+        "growth_range": {
+          "low": 13.3,
+          "high": 16.9
+        },
+        "terminal_value_grid": [
+          [
+            "3,434",
+            "4,676"
+          ],
+          [
+            "8,663",
+            "11,554"
+          ]
+        ]
+      },
+      "summary_squares": [
+        140.7,
+        "77.88",
+        "187.43"
+      ]
+    },
+    "dcf-ebitda-exit-10y": {
+      "gated_page": true,
+      "data_available": true,
+      "horizon_years": 10,
+      "terminal": {
+        "method": "exit_multiple",
+        "perp_growth": null,
+        "perp_growth_range": null,
+        "exit_multiple": 15.1,
+        "exit_year": 10,
+        "terminal_value_pv": 3779
+      },
+      "wacc_selected": 0.11800000000000001,
+      "enterprise_value": 5568,
+      "pv_projection": 1789,
+      "pv_projection_pct": 0.321,
+      "pv_terminal": 3779,
+      "pv_terminal_pct": 0.679,
+      "net_debt": 486,
+      "equity_value": 5082,
+      "shares_outstanding": 28,
+      "fair_value_per_share": 179.27353,
+      "fair_value_bridge_rounded": 179,
+      "upside_pct": 1.3019,
+      "sensitivity": {
+        "fair_price_range": {
+          "low": 146.41,
+          "high": 218.43
+        },
+        "wacc_range": {
+          "low": 0.105,
+          "high": 0.132
+        },
+        "growth_range": {
+          "low": 13.3,
+          "high": 16.9
+        },
+        "terminal_value_grid": [
+          [
+            "3,434",
+            "4,676"
+          ],
+          [
+            "8,663",
+            "11,554"
+          ]
+        ]
+      },
+      "summary_squares": [
+        130.2,
+        "77.88",
+        "179.27"
+      ]
+    }
+  },
+  "other_valuations": {
+    "epv_fair_price": -5.3714285,
+    "ddm_stable_fair_price": 12.531534,
+    "ddm_multi_fair_price": 61.009876,
+    "peter_lynch_fair_price": 7.9753,
+    "trailing_pe": 48.825695,
+    "forward_pe": 21.888767,
+    "trailing_ev_ebitda": null
+  },
+  "source": {
+    "carrier": "inline_script:window.most",
+    "url": "https://valueinvesting.io/AAREYDRUGS.NS/valuation/dcf-growth-exit-5y",
+    "fetched_via": "fetch",
+    "raw_ref": "https://valueinvesting.io/AAREYDRUGS.NS/valuation/dcf-growth-exit-5y"
+  },
+  "_debug": {
+    "html_bytes": 115084,
+    "carrier_found": true,
+    "field_count": 63,
+    "warnings": [],
+    "variant_status": {
+      "dcf-growth-exit-5y": "ok",
+      "dcf-growth-exit-10y": "ok",
+      "dcf-ebitda-exit-5y": "ok",
+      "dcf-ebitda-exit-10y": "ok"
+    },
+    "fetch_ms": 42,
+    "http_status": 200
+  }
+}
