@@ -147,9 +147,10 @@ function parseBridge(end) {
 }
 
 // ---------- core parser (pure; testable offline) ----------
-export function parseDcfHtml(html, ctx = {}) {
-  const warnings = [];
-  const doc = {
+// Full normalized skeleton — shared by success docs and failure stubs so every
+// public/data/dcf/<T>.json has an identical shape (Codex P2 #3).
+export function emptyDoc(ctx = {}, warnings = [], htmlLen = 0) {
+  return {
     schema_version: SCHEMA_VERSION,
     scraped_at: new Date().toISOString(),
     ticker: ctx.ticker || null,
@@ -164,8 +165,13 @@ export function parseDcfHtml(html, ctx = {}) {
     variants: {},
     other_valuations: {},
     source: { carrier: null, url: ctx.url || null, fetched_via: ctx.fetched_via || null, raw_ref: ctx.raw_ref || null },
-    _debug: { html_bytes: html ? html.length : 0, carrier_found: false, field_count: 0, warnings, variant_status: {}, fetch_ms: ctx.fetch_ms ?? null, http_status: ctx.http_status ?? null },
+    _debug: { html_bytes: htmlLen, carrier_found: false, field_count: 0, warnings, variant_status: {}, fetch_ms: ctx.fetch_ms ?? null, http_status: ctx.http_status ?? null },
   };
+}
+
+export function parseDcfHtml(html, ctx = {}) {
+  const warnings = [];
+  const doc = emptyDoc(ctx, warnings, html ? html.length : 0);
 
   const $ = cheerio.load(html || '');
   // locate the inline carrier script (the one defining window.most)
@@ -295,7 +301,8 @@ export function parseDcfHtml(html, ctx = {}) {
       const summary = parseSummary(topPart[def.top]);
       const fairFromField = fNum(def.fair);
       const termRow = termRoot[def.term]; // typical_* : [...,exitYear, pvTerminal]
-      const populated = !!(termRoot[def.end] || summary || fairFromField != null);
+      // Codex P2 #2: a summary shell alone (banks) is NOT a usable DCF — require a real fair value.
+      const populated = fairFromField != null || bridge.fair_value_per_share != null;
       const variant = {
         gated_page: def.gatedPage, // dedicated page is 403, but data present here
         data_available: populated,
@@ -349,13 +356,13 @@ export function parseDcfHtml(html, ctx = {}) {
 }
 
 // ---------- fetch w/ retry + backoff + timeout (Codex P2 #5) ----------
-export async function fetchWithRetry(url, { tries = 4, timeoutMs = 25000 } = {}) {
+export async function fetchWithRetry(url, { tries = 4, timeoutMs = 25000, headers = {} } = {}) {
   let lastErr;
   for (let i = 0; i < tries; i++) {
     const started = Date.now();
     try {
       const res = await fetch(url, {
-        headers: { 'user-agent': CHROME_UA, accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8', 'accept-language': 'en-US,en;q=0.9' },
+        headers: { 'user-agent': CHROME_UA, accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8', 'accept-language': 'en-US,en;q=0.9', ...headers },
         redirect: 'follow',
         signal: AbortSignal.timeout(timeoutMs),
       });
@@ -389,12 +396,9 @@ export async function scrapeTicker(ticker, { variant = PRIMARY_VARIANT } = {}) {
 }
 
 function parseStub(ticker, url, reason) {
-  return {
-    schema_version: SCHEMA_VERSION, scraped_at: new Date().toISOString(), ticker,
-    name: null, variants: {}, other_valuations: {},
-    source: { carrier: null, url, fetched_via: 'fetch', raw_ref: url },
-    _debug: { carrier_found: false, error: reason, warnings: [reason], variant_status: {} },
-  };
+  const doc = emptyDoc({ ticker, url, fetched_via: 'fetch', raw_ref: url }, [reason], 0);
+  doc._debug.error = reason;
+  return doc;
 }
 
 // ---------- CLI ----------

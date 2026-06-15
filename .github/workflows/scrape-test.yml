@@ -4,14 +4,10 @@ name: scrape-test
 # site from a GitHub runner (open internet). Builds the universe, scrapes 4 test
 # tickers (normal/normal/bank/loss-maker), writes sample JSON + STRATEGY-REPORT.md,
 # commits them back, uploads artifacts, and echoes the report into the log.
+# Prompt-2 smoke test (4-ticker strategy report). Manual-only now — the push
+# path is owned by scrape-batch.yml so the two don't both write universe.json.
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - claude/optimistic-sagan-hmur0e
-    paths:
-      - 'scraper/**'
-      - '.github/workflows/scrape-test.yml'
 
 permissions:
   contents: write
