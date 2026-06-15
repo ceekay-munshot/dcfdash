@@ -1,16 +1,16 @@
 {
-  "generated_at": "2026-06-15T06:55:54.630Z",
+  "generated_at": "2026-06-15T07:23:04.422Z",
   "source": "https://valueinvesting.io/sitemap.xml",
   "sub_sitemaps": [
     {
       "sitemap": "https://valueinvesting.io/sitemap1.xml",
       "urls": 46364,
-      "ms": 97
+      "ms": 95
     },
     {
       "sitemap": "https://valueinvesting.io/sitemap2.xml",
       "urls": 20735,
-      "ms": 60
+      "ms": 42
     }
   ],
   "total_urls": 67099,
@@ -72,7 +72,7 @@
     "KEG.UN.TO",
     "MID.UN.TO"
   ],
-  "ms": 344,
+  "ms": 455,
   "tickers": [
     {
       "ticker": "1SN.L",

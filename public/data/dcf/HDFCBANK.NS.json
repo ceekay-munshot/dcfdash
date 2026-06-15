@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "scraped_at": "2026-06-15T06:55:54.861Z",
+  "scraped_at": "2026-06-15T07:23:04.658Z",
   "ticker": "HDFCBANK.NS",
   "name": "HDFC Bank Ltd",
   "exchange": "National Stock Exchange of India",
@@ -449,7 +449,7 @@
       "dcf-ebitda-exit-5y": "ok",
       "dcf-ebitda-exit-10y": "ok"
     },
-    "fetch_ms": 77,
+    "fetch_ms": 86,
     "http_status": 200
   }
 }

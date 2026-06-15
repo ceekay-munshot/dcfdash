@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "scraped_at": "2026-06-15T06:55:54.759Z",
+  "scraped_at": "2026-06-15T07:23:04.550Z",
   "ticker": "TCS.NS",
   "name": "Tata Consultancy Services Ltd",
   "exchange": "National Stock Exchange of India",
@@ -1774,7 +1774,7 @@
       "dcf-ebitda-exit-5y": "ok",
       "dcf-ebitda-exit-10y": "ok"
     },
-    "fetch_ms": 42,
+    "fetch_ms": 39,
     "http_status": 200
   }
 }

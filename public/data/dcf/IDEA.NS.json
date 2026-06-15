@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "scraped_at": "2026-06-15T06:55:54.918Z",
+  "scraped_at": "2026-06-15T07:23:04.711Z",
   "ticker": "IDEA.NS",
   "name": "Vodafone Idea Ltd",
   "exchange": "National Stock Exchange of India",
@@ -1774,7 +1774,7 @@
       "dcf-ebitda-exit-5y": "ok",
       "dcf-ebitda-exit-10y": "ok"
     },
-    "fetch_ms": 43,
+    "fetch_ms": 38,
     "http_status": 200
   }
 }

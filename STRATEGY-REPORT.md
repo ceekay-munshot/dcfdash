@@ -1,6 +1,6 @@
 # valueinvesting.io DCF — Scraper & Universe Strategy (Prompt 2)
 
-- Generated: `2026-06-15T06:55:55.257Z` on GitHub Actions `Linux`, Node `v22.22.3`
+- Generated: `2026-06-15T07:23:05.061Z` on GitHub Actions `Linux`, Node `v22.22.3`
 - Scraper: `scraper/dcf-scrape.mjs` (plain `fetch()` + cheerio, no browser, no login), schema `1.0.0`
 - Test tickers: `RELIANCE.NS`, `TCS.NS`, `HDFCBANK.NS`, `IDEA.NS` (normal, normal, bank, loss-maker)
 
@@ -9,7 +9,7 @@
 - **Data carrier: embedded JSON in an inline `<script>` (`window.most`)** — robust field dictionary, NOT brittle DOM scraping. We parse the blob.
 - **One fetch per company** returns the **entire DCF family** (growth-exit & ebitda-exit × 5y/10y) + EPV/DDM/multiples. The "gated" 10y/ebitda *pages* (403) are redundant — their data is in the free 5y page's blob.
 - **Universe: 8391 tickers** from 2 sitemap(s) — but **0 are Indian (.NS/.BO)**. The public sitemap is global **ex-India**; India needs an alternate enumeration source (see Q3). ⚠️ blocker for the India-focused universe.
-- **Projected full run: ~0.02 h @ 8-way (0.17 h serial), avg 72 ms/company** → comfortably weekly.
+- **Projected full run: ~0.02 h @ 8-way (0.17 h serial), avg 73 ms/company** → comfortably weekly.
 
 ## Q1 — Data carrier
 
@@ -55,12 +55,12 @@ Page-level HTTP status (anonymous, `RELIANCE.NS`):
 
 | ticker | http | carrier | fetch ms | wall ms | proj rows | variants ok |
 | --- | --- | --- | --- | --- | --- | --- |
-| RELIANCE.NS | 200 | ✅ | 42 | 81 | 10 | 4/4 |
-| TCS.NS | 200 | ✅ | 42 | 66 | 10 | 4/4 |
-| HDFCBANK.NS | 200 | ✅ | 77 | 88 | 0 | 4/4 |
-| IDEA.NS | 200 | ✅ | 43 | 53 | 10 | 4/4 |
+| RELIANCE.NS | 200 | ✅ | 42 | 84 | 10 | 4/4 |
+| TCS.NS | 200 | ✅ | 39 | 60 | 10 | 4/4 |
+| HDFCBANK.NS | 200 | ✅ | 86 | 98 | 0 | 4/4 |
+| IDEA.NS | 200 | ✅ | 38 | 48 | 10 | 4/4 |
 
-- Avg **72 ms/company** (fetch + parse, 1 request each).
+- Avg **73 ms/company** (fetch + parse, 1 request each).
 - Full universe (8391): **0.17 h serial**, **~0.02 h @ 8-way**, **~0.01 h @ 16-way**.
 - ✅ Feasible as a **weekly** GitHub Actions run. Throttle to respect rate limits (429s seen in recon under bursts) — modest concurrency + jitter + the existing retry/backoff.
 
