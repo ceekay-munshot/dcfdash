@@ -261,12 +261,77 @@
       return d.shares_outstanding ? eq / d.shares_outstanding : null;
     }
 
-    const eyebrow = (t) => `<div class="text-[11px] font-bold uppercase tracking-[0.14em] text-indigo-500/80 mb-1">${t}</div>`;
+    // ---------- SVG chart engine ----------
+    function niceTicks(max, count = 4) {
+      if (!(max > 0)) return [0, 1];
+      const s0 = max / count, mag = Math.pow(10, Math.floor(Math.log10(s0))), n = s0 / mag;
+      const step = (n < 1.5 ? 1 : n < 3 ? 2 : n < 7 ? 5 : 10) * mag, t = [];
+      for (let v = 0; v <= max + step * 0.5; v += step) t.push(v);
+      return t;
+    }
+    // one consistent unit across an axis (values in ₹ millions -> Cr / k Cr / L Cr)
+    function axisFmt(yMax) {
+      const crMax = yMax / 10;
+      if (crMax >= 1e5) return (mn) => (mn / 10 / 1e5).toFixed(mn / 10 / 1e5 >= 10 ? 0 : 1) + 'L';
+      if (crMax >= 1e3) return (mn) => Math.round(mn / 10 / 1e3) + 'k';
+      return (mn) => Math.round(mn / 10).toString();
+    }
+    const SVG = (W, H, inner, defs) => `<svg viewBox="0 0 ${W} ${H}" class="w-full" preserveAspectRatio="xMidYMid meet" style="display:block;font-family:Inter">${defs || ''}${inner}</svg>`;
+
+    function gridY(ticks, yMax, base, ih, pL, W, pR, af) {
+      return ticks.map((t) => { const y = base - (t / yMax) * ih; return `<line x1="${pL}" y1="${y.toFixed(1)}" x2="${W - pR}" y2="${y.toFixed(1)}" stroke="#eef2f7"/><text x="${pL - 6}" y="${(y + 3).toFixed(1)}" text-anchor="end" font-size="11" fill="#94a3b8">${af(t)}</text>`; }).join('');
+    }
+
+    function svgFcf(proj) {
+      if (!proj.length) return '<div class="text-sm text-slate-400 py-10 text-center">No projection.</div>';
+      const W = 640, H = 232, pL = 42, pR = 12, pT = 16, pB = 26, iw = W - pL - pR, ih = H - pT - pB, base = pT + ih;
+      const max = Math.max(...proj.map((p) => Math.abs(p.fcf || 0)), 1), ticks = niceTicks(max, 4), yMax = ticks[ticks.length - 1] || max, af = axisFmt(yMax);
+      const n = proj.length, slot = iw / n, bw = Math.min(slot * 0.56, 44);
+      const bars = proj.map((p, i) => {
+        const cx = pL + slot * i + slot / 2, x = cx - bw / 2, fcf = Math.abs(p.fcf || 0), pv = Math.abs(p.pv_fcf || 0), fH = (fcf / yMax) * ih, pH = (pv / yMax) * ih;
+        return `<rect x="${x.toFixed(1)}" y="${(base - fH).toFixed(1)}" width="${bw.toFixed(1)}" height="${fH.toFixed(1)}" rx="4" fill="#e0e7ff"/><rect x="${x.toFixed(1)}" y="${(base - pH).toFixed(1)}" width="${bw.toFixed(1)}" height="${pH.toFixed(1)}" rx="4" fill="url(#fg)"/><text x="${cx.toFixed(1)}" y="${(base - fH - 6).toFixed(1)}" text-anchor="middle" font-size="10.5" font-weight="600" fill="#475569">${af(fcf)}</text><text x="${cx.toFixed(1)}" y="${(base + 16).toFixed(1)}" text-anchor="middle" font-size="11" fill="#94a3b8">'${String(p.year).slice(2)}</text>`;
+      }).join('');
+      return SVG(W, H, gridY(ticks, yMax, base, ih, pL, W, pR, af) + bars, '<defs><linearGradient id="fg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6366f1"/><stop offset="1" stop-color="#4338ca"/></linearGradient></defs>');
+    }
+
+    function svgWaterfall(pvF, pvT, ev, nd, eq) {
+      if (ev == null) return '<div class="text-sm text-slate-400 py-10 text-center">Not available for this method.</div>';
+      const steps = [{ l: 'PV·FCF', v: pvF || 0, t: 'p' }, { l: 'PV·term', v: pvT || 0, t: 'p' }, { l: 'EV', v: ev, t: 'x' }, { l: '−Net debt', v: -(nd || 0), t: 'n' }, { l: 'Equity', v: eq, t: 'x' }];
+      const W = 640, H = 232, pL = 42, pR = 12, pT = 18, pB = 28, iw = W - pL - pR, ih = H - pT - pB, base = pT + ih;
+      const max = Math.max(ev || 0, eq || 0, (pvF || 0) + (pvT || 0), 1), ticks = niceTicks(max, 4), yMax = ticks[ticks.length - 1] || max, af = axisFmt(yMax);
+      const n = steps.length, slot = iw / n, bw = Math.min(slot * 0.52, 56);
+      let cum = 0; const out = [];
+      steps.forEach((s, i) => {
+        const cx = pL + slot * i + slot / 2, x = cx - bw / 2, before = cum;
+        let start, end, color;
+        if (s.t === 'x') { start = 0; end = s.v; color = s.l === 'Equity' ? '#0f172a' : '#4338ca'; } else { start = before; end = before + s.v; color = s.v >= 0 ? '#6366f1' : '#e11d48'; }
+        const top = Math.max(start, end), bot = Math.min(start, end), h = Math.max(((top - bot) / yMax) * ih, 2), yTop = base - (top / yMax) * ih;
+        if (i > 0) { const yc = base - (before / yMax) * ih; out.push(`<line x1="${(pL + slot * (i - 1) + slot / 2 + bw / 2).toFixed(1)}" y1="${yc.toFixed(1)}" x2="${x.toFixed(1)}" y2="${yc.toFixed(1)}" stroke="#cbd5e1" stroke-dasharray="3 3"/>`); }
+        out.push(`<rect x="${x.toFixed(1)}" y="${yTop.toFixed(1)}" width="${bw.toFixed(1)}" height="${h.toFixed(1)}" rx="3" fill="${color}"/><text x="${cx.toFixed(1)}" y="${(yTop - 6).toFixed(1)}" text-anchor="middle" font-size="10.5" font-weight="700" fill="#334155">${s.t === 'n' ? '−' : ''}${af(Math.abs(s.v))}</text><text x="${cx.toFixed(1)}" y="${(base + 15).toFixed(1)}" text-anchor="middle" font-size="10" fill="#64748b">${s.l}</text>`);
+        cum = s.t === 'x' ? s.v : end;
+      });
+      return SVG(W, H, gridY(ticks, yMax, base, ih, pL, W, pR, af) + out.join(''));
+    }
+
+    function svgRev(proj) {
+      if (!proj.length) return '';
+      const W = 640, H = 210, pL = 42, pR = 12, pT = 22, pB = 26, iw = W - pL - pR, ih = H - pT - pB, base = pT + ih;
+      const max = Math.max(...proj.map((p) => p.revenue || 0), 1), ticks = niceTicks(max, 4), yMax = ticks[ticks.length - 1] || max, af = axisFmt(yMax);
+      const n = proj.length, slot = iw / n, bw = Math.min(slot * 0.46, 38);
+      const m = proj.map((p) => p.revenue ? (p.ebitda || 0) / p.revenue : null), mMax = Math.max(...m.filter((x) => x != null), 0.1) * 1.3;
+      const bars = proj.map((p, i) => { const cx = pL + slot * i + slot / 2, x = cx - bw / 2, h = ((p.revenue || 0) / yMax) * ih; return `<rect x="${x.toFixed(1)}" y="${(base - h).toFixed(1)}" width="${bw.toFixed(1)}" height="${h.toFixed(1)}" rx="4" fill="url(#rg)"/><text x="${cx.toFixed(1)}" y="${(base + 16).toFixed(1)}" text-anchor="middle" font-size="11" fill="#94a3b8">'${String(p.year).slice(2)}</text>`; }).join('');
+      const pts = proj.map((p, i) => m[i] == null ? null : `${(pL + slot * i + slot / 2).toFixed(1)},${(base - (m[i] / mMax) * ih).toFixed(1)}`).filter(Boolean);
+      const line = pts.length > 1 ? `<polyline points="${pts.join(' ')}" fill="none" stroke="#0ea5e9" stroke-width="2.5" stroke-linejoin="round"/>` : '';
+      const dots = proj.map((p, i) => { if (m[i] == null) return ''; const cx = pL + slot * i + slot / 2, cy = base - (m[i] / mMax) * ih; return `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="3" fill="#0ea5e9"/><text x="${cx.toFixed(1)}" y="${(cy - 8).toFixed(1)}" text-anchor="middle" font-size="10" font-weight="700" fill="#0284c7">${Math.round(m[i] * 100)}%</text>`; }).join('');
+      return SVG(W, H, gridY(ticks, yMax, base, ih, pL, W, pR, af) + bars + line + dots, '<defs><linearGradient id="rg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a5b4fc"/><stop offset="1" stop-color="#6366f1"/></linearGradient></defs>');
+    }
+
+    const eyebrow = (t) => `<div class="text-[10px] font-bold uppercase tracking-[0.14em] text-indigo-500/80 mb-0.5">${t}</div>`;
     function panel(eb, title, body, note) {
-      return `<section class="card rounded-3xl p-5 sm:p-7">
-        <div class="flex items-start justify-between gap-3 mb-5">
-          <div>${eyebrow(eb)}<h3 class="font-display font-extrabold text-slate-900 text-xl tracking-tight">${title}</h3></div>
-          ${note ? `<span class="text-xs text-slate-400 shrink-0 mt-1">${note}</span>` : ''}
+      return `<section class="card rounded-3xl p-4 sm:p-5">
+        <div class="flex items-start justify-between gap-3 mb-3.5">
+          <div>${eyebrow(eb)}<h3 class="font-display font-extrabold text-slate-900 text-lg tracking-tight">${title}</h3></div>
+          ${note ? `<span class="text-[11px] text-slate-400 shrink-0 mt-1">${note}</span>` : ''}
         </div>${body}</section>`;
     }
 
@@ -275,129 +340,72 @@
       const vk = state.variant, v = d.variants[vk] || {}, isEb = vk.includes('ebitda'), N = vk.includes('10y') ? 10 : 5;
       const proj = (d.shared_projection || []).slice(0, N);
       const W = d.wacc || {}, B = W.build || {};
+      const fair = v.fair_value_per_share, up = v.upside_pct;
 
-      // ---- 1. value build-up (composition bar + equity bridge) ----
-      const pvF = v.pv_projection, pvT = v.pv_terminal, ev = v.enterprise_value, nd = v.net_debt ?? d.net_debt, eq = v.equity_value, fair = v.fair_value_per_share, up = v.upside_pct;
-      const compTot = (pvF || 0) + (pvT || 0) || 1;
-      const fPct = (v.pv_projection_pct != null ? v.pv_projection_pct * 100 : (pvF || 0) / compTot * 100);
-      const tPct = (v.pv_terminal_pct != null ? v.pv_terminal_pct * 100 : (pvT || 0) / compTot * 100);
-      const buildup = (ev == null) ? '<div class="text-sm text-slate-400 py-4">Not available for this method.</div>' : `
-        <div class="rounded-2xl bg-slate-50/70 p-4 mb-5">
-          <div class="flex justify-between text-xs font-semibold text-slate-500 mb-2"><span>Enterprise value composition</span><span class="tnum">${compactCr(ev)}</span></div>
-          <div class="flex h-11 rounded-xl overflow-hidden ring-1 ring-slate-200/60">
-            <div class="flex flex-col items-center justify-center text-white text-xs font-bold" style="width:${Math.max(fPct, 0)}%;background:linear-gradient(180deg,#6366f1,#4f46e5)" title="Forecast FCF">${fPct >= 14 ? Math.round(fPct) + '%' : ''}</div>
-            <div class="flex flex-col items-center justify-center text-white text-xs font-bold" style="width:${Math.max(tPct, 0)}%;background:linear-gradient(180deg,#0ea5e9,#0284c7)" title="Terminal value">${tPct >= 14 ? Math.round(tPct) + '%' : ''}</div>
-          </div>
-          <div class="flex justify-between text-[11px] mt-2">
-            <span class="flex items-center gap-1.5 text-slate-500"><span class="h-2 w-2 rounded-full" style="background:#4f46e5"></span>Forecast FCF · ${compactCr(pvF)}</span>
-            <span class="flex items-center gap-1.5 text-slate-500"><span class="h-2 w-2 rounded-full" style="background:#0284c7"></span>Terminal · ${compactCr(pvT)}</span>
-          </div>
-        </div>
-        <div class="space-y-0.5">
-          ${[['Enterprise value', compactCr(ev), false], ['− Net debt', compactCr(nd), false], ['Equity value', compactCr(eq), true], ['÷ Shares outstanding', fmtShares(d.shares_outstanding), false]].map(([l, val, strong]) => `
-            <div class="flex items-center justify-between py-2 ${strong ? 'border-y border-slate-100 my-1' : ''}">
-              <span class="text-sm ${strong ? 'font-semibold text-slate-900' : 'text-slate-500'}">${l}</span>
-              <span class="tnum ${strong ? 'font-bold text-slate-900' : 'text-slate-700'}">${val}</span>
-            </div>`).join('')}
-          <div class="flex items-center justify-between rounded-2xl px-4 py-3 mt-2 ${up >= 0 ? 'bg-up-soft' : 'bg-down-soft'}">
-            <span class="text-sm font-semibold ${up >= 0 ? 'text-up' : 'text-down'}">Fair value / share</span>
-            <span class="tnum text-2xl font-display font-extrabold ${up >= 0 ? 'text-up' : 'text-down'}">${fmtRupee(fair)}</span>
-          </div>
-        </div>`;
+      const water = svgWaterfall(v.pv_projection, v.pv_terminal, v.enterprise_value, v.net_debt != null ? v.net_debt : d.net_debt, v.equity_value);
+      const callout = v.enterprise_value == null ? '' : `<div class="flex items-center justify-between rounded-2xl px-4 py-2.5 mt-3 ${up >= 0 ? 'bg-up-soft' : 'bg-down-soft'}">
+        <div><div class="text-[11px] font-semibold uppercase tracking-wide ${up >= 0 ? 'text-up' : 'text-down'}">Equity ÷ ${fmtShares(d.shares_outstanding)} sh</div><div class="text-xs text-slate-500">Fair value / share</div></div>
+        <div class="text-right"><div class="text-2xl font-display font-extrabold tnum leading-none ${up >= 0 ? 'text-up' : 'text-down'}">${fmtRupee(fair)}</div><div class="text-xs font-semibold tnum mt-0.5 ${up >= 0 ? 'text-up' : 'text-down'}">${signedPct(up)} vs ${fmtRupee(d.price_current)}</div></div>
+      </div>`;
 
-      // ---- 2. FCF & discounting chart ----
-      const FCF_H = 150;
-      const fmax = Math.max(...proj.map((p) => Math.abs(p.fcf || 0)), 1);
-      const fcfBars = proj.map((p) => {
-        const fcf = p.fcf || 0, pv = p.pv_fcf || 0;
-        const fhPx = Math.max(Math.abs(fcf) / fmax * FCF_H, 3), pr = Math.min(Math.abs(pv) / (Math.abs(fcf) || 1) * 100, 100);
-        return `<div class="flex-1 flex flex-col items-center justify-end min-w-0">
-          <div class="text-[9px] text-slate-400 tnum mb-1 whitespace-nowrap">${tinyCr(fcf)}</div>
-          <div class="relative w-full max-w-[30px] rounded-md overflow-hidden" style="height:${fhPx}px;background:#e0e7ff">
-            <div class="absolute bottom-0 inset-x-0" style="height:${pr}%;background:linear-gradient(180deg,#6366f1,#4338ca)"></div>
-          </div>
-          <div class="text-[10px] text-slate-400 tnum mt-1.5">'${String(p.year).slice(2)}</div>
-        </div>`;
-      }).join('');
-      const fcfCard = panel('Cash flows', 'Free cash flow, discounted', `
-        <div class="flex items-end justify-between gap-2" style="min-height:${FCF_H + 38}px">${fcfBars || '<div class="text-sm text-slate-400">No projection.</div>'}</div>
-        <div class="flex items-center gap-5 mt-4 text-xs text-slate-500">
-          <span class="flex items-center gap-1.5"><span class="h-2.5 w-2.5 rounded" style="background:#e0e7ff"></span>Projected FCF</span>
-          <span class="flex items-center gap-1.5"><span class="h-2.5 w-2.5 rounded" style="background:#4338ca"></span>Present value</span>
-          <span class="ml-auto">The gap is the time-value discount at ${fmtPct(W.selected, 1)} WACC.</span>
-        </div>`, '₹, ' + N + '-yr horizon');
+      const fcfLegend = `<div class="flex items-center gap-4 mt-1 text-[11px] text-slate-500"><span class="flex items-center gap-1.5"><span class="h-2.5 w-3 rounded-sm" style="background:#e0e7ff"></span>Projected FCF</span><span class="flex items-center gap-1.5"><span class="h-2.5 w-3 rounded-sm" style="background:#4338ca"></span>Present value</span><span class="ml-auto">discount @ ${fmtPct(W.selected, 1)} WACC</span></div>`;
 
-      // ---- 3. revenue & margin trajectory ----
-      const REV_H = 130;
-      const rmax = Math.max(...proj.map((p) => p.revenue || 0), 1);
-      const revBars = proj.map((p) => {
-        const rev = p.revenue || 0, m = rev ? (p.ebitda || 0) / rev : null;
-        return `<div class="flex-1 flex flex-col items-center justify-end min-w-0">
-          <div class="text-[9px] text-slate-400 tnum mb-1">${m != null ? Math.round(m * 100) + '%' : ''}</div>
-          <div class="w-full max-w-[30px] rounded-md" style="height:${Math.max(rev / rmax * REV_H, 3)}px;background:linear-gradient(180deg,#a5b4fc,#6366f1)"></div>
-          <div class="text-[10px] text-slate-400 tnum mt-1.5">'${String(p.year).slice(2)}</div>
-        </div>`;
-      }).join('');
-      const revCard = panel('Top line', 'Revenue & EBITDA margin', `
-        <div class="flex items-end justify-between gap-2" style="min-height:${REV_H + 32}px">${revBars}</div>
-        <div class="mt-3 text-xs text-slate-500">Bars: revenue (${compactCr(proj[0] && proj[0].revenue)} → ${compactCr(proj[proj.length - 1] && proj[proj.length - 1].revenue)}). Labels: EBITDA margin.</div>`, '₹');
-
-      // ---- 4. WACC build-up ----
       const rf = mid(B.long_term_bond_rate), erp = mid(B.equity_risk_premium), beta = W.beta != null ? W.beta : mid(B.adjusted_beta), addj = mid(B.additional_risk_adjustment) || 0;
       const coe = W.cost_of_equity_selected != null ? W.cost_of_equity_selected : (rf != null && beta != null && erp != null ? rf + beta * erp + addj : null);
       const cod = W.cost_of_debt_selected, de = mid(B.debt_equity_ratio), wsel = W.selected;
-      const segs = coe ? [['Risk-free', rf, '#94a3b8'], ['β × ERP', beta != null && erp != null ? beta * erp : null, '#6366f1'], ['Risk adj.', addj, '#c4b5fd']].filter((s) => s[1]) : [];
+      const segs = coe ? [['Risk-free', rf, '#94a3b8'], ['β × ERP', (beta != null && erp != null) ? beta * erp : null, '#6366f1'], ['Risk adj', addj || null, '#c4b5fd']].filter((s) => s[1]) : [];
       const segSum = segs.reduce((a, s) => a + s[1], 0) || 1;
-      const chip = (l, val) => `<div class="rounded-xl bg-slate-50 px-3 py-2"><div class="text-[10px] uppercase tracking-wide text-slate-400 font-semibold">${l}</div><div class="text-sm font-bold text-slate-900 tnum mt-0.5">${val}</div></div>`;
-      const waccCard = panel('Discount rate', 'WACC build-up · CAPM', `
-        ${coe ? `<div class="mb-1.5 flex justify-between text-xs font-semibold text-slate-500"><span>Cost of equity</span><span class="tnum">${fmtPct(coe, 1)}</span></div>
-        <div class="flex h-9 rounded-xl overflow-hidden ring-1 ring-slate-200/60">${segs.map((s) => `<div class="flex items-center justify-center text-white text-[10px] font-semibold" style="width:${s[1] / segSum * 100}%;background:${s[2]}" title="${s[0]}">${s[1] / segSum > 0.16 ? s[0] : ''}</div>`).join('')}</div>` : ''}
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mt-5">
-          ${chip('Risk-free', fmtPct(rf, 1))}${chip('Beta', beta != null ? beta.toFixed(2) : '—')}${chip('Equity risk premium', fmtPct(erp, 1))}${chip('Cost of equity', fmtPct(coe, 1))}
-          ${chip('Cost of debt', fmtPct(cod, 1))}${chip('Debt / Equity', de != null ? de.toFixed(2) : '—')}${chip('Tax rate', fmtPct(mid(B.tax_rate), 1))}${chip('Selected WACC', fmtPct(wsel, 2))}
-        </div>`, 'cost of equity → weighted WACC');
-
-      // ---- 5. live sensitivity heatmap ----
-      const baseW = W.selected, sens = v.sensitivity || {};
-      let heat = '<div class="text-sm text-slate-400">Not available.</div>';
-      if (baseW != null) {
-        const waccs = [-0.02, -0.01, 0, 0.01, 0.02].map((x) => baseW + x);
-        let cols, colLabels, secLabel, baseSec, selCol;
-        if (isEb) { baseSec = v.terminal && v.terminal.exit_multiple; if (baseSec) { cols = [-0.2, -0.1, 0, 0.1, 0.2].map((x) => baseSec * (1 + x)); colLabels = cols.map((c) => c.toFixed(1) + '×'); selCol = 2; secLabel = 'Exit EV/EBITDA multiple →'; } }
-        else { baseSec = d.assumptions_raw && d.assumptions_raw.avg_long_growth; if (baseSec != null) { cols = [-0.01, -0.005, 0, 0.005, 0.01].map((x) => baseSec + x); colLabels = cols.map((c) => (c * 100).toFixed(1) + '%'); selCol = 2; secLabel = 'Long-term growth →'; } }
-        if (cols) {
-          const price = d.price_current;
-          heat = `<div class="text-[11px] text-slate-400 mb-2">${secLabel} &nbsp;·&nbsp; ↓ WACC &nbsp;·&nbsp; cells = fair value/share, shaded by upside vs price</div>
-          <div class="overflow-x-auto -mx-1"><table class="border-separate text-xs" style="border-spacing:3px;min-width:440px">
-            <thead><tr><th></th>${colLabels.map((l, ci) => `<th class="px-2 py-1 text-center font-semibold ${ci === selCol ? 'text-slate-900' : 'text-slate-400'} tnum">${l}</th>`).join('')}</tr></thead>
-            <tbody>${waccs.map((w, ri) => `<tr><th class="pr-2 text-right font-semibold ${ri === 2 ? 'text-slate-900' : 'text-slate-400'} tnum whitespace-nowrap">${(w * 100).toFixed(1)}%</th>${cols.map((c, ci) => {
-            const f = fairAt(d, vk, w, c), u = f != null && price ? f / price - 1 : null;
-            const a = u == null ? 0 : Math.min(Math.abs(u), 0.5) / 0.5 * 0.82;
-            const bg = u == null ? '#f8fafc' : (u >= 0 ? `rgba(5,150,105,${a})` : `rgba(225,29,72,${a})`);
-            const seld = ri === 2 && ci === selCol;
-            return `<td class="px-2.5 py-2 text-center tnum rounded-lg ${seld ? 'ring-2 ring-slate-900 font-extrabold' : 'font-medium'}" style="background:${bg};color:${a > 0.45 ? '#fff' : '#0f172a'}">${f != null ? '₹' + Math.round(f).toLocaleString('en-IN') : '—'}</td>`;
-          }).join('')}</tr>`).join('')}</tbody></table></div>
-          <div class="mt-3 text-xs text-slate-500">Centre cell (ringed) is VI's selected case → <b class="tnum text-slate-700">${fmtRupee(fair)}</b>. Range across the grid: <b class="tnum text-slate-700">${rangeRupee(sens.fair_price_range)}</b>.</div>`;
-        }
-      }
-      const heatCard = panel('What if', 'Sensitivity — fair value vs WACC & ' + (isEb ? 'exit multiple' : 'growth'), heat);
-
-      // ---- detailed figures drawer (raw tables) ----
-      const drawer = `<div class="card rounded-3xl overflow-hidden">
-        <button data-drawer class="w-full flex items-center justify-between px-6 py-4 text-left hover:bg-slate-50/60 transition">
-          <span class="font-display font-bold text-slate-800">Detailed figures <span class="text-slate-400 font-sans font-normal text-sm">— full model tables</span></span>
-          <svg class="h-5 w-5 text-slate-400 transition-transform ${state.showTables ? 'rotate-180' : ''}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
-        </button>
-        ${state.showTables ? `<div class="px-6 pb-6 pt-1 space-y-6 border-t border-slate-100">${renderRawTables(d)}</div>` : ''}
+      const chip = (l, val, dark) => `<div class="rounded-xl ${dark ? 'bg-slate-900' : 'bg-slate-50'} px-2.5 py-2 text-center"><div class="text-[9px] uppercase tracking-wide ${dark ? 'text-white/55' : 'text-slate-400'} font-semibold">${l}</div><div class="text-sm font-bold ${dark ? 'text-white' : 'text-slate-900'} tnum mt-0.5">${val}</div></div>`;
+      const waccBody = `<div class="grid md:grid-cols-5 gap-5 items-center">
+        <div class="md:col-span-3">
+          ${coe ? `<div class="flex justify-between text-xs font-semibold text-slate-500 mb-1.5"><span>Cost of equity (CAPM)</span><span class="tnum">${fmtPct(coe, 1)}</span></div>
+          <div class="flex h-9 rounded-xl overflow-hidden ring-1 ring-slate-200/60">${segs.map((s) => `<div class="flex items-center justify-center text-white text-[10px] font-semibold" style="width:${(s[1] / segSum * 100).toFixed(1)}%;background:${s[2]}" title="${s[0]} · ${fmtPct(s[1], 1)}">${s[1] / segSum > 0.17 ? s[0] : ''}</div>`).join('')}</div>
+          <div class="flex justify-between text-[10px] text-slate-400 mt-1"><span>Risk-free ${fmtPct(rf, 1)}</span><span>β ${beta != null ? beta.toFixed(2) : '—'} × ERP ${fmtPct(erp, 1)}</span><span>+ adj ${fmtPct(addj, 1)}</span></div>` : '<div class="text-sm text-slate-400 py-2">WACC build not available.</div>'}
+        </div>
+        <div class="md:col-span-2 grid grid-cols-3 gap-2">
+          ${chip('Cost of equity', fmtPct(coe, 1))}${chip('Cost of debt', fmtPct(cod, 1))}${chip('D / E', de != null ? de.toFixed(2) : '—')}
+          ${chip('Tax', fmtPct(mid(B.tax_rate), 1))}${chip('Beta', beta != null ? beta.toFixed(2) : '—')}${chip('WACC', fmtPct(wsel, 1), true)}
+        </div>
       </div>`;
 
-      return `<div class="space-y-5">
-        <div class="grid lg:grid-cols-2 gap-5">
-          ${panel('Valuation', 'How the value builds up', buildup, '₹')}
-          ${fcfCard}
+      const baseW = W.selected, sens = v.sensitivity || {};
+      let heat = '<div class="text-sm text-slate-400 py-6 text-center">Not available.</div>';
+      if (baseW != null) {
+        const waccs = [-0.02, -0.01, 0, 0.01, 0.02].map((x) => baseW + x);
+        let cols, colLabels, secLabel, selCol = 2;
+        if (isEb) { const bs = v.terminal && v.terminal.exit_multiple; if (bs) { cols = [-0.2, -0.1, 0, 0.1, 0.2].map((x) => bs * (1 + x)); colLabels = cols.map((c) => c.toFixed(1) + '×'); secLabel = 'exit multiple →'; } }
+        else { const bs = d.assumptions_raw && d.assumptions_raw.avg_long_growth; if (bs != null) { cols = [-0.01, -0.005, 0, 0.005, 0.01].map((x) => bs + x); colLabels = cols.map((c) => (c * 100).toFixed(1) + '%'); secLabel = 'growth →'; } }
+        if (cols) {
+          const price = d.price_current;
+          heat = `<div class="text-[11px] text-slate-400 mb-2">${secLabel} &nbsp;·&nbsp; ↓ WACC &nbsp;·&nbsp; cell = fair value/share</div>
+          <div class="overflow-x-auto -mx-1"><table class="border-separate text-xs w-full" style="border-spacing:3px;min-width:420px">
+            <thead><tr><th class="w-10"></th>${colLabels.map((l, ci) => `<th class="px-1 py-1 text-center font-semibold ${ci === selCol ? 'text-slate-900' : 'text-slate-400'} tnum">${l}</th>`).join('')}</tr></thead>
+            <tbody>${waccs.map((w, ri) => `<tr><th class="pr-2 text-right font-semibold ${ri === 2 ? 'text-slate-900' : 'text-slate-400'} tnum">${(w * 100).toFixed(1)}%</th>${cols.map((c, ci) => {
+            const f = fairAt(d, vk, w, c), u = f != null && price ? f / price - 1 : null, a = u == null ? 0 : Math.min(Math.abs(u), 0.5) / 0.5 * 0.82, bg = u == null ? '#f8fafc' : (u >= 0 ? `rgba(5,150,105,${a})` : `rgba(225,29,72,${a})`), sel = ri === 2 && ci === selCol;
+            return `<td class="px-1.5 py-2 text-center tnum rounded-lg ${sel ? 'ring-2 ring-slate-900 font-extrabold' : 'font-medium'}" style="background:${bg};color:${a > 0.45 ? '#fff' : '#0f172a'}">${f != null ? Math.round(f).toLocaleString('en-IN') : '—'}</td>`;
+          }).join('')}</tr>`).join('')}</tbody></table></div>
+          <div class="mt-2.5 text-[11px] text-slate-500">Ringed = base case <b class="tnum text-slate-700">${fmtRupee(fair)}</b>. Grid range <b class="tnum text-slate-700">${rangeRupee(sens.fair_price_range)}</b>.</div>`;
+        }
+      }
+
+      const drawer = `<div class="card rounded-3xl overflow-hidden">
+        <button data-drawer class="w-full flex items-center justify-between px-5 py-3.5 text-left hover:bg-slate-50/60 transition">
+          <span class="font-display font-bold text-slate-800 text-sm">Detailed figures <span class="text-slate-400 font-sans font-normal">— full model tables</span></span>
+          <svg class="h-5 w-5 text-slate-400 transition-transform ${state.showTables ? 'rotate-180' : ''}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        ${state.showTables ? `<div class="px-5 pb-5 pt-1 space-y-5 border-t border-slate-100">${renderRawTables(d)}</div>` : ''}
+      </div>`;
+
+      return `<div class="space-y-4">
+        <div class="grid lg:grid-cols-2 gap-4">
+          ${panel('Valuation', 'Path to fair value', water + callout, '₹ waterfall')}
+          ${panel('Cash flows', 'FCF — gross vs present value', svgFcf(proj) + fcfLegend, N + 'yr · ₹')}
         </div>
-        ${waccCard}
-        <div class="grid lg:grid-cols-2 gap-5">${revCard}${heatCard}</div>
+        ${panel('Discount rate', 'WACC build-up', waccBody, 'CAPM')}
+        <div class="grid lg:grid-cols-2 gap-4">
+          ${panel('Top line', 'Revenue & EBITDA margin', svgRev(proj), '₹ · margin %')}
+          ${panel('What if', 'Sensitivity of fair value', heat, isEb ? 'WACC × multiple' : 'WACC × growth')}
+        </div>
         ${drawer}
       </div>`;
     }
