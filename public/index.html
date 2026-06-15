@@ -132,7 +132,7 @@
       { key: 'dcf-ebitda-exit-10y', label: 'EBITDA-exit 10Y' },
     ];
 
-    const state = { index: [], meta: null, doc: null, variant: 'dcf-growth-exit-5y', active: -1, matches: [] };
+    const state = { index: [], meta: null, doc: null, variant: 'dcf-growth-exit-5y', detailTab: 'revenue', active: -1, matches: [] };
     const $ = (id) => document.getElementById(id);
 
     // ---------- data load ----------
@@ -203,7 +203,8 @@
         state.doc = doc;
         state.variant = doc.variants?.['dcf-growth-exit-5y']?.fair_value_per_share != null ? 'dcf-growth-exit-5y'
           : (VARIANTS.find((v) => doc.variants?.[v.key]?.fair_value_per_share != null)?.key || 'dcf-growth-exit-5y');
-        renderCompany();
+        state.detailTab = 'revenue';
+        renderCompany(true);
       } catch {
         $('result').innerHTML = `<div class="card rounded-2xl p-8 text-center text-slate-500">No DCF data for <b>${esc(ticker)}</b>.</div>`;
       }
@@ -216,7 +217,74 @@
       return { label: 'Fairly valued', cls: 'slate', soft: 'bg-slate-100 text-slate-600' };
     }
 
-    function renderCompany() {
+    // ---------- detailed model (VI's exact tables) ----------
+    const RK = {
+      'dcf-growth-exit-5y': 'R_end_5', 'dcf-growth-exit-10y': 'R_end_10',
+      'dcf-ebitda-exit-5y': 'R_end_ebitda_5', 'dcf-ebitda-exit-10y': 'R_end_ebitda_10',
+    };
+    const rowsOf = (o, ks) => o ? ks.filter((k) => o[k] != null).map((k) => o[k]) : [];
+    const BOLD = /^(Revenue|Net profit|EBITDA|Free Cash Flow|Present value of FCF|Enterprise value|Equity value|Fair price|Net working capital|Total depreciation)/i;
+    const SOFT = /(%|rate|Days|Margin|Growth|multiple|Timing|Historical)/i;
+    function mtable(rows, header, minw = 520) {
+      if (!rows.length && !header) return '<div class="text-sm text-slate-400 py-3">Not available.</div>';
+      const head = header ? `<thead><tr>${header.map((c, i) => `<th class="px-3 py-2 text-[11px] font-semibold text-slate-400 uppercase tracking-wide whitespace-nowrap ${i ? 'text-right' : 'text-left'}">${esc(c)}</th>`).join('')}</tr></thead>` : '';
+      const body = rows.map((r) => {
+        const b = BOLD.test(String(r[0] || '')), s = !b && SOFT.test(String(r[0] || ''));
+        return `<tr class="border-t border-slate-100">
+          <td class="px-3 py-1.5 text-left whitespace-nowrap ${b ? 'font-semibold text-slate-900' : s ? 'text-xs text-slate-400' : 'text-slate-600'}">${esc(r[0])}</td>
+          ${r.slice(1).map((v) => `<td class="px-3 py-1.5 text-right tnum whitespace-nowrap ${b ? 'font-semibold text-slate-900' : s ? 'text-slate-400' : 'text-slate-700'}">${v === '' || v == null ? '' : esc(v)}</td>`).join('')}
+        </tr>`;
+      }).join('');
+      return `<div class="overflow-x-auto -mx-1"><table class="w-full text-sm border-collapse" style="min-width:${minw}px">${head}<tbody>${body}</tbody></table></div>`;
+    }
+    const card = (title, body, note) => `<div class="card rounded-3xl p-5 sm:p-6">
+      <div class="flex items-baseline justify-between gap-3 mb-3"><h3 class="font-display font-bold text-slate-900 text-lg">${title}</h3>${note ? `<span class="text-xs text-slate-400 shrink-0">${note}</span>` : ''}</div>${body}</div>`;
+    const rangeRupee = (r) => r ? `${fmtRupee(r.low)} – ${fmtRupee(r.high)}` : '—';
+    const rangePct = (r) => r ? `${(r.low * 100).toFixed(1)}% – ${(r.high * 100).toFixed(1)}%` : '—';
+
+    function renderDetail(d) {
+      const mt = d.model_tables || {}, T = mt.terminal || {}, vk = state.variant;
+      const end = T[RK[vk]];
+      const bridge = end ? mtable(rowsOf(end, ['R16', 'R17', 'R18', 'R19', 'R20', 'R21', 'R22']), null, 360)
+        : '<div class="text-sm text-slate-400 py-3">Bridge not available for this method.</div>';
+      const dcf = mtable(rowsOf(T, ['R2', 'R3', 'R4', 'R5', 'R6', 'R7', 'R8', 'R9', 'R14', 'R15']), T.R1, 760);
+      const termA = `<div class="flex flex-wrap gap-x-6 gap-y-1 mt-3 text-xs text-slate-500">
+        ${T.R12 ? `<span>WACC: <b class="text-slate-700 tnum">${esc(T.R12[1])}</b></span>` : ''}
+        ${T.R13 ? `<span>LT growth: <b class="text-slate-700 tnum">${esc(T.R13[1])}</b></span>` : ''}
+        ${T.R10 ? `<span>EBITDA multiple: <b class="text-slate-700 tnum">${esc(T.R10[1])}</b></span>` : ''}</div>`;
+      const W = mt.wacc, wacc = mtable(rowsOf(W, ['R2', 'R3', 'R4', 'R0', 'R5', 'R6', 'R7', 'R8', 'R9', 'R10']), W && W.R1, 360);
+
+      const FT = [['revenue', 'Revenue & Expenses', mt.revenue], ['capex', 'Capex', mt.capex], ['da', 'D&A', mt.da], ['working_capital', 'Working Capital', mt.working_capital]];
+      const tab = state.detailTab || 'revenue';
+      const ftTabs = FT.map(([k, label, o]) => `<button data-tab="${k}" ${o ? '' : 'disabled'} class="px-3 py-1.5 rounded-lg text-sm font-semibold whitespace-nowrap ${k === tab ? 'tab-active' : o ? 'text-slate-500 hover:bg-slate-100' : 'text-slate-300'}">${label}</button>`).join('');
+      const o = (FT.find((f) => f[0] === tab) || [])[2];
+      let ftBody = '<div class="text-sm text-slate-400 py-3">Not available.</div>';
+      if (o) {
+        if (tab === 'revenue') ftBody = mtable(rowsOf(o, ['R3', 'R4', 'R5', 'R6', 'R7', 'R8', 'R9', 'R10', 'R11', 'R12', 'R13', 'R14', 'R15', 'R16']), o.R2, 760);
+        else if (tab === 'capex') ftBody = mtable(rowsOf(o, ['R3', 'R4']), o.R2, 680) + `<div class="mt-4 mb-1 text-[11px] font-semibold text-slate-400 uppercase tracking-wide">Historical</div>` + mtable(rowsOf(o, ['R7', 'R8']), o.R6, 500);
+        else if (tab === 'da') ftBody = `<div class="text-xs text-slate-400 mb-2">Average useful life: <b class="text-slate-600">${esc(o.R1 && o.R1[1])}</b> yrs</div>` + mtable(rowsOf(o, ['R5', 'R6', 'R7', 'R8', 'R9', 'R10', 'R11', 'R12', 'R13', 'R14', 'R15', 'R16', 'R17', 'R18', 'R19']), o.R3, 760);
+        else ftBody = mtable(rowsOf(o, ['R3', 'R4', 'R5', 'R6', 'R7', 'R8', 'R9', 'R10']), o.R2, 760);
+      }
+
+      const sens = (d.variants[vk] || {}).sensitivity || {};
+      const sensBody = `<div class="grid sm:grid-cols-3 gap-3 text-sm">
+        <div class="rounded-xl bg-slate-50 p-3"><div class="text-[11px] uppercase text-slate-400 font-semibold tracking-wide">Fair price range</div><div class="mt-1 font-semibold text-slate-900 tnum">${rangeRupee(sens.fair_price_range)}</div></div>
+        <div class="rounded-xl bg-slate-50 p-3"><div class="text-[11px] uppercase text-slate-400 font-semibold tracking-wide">WACC range</div><div class="mt-1 font-semibold text-slate-900 tnum">${rangePct(sens.wacc_range)}</div></div>
+        <div class="rounded-xl bg-slate-50 p-3"><div class="text-[11px] uppercase text-slate-400 font-semibold tracking-wide">${sens.exit_multiple_range ? 'Exit multiple range' : 'LT growth range'}</div><div class="mt-1 font-semibold text-slate-900 tnum">${sens.exit_multiple_range ? sens.exit_multiple_range.low + '× – ' + sens.exit_multiple_range.high + '×' : rangePct(sens.growth_range)}</div></div>
+      </div>`;
+
+      return `<div class="space-y-5">
+        <div class="grid lg:grid-cols-5 gap-5">
+          <div class="lg:col-span-2">${card('How the fair value is built', bridge, '₹ mn, ex. per share')}</div>
+          <div class="lg:col-span-3">${card('WACC build · CAPM', wacc, 'selected = midpoint')}</div>
+        </div>
+        ${card('Discounted cash flow', dcf + termA, '₹ in millions')}
+        ${card('Forecast detail', `<div class="flex flex-wrap gap-2 mb-4">${ftTabs}</div>${ftBody}`, '₹ in millions')}
+        ${card('Sensitivity', sensBody)}
+      </div>`;
+    }
+
+    function renderCompany(animate) {
       const d = state.doc, v = d.variants[state.variant] || {};
       const up = v.upside_pct, V = verdict(up);
       const isUp = up != null && up >= 0;
@@ -241,7 +309,7 @@
         </div>`;
 
       $('result').innerHTML = `
-      <div class="fade-in space-y-5">
+      <div class="${animate ? 'fade-in ' : ''}space-y-5">
         <!-- Hero -->
         <div class="card rounded-3xl p-6 sm:p-8">
           <div class="flex flex-col lg:flex-row lg:items-center gap-7">
@@ -293,9 +361,12 @@
         </div>
 
         <p class="text-xs text-slate-400 px-1">Figures as published by valueinvesting.io for the selected DCF method. Switch methods above. ${d.is_financial ? 'Financial company — DCF may be supplemented by a dividend model.' : ''}</p>
+
+        ${renderDetail(d)}
       </div>`;
 
-      $('result').querySelectorAll('[data-v]').forEach((b) => b.onclick = () => { if (!b.disabled) { state.variant = b.dataset.v; renderCompany(); } });
+      $('result').querySelectorAll('[data-v]').forEach((b) => b.onclick = () => { if (!b.disabled) { state.variant = b.dataset.v; renderCompany(false); } });
+      $('result').querySelectorAll('[data-tab]').forEach((b) => b.onclick = () => { if (!b.disabled) { state.detailTab = b.dataset.tab; renderCompany(false); } });
     }
 
     // ---------- states ----------
