@@ -132,7 +132,7 @@
       { key: 'dcf-ebitda-exit-10y', label: 'EBITDA-exit 10Y' },
     ];
 
-    const state = { index: [], meta: null, doc: null, variant: 'dcf-growth-exit-5y', detailTab: 'revenue', active: -1, matches: [] };
+    const state = { index: [], meta: null, doc: null, variant: 'dcf-growth-exit-5y', detailTab: 'revenue', showTables: false, active: -1, matches: [] };
     const $ = (id) => document.getElementById(id);
 
     // ---------- data load ----------
@@ -239,49 +239,184 @@
     }
     const card = (title, body, note) => `<div class="card rounded-3xl p-5 sm:p-6">
       <div class="flex items-baseline justify-between gap-3 mb-3"><h3 class="font-display font-bold text-slate-900 text-lg">${title}</h3>${note ? `<span class="text-xs text-slate-400 shrink-0">${note}</span>` : ''}</div>${body}</div>`;
+    // ---------- numeric helpers for the visuals ----------
+    const num = (v) => { if (v == null) return null; if (typeof v === 'number') return isFinite(v) ? v : null; let s = String(v).trim(); const neg = /^\(/.test(s) || /^-/.test(s); s = s.replace(/[(),%x₹$€£\s]/g, '').replace(/^-/, ''); const n = parseFloat(s); return isFinite(n) ? (neg ? -n : n) : null; };
+    const compactCr = (mn) => { if (mn == null) return '—'; const cr = mn / 10, a = Math.abs(cr), s = cr < 0 ? '−' : ''; if (a >= 1e5) return s + '₹' + (a / 1e5).toFixed(2) + ' L Cr'; if (a >= 1) return s + '₹' + Math.round(a).toLocaleString('en-IN') + ' Cr'; return s + '₹' + (a * 100).toFixed(1) + ' L'; };
+    const tinyCr = (mn) => { if (mn == null) return ''; const cr = Math.abs(mn / 10), s = mn < 0 ? '−' : ''; if (cr >= 1e5) return s + (cr / 1e5).toFixed(1) + 'L'; if (cr >= 1e3) return s + (cr / 1e3).toFixed(1) + 'k'; return s + Math.round(cr); };
+    const TYP = { 'dcf-growth-exit-5y': 'typical_5', 'dcf-growth-exit-10y': 'typical_10', 'dcf-ebitda-exit-5y': 'typical_ebitda_5', 'dcf-ebitda-exit-10y': 'typical_ebitda_10' };
+    const mid = (r) => r && r.low != null && r.high != null ? (r.low + r.high) / 2 : null;
     const rangeRupee = (r) => r ? `${fmtRupee(r.low)} – ${fmtRupee(r.high)}` : '—';
     const rangePct = (r) => r ? `${(r.low * 100).toFixed(1)}% – ${(r.high * 100).toFixed(1)}%` : '—';
 
+    // recompute fair value at a given WACC and growth/multiple (for the live sensitivity grid)
+    function termInputs(d, vk) { const T = (d.model_tables || {}).terminal || {}, typ = T[TYP[vk]]; return { ebitda: num(typ && typ[4]), fcf: num(typ && typ[8]), exitYear: num(typ && typ[9]) || (vk.includes('10y') ? 10 : 5) }; }
+    function fairAt(d, vk, wacc, second) {
+      const isEb = vk.includes('ebitda'), N = vk.includes('10y') ? 10 : 5;
+      let spv = 0; for (const p of (d.shared_projection || []).slice(0, N)) if (p.fcf != null && p.timing != null) spv += p.fcf / Math.pow(1 + wacc, p.timing);
+      const ti = termInputs(d, vk); let tv;
+      if (isEb) tv = ti.ebitda != null ? ti.ebitda * second : null;
+      else tv = (ti.fcf != null && wacc - second > 0) ? ti.fcf * (1 + second) / (wacc - second) : null;
+      if (tv == null) return null;
+      const ev = spv + tv / Math.pow(1 + wacc, ti.exitYear), eq = ev - (d.net_debt || 0);
+      return d.shares_outstanding ? eq / d.shares_outstanding : null;
+    }
+
+    const eyebrow = (t) => `<div class="text-[11px] font-bold uppercase tracking-[0.14em] text-indigo-500/80 mb-1">${t}</div>`;
+    function panel(eb, title, body, note) {
+      return `<section class="card rounded-3xl p-5 sm:p-7">
+        <div class="flex items-start justify-between gap-3 mb-5">
+          <div>${eyebrow(eb)}<h3 class="font-display font-extrabold text-slate-900 text-xl tracking-tight">${title}</h3></div>
+          ${note ? `<span class="text-xs text-slate-400 shrink-0 mt-1">${note}</span>` : ''}
+        </div>${body}</section>`;
+    }
+
+    // ---------- the visual model ----------
     function renderDetail(d) {
-      const mt = d.model_tables || {}, T = mt.terminal || {}, vk = state.variant;
-      const end = T[RK[vk]];
-      const bridge = end ? mtable(rowsOf(end, ['R16', 'R17', 'R18', 'R19', 'R20', 'R21', 'R22']), null, 360)
-        : '<div class="text-sm text-slate-400 py-3">Bridge not available for this method.</div>';
-      const dcf = mtable(rowsOf(T, ['R2', 'R3', 'R4', 'R5', 'R6', 'R7', 'R8', 'R9', 'R14', 'R15']), T.R1, 760);
-      const termA = `<div class="flex flex-wrap gap-x-6 gap-y-1 mt-3 text-xs text-slate-500">
-        ${T.R12 ? `<span>WACC: <b class="text-slate-700 tnum">${esc(T.R12[1])}</b></span>` : ''}
-        ${T.R13 ? `<span>LT growth: <b class="text-slate-700 tnum">${esc(T.R13[1])}</b></span>` : ''}
-        ${T.R10 ? `<span>EBITDA multiple: <b class="text-slate-700 tnum">${esc(T.R10[1])}</b></span>` : ''}</div>`;
-      const W = mt.wacc, wacc = mtable(rowsOf(W, ['R2', 'R3', 'R4', 'R0', 'R5', 'R6', 'R7', 'R8', 'R9', 'R10']), W && W.R1, 360);
+      const vk = state.variant, v = d.variants[vk] || {}, isEb = vk.includes('ebitda'), N = vk.includes('10y') ? 10 : 5;
+      const proj = (d.shared_projection || []).slice(0, N);
+      const W = d.wacc || {}, B = W.build || {};
 
-      const FT = [['revenue', 'Revenue & Expenses', mt.revenue], ['capex', 'Capex', mt.capex], ['da', 'D&A', mt.da], ['working_capital', 'Working Capital', mt.working_capital]];
-      const tab = state.detailTab || 'revenue';
-      const ftTabs = FT.map(([k, label, o]) => `<button data-tab="${k}" ${o ? '' : 'disabled'} class="px-3 py-1.5 rounded-lg text-sm font-semibold whitespace-nowrap ${k === tab ? 'tab-active' : o ? 'text-slate-500 hover:bg-slate-100' : 'text-slate-300'}">${label}</button>`).join('');
-      const o = (FT.find((f) => f[0] === tab) || [])[2];
-      let ftBody = '<div class="text-sm text-slate-400 py-3">Not available.</div>';
-      if (o) {
-        if (tab === 'revenue') ftBody = mtable(rowsOf(o, ['R3', 'R4', 'R5', 'R6', 'R7', 'R8', 'R9', 'R10', 'R11', 'R12', 'R13', 'R14', 'R15', 'R16']), o.R2, 760);
-        else if (tab === 'capex') ftBody = mtable(rowsOf(o, ['R3', 'R4']), o.R2, 680) + `<div class="mt-4 mb-1 text-[11px] font-semibold text-slate-400 uppercase tracking-wide">Historical</div>` + mtable(rowsOf(o, ['R7', 'R8']), o.R6, 500);
-        else if (tab === 'da') ftBody = `<div class="text-xs text-slate-400 mb-2">Average useful life: <b class="text-slate-600">${esc(o.R1 && o.R1[1])}</b> yrs</div>` + mtable(rowsOf(o, ['R5', 'R6', 'R7', 'R8', 'R9', 'R10', 'R11', 'R12', 'R13', 'R14', 'R15', 'R16', 'R17', 'R18', 'R19']), o.R3, 760);
-        else ftBody = mtable(rowsOf(o, ['R3', 'R4', 'R5', 'R6', 'R7', 'R8', 'R9', 'R10']), o.R2, 760);
+      // ---- 1. value build-up (composition bar + equity bridge) ----
+      const pvF = v.pv_projection, pvT = v.pv_terminal, ev = v.enterprise_value, nd = v.net_debt ?? d.net_debt, eq = v.equity_value, fair = v.fair_value_per_share, up = v.upside_pct;
+      const compTot = (pvF || 0) + (pvT || 0) || 1;
+      const fPct = (v.pv_projection_pct != null ? v.pv_projection_pct * 100 : (pvF || 0) / compTot * 100);
+      const tPct = (v.pv_terminal_pct != null ? v.pv_terminal_pct * 100 : (pvT || 0) / compTot * 100);
+      const buildup = (ev == null) ? '<div class="text-sm text-slate-400 py-4">Not available for this method.</div>' : `
+        <div class="rounded-2xl bg-slate-50/70 p-4 mb-5">
+          <div class="flex justify-between text-xs font-semibold text-slate-500 mb-2"><span>Enterprise value composition</span><span class="tnum">${compactCr(ev)}</span></div>
+          <div class="flex h-11 rounded-xl overflow-hidden ring-1 ring-slate-200/60">
+            <div class="flex flex-col items-center justify-center text-white text-xs font-bold" style="width:${Math.max(fPct, 0)}%;background:linear-gradient(180deg,#6366f1,#4f46e5)" title="Forecast FCF">${fPct >= 14 ? Math.round(fPct) + '%' : ''}</div>
+            <div class="flex flex-col items-center justify-center text-white text-xs font-bold" style="width:${Math.max(tPct, 0)}%;background:linear-gradient(180deg,#0ea5e9,#0284c7)" title="Terminal value">${tPct >= 14 ? Math.round(tPct) + '%' : ''}</div>
+          </div>
+          <div class="flex justify-between text-[11px] mt-2">
+            <span class="flex items-center gap-1.5 text-slate-500"><span class="h-2 w-2 rounded-full" style="background:#4f46e5"></span>Forecast FCF · ${compactCr(pvF)}</span>
+            <span class="flex items-center gap-1.5 text-slate-500"><span class="h-2 w-2 rounded-full" style="background:#0284c7"></span>Terminal · ${compactCr(pvT)}</span>
+          </div>
+        </div>
+        <div class="space-y-0.5">
+          ${[['Enterprise value', compactCr(ev), false], ['− Net debt', compactCr(nd), false], ['Equity value', compactCr(eq), true], ['÷ Shares outstanding', fmtShares(d.shares_outstanding), false]].map(([l, val, strong]) => `
+            <div class="flex items-center justify-between py-2 ${strong ? 'border-y border-slate-100 my-1' : ''}">
+              <span class="text-sm ${strong ? 'font-semibold text-slate-900' : 'text-slate-500'}">${l}</span>
+              <span class="tnum ${strong ? 'font-bold text-slate-900' : 'text-slate-700'}">${val}</span>
+            </div>`).join('')}
+          <div class="flex items-center justify-between rounded-2xl px-4 py-3 mt-2 ${up >= 0 ? 'bg-up-soft' : 'bg-down-soft'}">
+            <span class="text-sm font-semibold ${up >= 0 ? 'text-up' : 'text-down'}">Fair value / share</span>
+            <span class="tnum text-2xl font-display font-extrabold ${up >= 0 ? 'text-up' : 'text-down'}">${fmtRupee(fair)}</span>
+          </div>
+        </div>`;
+
+      // ---- 2. FCF & discounting chart ----
+      const fmax = Math.max(...proj.map((p) => Math.abs(p.fcf || 0)), 1);
+      const fcfBars = proj.map((p) => {
+        const fcf = p.fcf || 0, pv = p.pv_fcf || 0;
+        const fh = Math.max(Math.abs(fcf) / fmax * 100, 1.5), pr = Math.min(Math.abs(pv) / (Math.abs(fcf) || 1) * 100, 100);
+        return `<div class="flex-1 flex flex-col items-center justify-end min-w-0">
+          <div class="text-[9px] text-slate-400 tnum mb-1 whitespace-nowrap">${tinyCr(fcf)}</div>
+          <div class="relative w-full max-w-[30px] rounded-md overflow-hidden" style="height:${fh}%;background:#e0e7ff">
+            <div class="absolute bottom-0 inset-x-0" style="height:${pr}%;background:linear-gradient(180deg,#6366f1,#4338ca)"></div>
+          </div>
+          <div class="text-[10px] text-slate-400 tnum mt-1.5">'${String(p.year).slice(2)}</div>
+        </div>`;
+      }).join('');
+      const fcfCard = panel('Cash flows', 'Free cash flow, discounted', `
+        <div class="flex items-end gap-2" style="height:190px">${fcfBars || '<div class="text-sm text-slate-400">No projection.</div>'}</div>
+        <div class="flex items-center gap-5 mt-4 text-xs text-slate-500">
+          <span class="flex items-center gap-1.5"><span class="h-2.5 w-2.5 rounded" style="background:#e0e7ff"></span>Projected FCF</span>
+          <span class="flex items-center gap-1.5"><span class="h-2.5 w-2.5 rounded" style="background:#4338ca"></span>Present value</span>
+          <span class="ml-auto">The gap is the time-value discount at ${fmtPct(W.selected, 1)} WACC.</span>
+        </div>`, '₹, ' + N + '-yr horizon');
+
+      // ---- 3. revenue & margin trajectory ----
+      const rmax = Math.max(...proj.map((p) => p.revenue || 0), 1);
+      const revBars = proj.map((p) => {
+        const rev = p.revenue || 0, m = rev ? (p.ebitda || 0) / rev : null;
+        return `<div class="flex-1 flex flex-col items-center justify-end min-w-0">
+          <div class="text-[9px] text-slate-400 tnum mb-1">${m != null ? Math.round(m * 100) + '%' : ''}</div>
+          <div class="w-full max-w-[30px] rounded-md" style="height:${Math.max(rev / rmax * 100, 1.5)}%;background:linear-gradient(180deg,#a5b4fc,#6366f1)"></div>
+          <div class="text-[10px] text-slate-400 tnum mt-1.5">'${String(p.year).slice(2)}</div>
+        </div>`;
+      }).join('');
+      const revCard = panel('Top line', 'Revenue & EBITDA margin', `
+        <div class="flex items-end gap-2" style="height:170px">${revBars}</div>
+        <div class="mt-3 text-xs text-slate-500">Bars: revenue (${compactCr(proj[0] && proj[0].revenue)} → ${compactCr(proj[proj.length - 1] && proj[proj.length - 1].revenue)}). Labels: EBITDA margin.</div>`, '₹');
+
+      // ---- 4. WACC build-up ----
+      const rf = mid(B.long_term_bond_rate), erp = mid(B.equity_risk_premium), beta = W.beta != null ? W.beta : mid(B.adjusted_beta), addj = mid(B.additional_risk_adjustment) || 0;
+      const coe = W.cost_of_equity_selected != null ? W.cost_of_equity_selected : (rf != null && beta != null && erp != null ? rf + beta * erp + addj : null);
+      const cod = W.cost_of_debt_selected, de = mid(B.debt_equity_ratio), wsel = W.selected;
+      const segs = coe ? [['Risk-free', rf, '#94a3b8'], ['β × ERP', beta != null && erp != null ? beta * erp : null, '#6366f1'], ['Risk adj.', addj, '#c4b5fd']].filter((s) => s[1]) : [];
+      const segSum = segs.reduce((a, s) => a + s[1], 0) || 1;
+      const chip = (l, val) => `<div class="rounded-xl bg-slate-50 px-3 py-2"><div class="text-[10px] uppercase tracking-wide text-slate-400 font-semibold">${l}</div><div class="text-sm font-bold text-slate-900 tnum mt-0.5">${val}</div></div>`;
+      const waccCard = panel('Discount rate', 'WACC build-up · CAPM', `
+        ${coe ? `<div class="mb-1.5 flex justify-between text-xs font-semibold text-slate-500"><span>Cost of equity</span><span class="tnum">${fmtPct(coe, 1)}</span></div>
+        <div class="flex h-9 rounded-xl overflow-hidden ring-1 ring-slate-200/60">${segs.map((s) => `<div class="flex items-center justify-center text-white text-[10px] font-semibold" style="width:${s[1] / segSum * 100}%;background:${s[2]}" title="${s[0]}">${s[1] / segSum > 0.16 ? s[0] : ''}</div>`).join('')}</div>` : ''}
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mt-5">
+          ${chip('Risk-free', fmtPct(rf, 1))}${chip('Beta', beta != null ? beta.toFixed(2) : '—')}${chip('Equity risk premium', fmtPct(erp, 1))}${chip('Cost of equity', fmtPct(coe, 1))}
+          ${chip('Cost of debt', fmtPct(cod, 1))}${chip('Debt / Equity', de != null ? de.toFixed(2) : '—')}${chip('Tax rate', fmtPct(mid(B.tax_rate), 1))}${chip('Selected WACC', fmtPct(wsel, 2))}
+        </div>`, 'cost of equity → weighted WACC');
+
+      // ---- 5. live sensitivity heatmap ----
+      const baseW = W.selected, sens = v.sensitivity || {};
+      let heat = '<div class="text-sm text-slate-400">Not available.</div>';
+      if (baseW != null) {
+        const waccs = [-0.02, -0.01, 0, 0.01, 0.02].map((x) => baseW + x);
+        let cols, colLabels, secLabel, baseSec, selCol;
+        if (isEb) { baseSec = v.terminal && v.terminal.exit_multiple; if (baseSec) { cols = [-0.2, -0.1, 0, 0.1, 0.2].map((x) => baseSec * (1 + x)); colLabels = cols.map((c) => c.toFixed(1) + '×'); selCol = 2; secLabel = 'Exit EV/EBITDA multiple →'; } }
+        else { baseSec = d.assumptions_raw && d.assumptions_raw.avg_long_growth; if (baseSec != null) { cols = [-0.01, -0.005, 0, 0.005, 0.01].map((x) => baseSec + x); colLabels = cols.map((c) => (c * 100).toFixed(1) + '%'); selCol = 2; secLabel = 'Long-term growth →'; } }
+        if (cols) {
+          const price = d.price_current;
+          heat = `<div class="text-[11px] text-slate-400 mb-2">${secLabel} &nbsp;·&nbsp; ↓ WACC &nbsp;·&nbsp; cells = fair value/share, shaded by upside vs price</div>
+          <div class="overflow-x-auto -mx-1"><table class="border-separate text-xs" style="border-spacing:3px;min-width:440px">
+            <thead><tr><th></th>${colLabels.map((l, ci) => `<th class="px-2 py-1 text-center font-semibold ${ci === selCol ? 'text-slate-900' : 'text-slate-400'} tnum">${l}</th>`).join('')}</tr></thead>
+            <tbody>${waccs.map((w, ri) => `<tr><th class="pr-2 text-right font-semibold ${ri === 2 ? 'text-slate-900' : 'text-slate-400'} tnum whitespace-nowrap">${(w * 100).toFixed(1)}%</th>${cols.map((c, ci) => {
+            const f = fairAt(d, vk, w, c), u = f != null && price ? f / price - 1 : null;
+            const a = u == null ? 0 : Math.min(Math.abs(u), 0.5) / 0.5 * 0.82;
+            const bg = u == null ? '#f8fafc' : (u >= 0 ? `rgba(5,150,105,${a})` : `rgba(225,29,72,${a})`);
+            const seld = ri === 2 && ci === selCol;
+            return `<td class="px-2.5 py-2 text-center tnum rounded-lg ${seld ? 'ring-2 ring-slate-900 font-extrabold' : 'font-medium'}" style="background:${bg};color:${a > 0.45 ? '#fff' : '#0f172a'}">${f != null ? '₹' + Math.round(f).toLocaleString('en-IN') : '—'}</td>`;
+          }).join('')}</tr>`).join('')}</tbody></table></div>
+          <div class="mt-3 text-xs text-slate-500">Centre cell (ringed) is VI's selected case → <b class="tnum text-slate-700">${fmtRupee(fair)}</b>. Range across the grid: <b class="tnum text-slate-700">${rangeRupee(sens.fair_price_range)}</b>.</div>`;
+        }
       }
+      const heatCard = panel('What if', 'Sensitivity — fair value vs WACC & ' + (isEb ? 'exit multiple' : 'growth'), heat);
 
-      const sens = (d.variants[vk] || {}).sensitivity || {};
-      const sensBody = `<div class="grid sm:grid-cols-3 gap-3 text-sm">
-        <div class="rounded-xl bg-slate-50 p-3"><div class="text-[11px] uppercase text-slate-400 font-semibold tracking-wide">Fair price range</div><div class="mt-1 font-semibold text-slate-900 tnum">${rangeRupee(sens.fair_price_range)}</div></div>
-        <div class="rounded-xl bg-slate-50 p-3"><div class="text-[11px] uppercase text-slate-400 font-semibold tracking-wide">WACC range</div><div class="mt-1 font-semibold text-slate-900 tnum">${rangePct(sens.wacc_range)}</div></div>
-        <div class="rounded-xl bg-slate-50 p-3"><div class="text-[11px] uppercase text-slate-400 font-semibold tracking-wide">${sens.exit_multiple_range ? 'Exit multiple range' : 'LT growth range'}</div><div class="mt-1 font-semibold text-slate-900 tnum">${sens.exit_multiple_range ? sens.exit_multiple_range.low + '× – ' + sens.exit_multiple_range.high + '×' : rangePct(sens.growth_range)}</div></div>
+      // ---- detailed figures drawer (raw tables) ----
+      const drawer = `<div class="card rounded-3xl overflow-hidden">
+        <button data-drawer class="w-full flex items-center justify-between px-6 py-4 text-left hover:bg-slate-50/60 transition">
+          <span class="font-display font-bold text-slate-800">Detailed figures <span class="text-slate-400 font-sans font-normal text-sm">— full model tables</span></span>
+          <svg class="h-5 w-5 text-slate-400 transition-transform ${state.showTables ? 'rotate-180' : ''}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        ${state.showTables ? `<div class="px-6 pb-6 pt-1 space-y-6 border-t border-slate-100">${renderRawTables(d)}</div>` : ''}
       </div>`;
 
       return `<div class="space-y-5">
-        <div class="grid lg:grid-cols-5 gap-5">
-          <div class="lg:col-span-2">${card('How the fair value is built', bridge, '₹ mn, ex. per share')}</div>
-          <div class="lg:col-span-3">${card('WACC build · CAPM', wacc, 'selected = midpoint')}</div>
+        <div class="grid lg:grid-cols-2 gap-5">
+          ${panel('Valuation', 'How the value builds up', buildup, '₹')}
+          ${fcfCard}
         </div>
-        ${card('Discounted cash flow', dcf + termA, '₹ in millions')}
-        ${card('Forecast detail', `<div class="flex flex-wrap gap-2 mb-4">${ftTabs}</div>${ftBody}`, '₹ in millions')}
-        ${card('Sensitivity', sensBody)}
+        ${waccCard}
+        <div class="grid lg:grid-cols-2 gap-5">${revCard}${heatCard}</div>
+        ${drawer}
       </div>`;
+    }
+
+    function renderRawTables(d) {
+      const mt = d.model_tables || {}, T = mt.terminal || {}, vk = state.variant, end = T[RK[vk]];
+      const bridge = end ? mtable(rowsOf(end, ['R16', 'R17', 'R18', 'R19', 'R20', 'R21', 'R22']), null, 360) : '<div class="text-sm text-slate-400">—</div>';
+      const dcf = mtable(rowsOf(T, ['R2', 'R3', 'R4', 'R5', 'R6', 'R7', 'R8', 'R9', 'R14', 'R15']), T.R1, 760);
+      const wacc = mtable(rowsOf(mt.wacc, ['R2', 'R3', 'R4', 'R0', 'R5', 'R6', 'R7', 'R8', 'R9', 'R10']), mt.wacc && mt.wacc.R1, 360);
+      const FT = [['revenue', 'Revenue & Expenses', mt.revenue], ['capex', 'Capex', mt.capex], ['da', 'D&A', mt.da], ['working_capital', 'Working Capital', mt.working_capital]];
+      const tab = FT.some((f) => f[0] === state.detailTab && f[2]) ? state.detailTab : 'revenue';
+      const tabs = FT.map(([k, l, o]) => `<button data-tab="${k}" ${o ? '' : 'disabled'} class="px-3 py-1.5 rounded-lg text-sm font-semibold ${k === tab ? 'tab-active' : o ? 'text-slate-500 hover:bg-slate-100' : 'text-slate-300'}">${l}</button>`).join('');
+      const o = (FT.find((f) => f[0] === tab) || [])[2]; let ft = '<div class="text-sm text-slate-400 py-3">—</div>';
+      if (o) {
+        if (tab === 'revenue') ft = mtable(rowsOf(o, ['R3', 'R4', 'R5', 'R6', 'R7', 'R8', 'R9', 'R10', 'R11', 'R12', 'R13', 'R14', 'R15', 'R16']), o.R2, 760);
+        else if (tab === 'capex') ft = mtable(rowsOf(o, ['R3', 'R4']), o.R2, 680) + mtable(rowsOf(o, ['R7', 'R8']), o.R6, 500);
+        else if (tab === 'da') ft = mtable(rowsOf(o, ['R5', 'R6', 'R7', 'R8', 'R9', 'R10', 'R11', 'R12', 'R13', 'R14', 'R15', 'R16', 'R17', 'R18', 'R19']), o.R3, 760);
+        else ft = mtable(rowsOf(o, ['R3', 'R4', 'R5', 'R6', 'R7', 'R8', 'R9', 'R10']), o.R2, 760);
+      }
+      const sub = (t, b) => `<div><div class="text-[11px] font-semibold uppercase tracking-wide text-slate-400 mb-2">${t}</div>${b}</div>`;
+      return sub('Valuation bridge (₹ mn)', bridge) + sub('Discounted cash flow (₹ mn)', dcf) + sub('WACC build', wacc) + sub('Forecast', `<div class="flex flex-wrap gap-2 mb-3">${tabs}</div>${ft}`);
     }
 
     function renderCompany(animate) {
@@ -367,6 +502,7 @@
 
       $('result').querySelectorAll('[data-v]').forEach((b) => b.onclick = () => { if (!b.disabled) { state.variant = b.dataset.v; renderCompany(false); } });
       $('result').querySelectorAll('[data-tab]').forEach((b) => b.onclick = () => { if (!b.disabled) { state.detailTab = b.dataset.tab; renderCompany(false); } });
+      $('result').querySelectorAll('[data-drawer]').forEach((b) => b.onclick = () => { state.showTables = !state.showTables; renderCompany(false); });
     }
 
     // ---------- states ----------
