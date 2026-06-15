@@ -1,0 +1,44 @@
+name: dcf-test
+
+# Manual single/slice smoke test: scrape specific tickers with the reader and
+# print + upload the results. Does NOT commit (never mutates the published dataset).
+on:
+  workflow_dispatch:
+    inputs:
+      tickers:
+        description: 'Space-separated tickers to scrape'
+        default: 'RELIANCE.NS TCS.NS HDFCBANK.NS IDEA.NS'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install cheerio
+        run: npm install cheerio@1
+      - name: Scrape tickers
+        run: node scraper/dcf-scrape.mjs ${{ github.event.inputs.tickers }}
+      - name: Show results
+        if: always()
+        run: |
+          for f in public/data/dcf/*.json; do
+            [ -f "$f" ] || continue
+            echo "=== $f ==="
+            node -e 'const d=require(process.argv[1]); const v=d.variants?.["dcf-growth-exit-5y"]||{}; console.log(JSON.stringify({ticker:d.ticker,name:d.name,carrier:d._debug?.carrier_found,fair5y:v.fair_value_per_share,upside:v.upside_pct,proj:d.shared_projection?.length,is_financial:d.is_financial},null,0))' "$f"
+          done
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dcf-test-output
+          path: public/data/dcf/
+          if-no-files-found: warn

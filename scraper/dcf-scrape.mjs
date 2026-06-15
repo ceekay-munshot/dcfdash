@@ -323,7 +323,9 @@ export function parseDcfHtml(html, ctx = {}) {
         sensitivity: {
           fair_price_range: summary?.fair_price_range ?? null,
           wacc_range: summary?.wacc_range ?? null,
-          growth_range: summary?.growth_range ?? null,
+          // Codex #6: for ebitda-exit, summary row3 is the EXIT-MULTIPLE range, not growth.
+          growth_range: def.method === 'exit_multiple' ? null : (summary?.growth_range ?? null),
+          exit_multiple_range: def.method === 'exit_multiple' ? (summary?.growth_range ?? null) : null,
           terminal_value_grid: termRoot.R11?.[1] ?? null,
         },
         summary_squares: summary?.squares ?? null,
@@ -355,8 +357,17 @@ export function parseDcfHtml(html, ctx = {}) {
   return doc;
 }
 
-// ---------- fetch w/ retry + backoff + timeout (Codex P2 #5) ----------
-export async function fetchWithRetry(url, { tries = 4, timeoutMs = 25000, headers = {} } = {}) {
+// ---------- fetch w/ retry + backoff + timeout, honoring Retry-After (429) ----------
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+function parseRetryAfter(h) {
+  if (!h) return null;
+  const s = Number(h);
+  if (isFinite(s)) return Math.min(Math.max(s, 0) * 1000, 60000);
+  const d = Date.parse(h);
+  if (!isNaN(d)) return Math.min(Math.max(d - Date.now(), 0), 60000);
+  return null;
+}
+export async function fetchWithRetry(url, { tries = 6, timeoutMs = 25000, headers = {} } = {}) {
   let lastErr;
   for (let i = 0; i < tries; i++) {
     const started = Date.now();
@@ -366,14 +377,17 @@ export async function fetchWithRetry(url, { tries = 4, timeoutMs = 25000, header
         redirect: 'follow',
         signal: AbortSignal.timeout(timeoutMs),
       });
+      if (res.status === 429 || res.status >= 500) {
+        const ra = parseRetryAfter(res.headers.get('retry-after'));
+        await res.text().catch(() => {}); // drain socket
+        if (i < tries - 1) { await sleep(ra != null ? ra + 250 : Math.min(2000 * 2 ** i, 30000)); continue; }
+        return { status: res.status, body: '', ms: Date.now() - started, headers: Object.fromEntries(res.headers.entries()) };
+      }
       const body = await res.text();
-      const ms = Date.now() - started;
-      if (res.status === 429 || res.status >= 500) throw new Error(`HTTP ${res.status}`);
-      return { status: res.status, body, ms, headers: Object.fromEntries(res.headers.entries()) };
+      return { status: res.status, body, ms: Date.now() - started, headers: Object.fromEntries(res.headers.entries()) };
     } catch (e) {
       lastErr = e;
-      const wait = Math.min(2 ** i * 1000, 8000);
-      if (i < tries - 1) await new Promise((r) => setTimeout(r, wait));
+      if (i < tries - 1) await sleep(Math.min(2000 * 2 ** i, 30000));
     }
   }
   throw lastErr;
