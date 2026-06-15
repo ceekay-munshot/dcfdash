@@ -1,0 +1,100 @@
+name: dcf-weekly-refresh
+
+# Production data-layer refresh: build the NSE candidate universe, gently scrape
+# the whole universe (~3-4 req/s, honors Retry-After), and commit the dataset
+# (public/data/dcf/*, index.json, dcf-metadata.json) back to the branch.
+#
+# Triggers: weekly cron (Sun 02:00 UTC), manual workflow_dispatch (resumable via
+# start_at / max_companies), and push on the feature branch (to validate on the
+# branch; once merged to the default branch, cron + dispatch are the real triggers
+# and this push trigger can be dropped).
+on:
+  schedule:
+    - cron: '0 2 * * 0'
+  workflow_dispatch:
+    inputs:
+      start_at:
+        description: 'Universe index to start at (resume cursor)'
+        default: '0'
+      max_companies:
+        description: 'Max companies this run (default: all)'
+        default: '100000'
+      build_universe:
+        description: 'Rebuild universe.json from NSE (true/false)'
+        default: 'true'
+  push:
+    branches:
+      - claude/optimistic-sagan-hmur0e
+    paths:
+      - 'scraper/**'
+      - '.github/workflows/dcf-weekly-refresh.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: dcf-weekly-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      START_AT: ${{ github.event.inputs.start_at || '0' }}
+      MAX_COMPANIES: ${{ github.event.inputs.max_companies || '100000' }}
+      CONCURRENCY: '2'
+      DELAY_MS: '500'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install cheerio
+        run: npm install cheerio@1
+
+      - name: Build NSE candidate universe
+        if: ${{ github.event.inputs.build_universe != 'false' }}
+        run: node scraper/build-universe.mjs
+
+      - name: Gentle full scrape
+        run: node scraper/scrape-all.mjs
+
+      - name: Echo summary
+        if: always()
+        run: |
+          echo '=== dcf-metadata.json ==='; cat public/data/dcf-metadata.json 2>/dev/null || echo "(none)"
+          echo; echo '=== index.json (head) ==='; head -c 800 public/data/index.json 2>/dev/null || echo "(none)"
+          echo; echo "dcf docs: $(ls public/data/dcf 2>/dev/null | wc -l)"
+
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dcf-dataset
+          path: |
+            public/data/universe.json
+            public/data/index.json
+            public/data/dcf-metadata.json
+            public/data/dcf/
+          if-no-files-found: warn
+
+      - name: Commit dataset (only if the run succeeded)
+        if: success()
+        run: |
+          set -e
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f public/data
+          if git diff --cached --quiet; then echo "no dataset changes"; exit 0; fi
+          git commit -m "data: weekly DCF refresh [start=${START_AT} max=${MAX_COMPANIES}] [skip ci]"
+          BR="${{ github.ref_name }}"; pushed=0; n=0
+          until [ "$n" -ge 5 ]; do
+            if git push origin "HEAD:$BR"; then echo "pushed"; pushed=1; break; fi
+            n=$((n+1)); echo "push retry $n"; git fetch origin "$BR" || true; git rebase "origin/$BR" || git rebase --abort || true; sleep "$((2**n))"
+          done
+          if [ "$pushed" -ne 1 ]; then echo "::error::commit-back failed after retries"; exit 1; fi

@@ -1,0 +1,661 @@
+{
+  "startedAt": "2026-06-15T05:54:52.513Z",
+  "base": "https://valueinvesting.io",
+  "primaryVariant": "dcf-growth-exit-5y",
+  "env": {
+    "node": "v22.22.3",
+    "runnerOs": "Linux"
+  },
+  "tickers": {
+    "RELIANCE.NS": {
+      "ticker": "RELIANCE.NS",
+      "url": "https://valueinvesting.io/RELIANCE.NS/valuation/dcf-growth-exit-5y",
+      "navStatus": 200,
+      "navError": null,
+      "docStatus": 200,
+      "endpointsCount": 92,
+      "jsonEndpoints": [
+        {
+          "ticker": "RELIANCE.NS",
+          "url": "https://js.stripe.com/v3/.deploy_status_henson.json",
+          "method": "GET",
+          "status": 200,
+          "contentType": "application/json",
+          "resourceType": "fetch",
+          "isJSON": true,
+          "bodyFile": "json-bodies/001_200_v3_.deploy_status_henson.json.json",
+          "bytes": 474
+        },
+        {
+          "ticker": "RELIANCE.NS",
+          "url": "https://js.stripe.com/v3/.deploy_status_henson.json",
+          "method": "GET",
+          "status": 200,
+          "contentType": "application/json",
+          "resourceType": "fetch",
+          "isJSON": true,
+          "bodyFile": "json-bodies/002_200_v3_.deploy_status_henson.json.json",
+          "bytes": 474
+        },
+        {
+          "ticker": "RELIANCE.NS",
+          "url": "https://js.stripe.com/v3/.deploy_status_henson.json",
+          "method": "GET",
+          "status": 200,
+          "contentType": "application/json",
+          "resourceType": "fetch",
+          "isJSON": true,
+          "bodyFile": "json-bodies/003_200_v3_.deploy_status_henson.json.json",
+          "bytes": 474
+        },
+        {
+          "ticker": "RELIANCE.NS",
+          "url": "https://ep1.adtrafficquality.google/getconfig/sodar?sv=200&tid=gda&tv=r20260611&st=env&sjk=5093050466953611",
+          "method": "GET",
+          "status": 200,
+          "contentType": "application/json; charset=UTF-8",
+          "resourceType": "xhr",
+          "isJSON": true,
+          "bodyFile": "json-bodies/004_200_getconfig_sodar.json",
+          "bytes": 18178
+        },
+        {
+          "ticker": "RELIANCE.NS",
+          "url": "https://embed.tawk.to/_s/v4/app/6a2a73cfdc0/languages/en.json",
+          "method": "GET",
+          "status": 200,
+          "contentType": "application/json",
+          "resourceType": "fetch",
+          "isJSON": true,
+          "bodyFile": "json-bodies/005_200__s_v4_app_6a2a73cfdc0_languages_en.json.json",
+          "bytes": 11596
+        },
+        {
+          "ticker": "RELIANCE.NS",
+          "url": "https://embed.tawk.to/_s/v4/app/6a2a73cfdc0/languages/en_dev.json",
+          "method": "GET",
+          "status": 200,
+          "contentType": "application/json",
+          "resourceType": "fetch",
+          "isJSON": true,
+          "bodyFile": "json-bodies/006_200__s_v4_app_6a2a73cfdc0_languages_en_dev.json.json",
+          "bytes": 10839
+        },
+        {
+          "ticker": "RELIANCE.NS",
+          "url": "https://va.tawk.to/v1/widget-settings?propertyId=611c4284d6e7610a49b0ad9d&widgetId=1fdb67lcq&sv=null",
+          "method": "GET",
+          "status": 200,
+          "contentType": "application/json",
+          "resourceType": "fetch",
+          "isJSON": true,
+          "bodyFile": "json-bodies/007_200_v1_widget-settings.json",
+          "bytes": 2953
+        },
+        {
+          "ticker": "RELIANCE.NS",
+          "url": "https://va.tawk.to/v1/session/start",
+          "method": "POST",
+          "status": 200,
+          "contentType": "application/json",
+          "resourceType": "fetch",
+          "isJSON": true,
+          "bodyFile": "json-bodies/008_200_v1_session_start.json",
+          "bytes": 1044
+        },
+        {
+          "ticker": "RELIANCE.NS",
+          "url": "https://m.stripe.com/6",
+          "method": "POST",
+          "status": 200,
+          "contentType": "application/json;charset=utf-8",
+          "resourceType": "xhr",
+          "isJSON": true,
+          "bodyFile": "json-bodies/009_200_6.json",
+          "bytes": 156
+        }
+      ],
+      "distinctHosts": [
+        "valueinvesting.io",
+        "use.fontawesome.com",
+        "cdnjs.cloudflare.com",
+        "pagead2.googlesyndication.com",
+        "challenges.cloudflare.com",
+        "static.cloudflareinsights.com",
+        "embed.tawk.to",
+        "www.googletagmanager.com",
+        "js.stripe.com",
+        "googleads.g.doubleclick.net",
+        "www.google-analytics.com",
+        "ep1.adtrafficquality.google",
+        "ep2.adtrafficquality.google",
+        "www.google.com",
+        "va.tawk.to",
+        "m.stripe.network",
+        "r.stripe.com",
+        "m.stripe.com"
+      ],
+      "embedded": {
+        "hasNextData": false,
+        "hasNuxt": false,
+        "hasNextF": false,
+        "appJsonScriptsCount": 0
+      },
+      "valuationLinks": [
+        "/RELIANCE.NS/valuation/dcf-growth-exit-5y",
+        "/RELIANCE.NS/valuation/intrinsic-value",
+        "/RELIANCE.NS/valuation/pe-multiples",
+        "/RELIANCE.NS/valuation/fair-value",
+        "/RELIANCE.NS/valuation/epv",
+        "/RELIANCE.NS/valuation/ddm-stable",
+        "/RELIANCE.NS/valuation/wacc",
+        "/IOC.NS/valuation/dcf-growth-exit-5y",
+        "/5020.T/valuation/dcf-growth-exit-5y",
+        "/BPCL.NS/valuation/dcf-growth-exit-5y",
+        "/5019.T/valuation/dcf-growth-exit-5y",
+        "/HINDPETRO.NS/valuation/dcf-growth-exit-5y",
+        "/5021.T/valuation/dcf-growth-exit-5y",
+        "/RELIANCE.NS/valuation/dcf-growth-exit-10y",
+        "/RELIANCE.NS/valuation/dcf-ebitda-exit-5y",
+        "/RELIANCE.NS/valuation/dcf-ebitda-exit-10y"
+      ],
+      "paywallHits": [],
+      "fvLines": [
+        "Peter Lynch Fair Value",
+        "Upside",
+        "The Discounted Cash Flow (DCF) valuation of Reliance Industries Ltd (RELIANCE.NS) is 694.05 INR. With the latest stock price at 1,293.00 INR, the upside of Reliance Industries Ltd based on DCF is -46.3%.",
+        "Upside\t-56.2% - -31.4%\t-46.3%"
+      ],
+      "fvNumbers": [
+        "694.05",
+        "1293.00",
+        "46.3",
+        "56.2",
+        "31.4"
+      ],
+      "pageTextLen": 2384,
+      "renderedHtmlLen": 240911,
+      "trace": {
+        "numbersTested": 5,
+        "inJsonXHR": [],
+        "inInitialHtml": [
+          "694.05",
+          "46.3",
+          "56.2",
+          "31.4"
+        ],
+        "inEmbeddedBlob": []
+      }
+    },
+    "TCS.NS": {
+      "ticker": "TCS.NS",
+      "url": "https://valueinvesting.io/TCS.NS/valuation/dcf-growth-exit-5y",
+      "navStatus": 200,
+      "navError": null,
+      "docStatus": 200,
+      "endpointsCount": 91,
+      "jsonEndpoints": [
+        {
+          "ticker": "TCS.NS",
+          "url": "https://js.stripe.com/v3/.deploy_status_henson.json",
+          "method": "GET",
+          "status": 200,
+          "contentType": "application/json",
+          "resourceType": "fetch",
+          "isJSON": true,
+          "bodyFile": "json-bodies/001_200_v3_.deploy_status_henson.json.json",
+          "bytes": 474
+        },
+        {
+          "ticker": "TCS.NS",
+          "url": "https://js.stripe.com/v3/.deploy_status_henson.json",
+          "method": "GET",
+          "status": 200,
+          "contentType": "application/json",
+          "resourceType": "fetch",
+          "isJSON": true,
+          "bodyFile": "json-bodies/002_200_v3_.deploy_status_henson.json.json",
+          "bytes": 474
+        },
+        {
+          "ticker": "TCS.NS",
+          "url": "https://js.stripe.com/v3/.deploy_status_henson.json",
+          "method": "GET",
+          "status": 200,
+          "contentType": "application/json",
+          "resourceType": "fetch",
+          "isJSON": true,
+          "bodyFile": "json-bodies/003_200_v3_.deploy_status_henson.json.json",
+          "bytes": 474
+        },
+        {
+          "ticker": "TCS.NS",
+          "url": "https://ep1.adtrafficquality.google/getconfig/sodar?sv=200&tid=gda&tv=r20260611&st=env&sjk=969487616648880",
+          "method": "GET",
+          "status": 200,
+          "contentType": "application/json; charset=UTF-8",
+          "resourceType": "xhr",
+          "isJSON": true,
+          "bodyFile": "json-bodies/004_200_getconfig_sodar.json",
+          "bytes": 17958
+        },
+        {
+          "ticker": "TCS.NS",
+          "url": "https://va.tawk.to/v1/widget-settings?propertyId=611c4284d6e7610a49b0ad9d&widgetId=1fdb67lcq&sv=null",
+          "method": "GET",
+          "status": 200,
+          "contentType": "application/json",
+          "resourceType": "fetch",
+          "isJSON": true,
+          "bodyFile": "json-bodies/005_200_v1_widget-settings.json",
+          "bytes": 2953
+        },
+        {
+          "ticker": "TCS.NS",
+          "url": "https://embed.tawk.to/_s/v4/app/6a2a73cfdc0/languages/en.json",
+          "method": "GET",
+          "status": 200,
+          "contentType": "application/json",
+          "resourceType": "fetch",
+          "isJSON": true,
+          "bodyFile": "json-bodies/006_200__s_v4_app_6a2a73cfdc0_languages_en.json.json",
+          "bytes": 11596
+        },
+        {
+          "ticker": "TCS.NS",
+          "url": "https://embed.tawk.to/_s/v4/app/6a2a73cfdc0/languages/en_dev.json",
+          "method": "GET",
+          "status": 200,
+          "contentType": "application/json",
+          "resourceType": "fetch",
+          "isJSON": true,
+          "bodyFile": "json-bodies/007_200__s_v4_app_6a2a73cfdc0_languages_en_dev.json.json",
+          "bytes": 10839
+        },
+        {
+          "ticker": "TCS.NS",
+          "url": "https://va.tawk.to/v1/session/start",
+          "method": "POST",
+          "status": 200,
+          "contentType": "application/json",
+          "resourceType": "fetch",
+          "isJSON": true,
+          "bodyFile": "json-bodies/008_200_v1_session_start.json",
+          "bytes": 605
+        },
+        {
+          "ticker": "TCS.NS",
+          "url": "https://m.stripe.com/6",
+          "method": "POST",
+          "status": 200,
+          "contentType": "application/json;charset=utf-8",
+          "resourceType": "xhr",
+          "isJSON": true,
+          "bodyFile": "json-bodies/009_200_6.json",
+          "bytes": 156
+        }
+      ],
+      "distinctHosts": [
+        "valueinvesting.io",
+        "cdnjs.cloudflare.com",
+        "use.fontawesome.com",
+        "pagead2.googlesyndication.com",
+        "www.googletagmanager.com",
+        "challenges.cloudflare.com",
+        "static.cloudflareinsights.com",
+        "embed.tawk.to",
+        "js.stripe.com",
+        "googleads.g.doubleclick.net",
+        "ep1.adtrafficquality.google",
+        "va.tawk.to",
+        "ep2.adtrafficquality.google",
+        "www.google.com",
+        "m.stripe.network",
+        "r.stripe.com",
+        "m.stripe.com",
+        "www.google-analytics.com"
+      ],
+      "embedded": {
+        "hasNextData": false,
+        "hasNuxt": false,
+        "hasNextF": false,
+        "appJsonScriptsCount": 0
+      },
+      "valuationLinks": [
+        "/TCS.NS/valuation/dcf-growth-exit-5y",
+        "/TCS.NS/valuation/intrinsic-value",
+        "/TCS.NS/valuation/pe-multiples",
+        "/TCS.NS/valuation/fair-value",
+        "/TCS.NS/valuation/epv",
+        "/TCS.NS/valuation/ddm-stable",
+        "/TCS.NS/valuation/wacc",
+        "/INFY.NS/valuation/dcf-growth-exit-5y",
+        "/WIPRO.NS/valuation/dcf-growth-exit-5y",
+        "/TECHM.NS/valuation/dcf-growth-exit-5y",
+        "/PERSISTENT.NS/valuation/dcf-growth-exit-5y",
+        "/LTI.NS/valuation/dcf-growth-exit-5y",
+        "/MINDTREE.NS/valuation/dcf-growth-exit-5y",
+        "/TCS.NS/valuation/dcf-growth-exit-10y",
+        "/TCS.NS/valuation/dcf-ebitda-exit-5y",
+        "/TCS.NS/valuation/dcf-ebitda-exit-10y"
+      ],
+      "paywallHits": [],
+      "fvLines": [
+        "Peter Lynch Fair Value",
+        "Upside",
+        "The Discounted Cash Flow (DCF) valuation of Tata Consultancy Services Ltd (TCS.NS) is 1,084.92 INR. With the latest stock price at 2,161.40 INR, the upside of Tata Consultancy Services Ltd based on DCF is -49.8%.",
+        "Upside\t-56.6% - -39.7%\t-49.8%"
+      ],
+      "fvNumbers": [
+        "1084.92",
+        "2161.40",
+        "49.8",
+        "56.6",
+        "39.7"
+      ],
+      "pageTextLen": 2269,
+      "renderedHtmlLen": 244652,
+      "trace": {
+        "numbersTested": 5,
+        "inJsonXHR": [],
+        "inInitialHtml": [
+          "1084.92",
+          "49.8",
+          "56.6",
+          "39.7"
+        ],
+        "inEmbeddedBlob": []
+      }
+    },
+    "HDFCBANK.NS": {
+      "ticker": "HDFCBANK.NS",
+      "url": "https://valueinvesting.io/HDFCBANK.NS/valuation/dcf-growth-exit-5y",
+      "navStatus": 200,
+      "navError": null,
+      "docStatus": 200,
+      "endpointsCount": 92,
+      "jsonEndpoints": [
+        {
+          "ticker": "HDFCBANK.NS",
+          "url": "https://js.stripe.com/v3/.deploy_status_henson.json",
+          "method": "GET",
+          "status": 200,
+          "contentType": "application/json",
+          "resourceType": "fetch",
+          "isJSON": true,
+          "bodyFile": "json-bodies/001_200_v3_.deploy_status_henson.json.json",
+          "bytes": 474
+        },
+        {
+          "ticker": "HDFCBANK.NS",
+          "url": "https://js.stripe.com/v3/.deploy_status_henson.json",
+          "method": "GET",
+          "status": 200,
+          "contentType": "application/json",
+          "resourceType": "fetch",
+          "isJSON": true,
+          "bodyFile": "json-bodies/002_200_v3_.deploy_status_henson.json.json",
+          "bytes": 474
+        },
+        {
+          "ticker": "HDFCBANK.NS",
+          "url": "https://js.stripe.com/v3/.deploy_status_henson.json",
+          "method": "GET",
+          "status": 200,
+          "contentType": "application/json",
+          "resourceType": "fetch",
+          "isJSON": true,
+          "bodyFile": "json-bodies/003_200_v3_.deploy_status_henson.json.json",
+          "bytes": 474
+        },
+        {
+          "ticker": "HDFCBANK.NS",
+          "url": "https://ep1.adtrafficquality.google/getconfig/sodar?sv=200&tid=gda&tv=r20260611&st=env&sjk=3933928160664238",
+          "method": "GET",
+          "status": 200,
+          "contentType": "application/json; charset=UTF-8",
+          "resourceType": "xhr",
+          "isJSON": true,
+          "bodyFile": "json-bodies/004_200_getconfig_sodar.json",
+          "bytes": 18046
+        },
+        {
+          "ticker": "HDFCBANK.NS",
+          "url": "https://va.tawk.to/v1/widget-settings?propertyId=611c4284d6e7610a49b0ad9d&widgetId=1fdb67lcq&sv=null",
+          "method": "GET",
+          "status": 200,
+          "contentType": "application/json",
+          "resourceType": "fetch",
+          "isJSON": true,
+          "bodyFile": "json-bodies/005_200_v1_widget-settings.json",
+          "bytes": 2953
+        },
+        {
+          "ticker": "HDFCBANK.NS",
+          "url": "https://embed.tawk.to/_s/v4/app/6a2a73cfdc0/languages/en.json",
+          "method": "GET",
+          "status": 200,
+          "contentType": "application/json",
+          "resourceType": "fetch",
+          "isJSON": true,
+          "bodyFile": "json-bodies/006_200__s_v4_app_6a2a73cfdc0_languages_en.json.json",
+          "bytes": 11596
+        },
+        {
+          "ticker": "HDFCBANK.NS",
+          "url": "https://embed.tawk.to/_s/v4/app/6a2a73cfdc0/languages/en_dev.json",
+          "method": "GET",
+          "status": 200,
+          "contentType": "application/json",
+          "resourceType": "fetch",
+          "isJSON": true,
+          "bodyFile": "json-bodies/007_200__s_v4_app_6a2a73cfdc0_languages_en_dev.json.json",
+          "bytes": 10839
+        },
+        {
+          "ticker": "HDFCBANK.NS",
+          "url": "https://va.tawk.to/v1/session/start",
+          "method": "POST",
+          "status": 200,
+          "contentType": "application/json",
+          "resourceType": "fetch",
+          "isJSON": true,
+          "bodyFile": "json-bodies/008_200_v1_session_start.json",
+          "bytes": 605
+        },
+        {
+          "ticker": "HDFCBANK.NS",
+          "url": "https://m.stripe.com/6",
+          "method": "POST",
+          "status": 200,
+          "contentType": "application/json;charset=utf-8",
+          "resourceType": "xhr",
+          "isJSON": true,
+          "bodyFile": "json-bodies/009_200_6.json",
+          "bytes": 156
+        }
+      ],
+      "distinctHosts": [
+        "valueinvesting.io",
+        "cdnjs.cloudflare.com",
+        "use.fontawesome.com",
+        "pagead2.googlesyndication.com",
+        "www.googletagmanager.com",
+        "challenges.cloudflare.com",
+        "static.cloudflareinsights.com",
+        "js.stripe.com",
+        "embed.tawk.to",
+        "googleads.g.doubleclick.net",
+        "ep1.adtrafficquality.google",
+        "va.tawk.to",
+        "ep2.adtrafficquality.google",
+        "www.google.com",
+        "m.stripe.network",
+        "r.stripe.com",
+        "m.stripe.com",
+        "www.google-analytics.com"
+      ],
+      "embedded": {
+        "hasNextData": false,
+        "hasNuxt": false,
+        "hasNextF": false,
+        "appJsonScriptsCount": 0
+      },
+      "valuationLinks": [
+        "/HDFCBANK.NS/valuation/wacc",
+        "/HDFCBANK.NS/valuation/intrinsic-value",
+        "/HDFCBANK.NS/valuation/pe-multiples",
+        "/HDFCBANK.NS/valuation/fair-value",
+        "/HDFCBANK.NS/valuation/ddm-stable",
+        "/ICICIBANK.NS/valuation/wacc",
+        "/SBIN.NS/valuation/wacc",
+        "/KOTAKBANK.NS/valuation/wacc",
+        "/AXISBANK.NS/valuation/wacc",
+        "/BANKBARODA.NS/valuation/wacc",
+        "/PNB.NS/valuation/wacc",
+        "/BANKINDIA.NS/valuation/wacc",
+        "/INDUSINDBK.NS/valuation/wacc",
+        "/SOUTHBANK.NS/valuation/wacc"
+      ],
+      "paywallHits": [
+        "Equity market risk premium\t8.3%\t9.3%",
+        "The Cost of Equity reflects the return a company needs to deliver to shareholders to justify the risk of investing in its shares. It’s computed using the Capital Asset Pricing Model (CAPM), which blends the risk-free rate, the stock’s beta, and the market risk premium."
+      ],
+      "fvLines": [
+        "Peter Lynch Fair Value"
+      ],
+      "fvNumbers": [],
+      "pageTextLen": 2785,
+      "renderedHtmlLen": 215114
+    }
+  },
+  "fetchMatrix": {
+    "RELIANCE.NS": {
+      "bareUA": {
+        "ok": true,
+        "status": 200,
+        "finalUrl": "https://valueinvesting.io/RELIANCE.NS/valuation/dcf-growth-exit-5y",
+        "ms": 264,
+        "server": "cloudflare",
+        "cfMitigated": null,
+        "cfRay": "a0bf52978c8b392b-IAD",
+        "contentType": "text/html; charset=utf-8",
+        "bodyBytes": 196386,
+        "challengeDetected": false,
+        "first1kb": "<!DOCTYPE html>\n<html>\n<head>\n    \n    <script async src=\"https://www.googletagmanager.com/gtag/js?id=G-4KHY6KT2C0\"></script>\n    <script>\n        window.dataLayer = window.dataLayer || [];\n        function gtag(){dataLayer.push(arguments);}\n        gtag('js', new Date());\n\n        gtag('config', 'G-4KHY6KT2C0');\n    </script>\n    <script async src=\"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5071091637270549\"\n            crossorigin=\"anonymous\"></script>\n    <link rel=\"shortcut icon\" href=\"/static/img/ico.png\" type=\"image/x-icon\"/>\n    <title>RELIANCE.NS DCF Valuation | Reliance Industries Ltd (RELIANCE.NS) </title>\n\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1 minimum-scale=1\"/>\n\n    <meta name=\"keywords\" content=\"RELIANCE.NS dcf, dcf, discounted cash flows, RELIANCE.NS, is RELIANCE.NS a buy\"/>\n    <meta name=\"description\" content=\"What is RELIANCE.NS&#39;s DCF valuation? The Discounted Cash Flow (DCF) value of Reliance Industries L"
+      },
+      "browserUA": {
+        "ok": true,
+        "status": 200,
+        "finalUrl": "https://valueinvesting.io/RELIANCE.NS/valuation/dcf-growth-exit-5y",
+        "ms": 43,
+        "server": "cloudflare",
+        "cfMitigated": null,
+        "cfRay": "a0bf5297ecc5392b-IAD",
+        "contentType": "text/html; charset=utf-8",
+        "bodyBytes": 196890,
+        "challengeDetected": false,
+        "first1kb": "<!DOCTYPE html>\n<html>\n<head>\n    \n    <script async src=\"https://www.googletagmanager.com/gtag/js?id=G-4KHY6KT2C0\"></script>\n    <script>\n        window.dataLayer = window.dataLayer || [];\n        function gtag(){dataLayer.push(arguments);}\n        gtag('js', new Date());\n\n        gtag('config', 'G-4KHY6KT2C0');\n    </script>\n    <script async src=\"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5071091637270549\"\n            crossorigin=\"anonymous\"></script>\n    <link rel=\"shortcut icon\" href=\"/static/img/ico.png\" type=\"image/x-icon\"/>\n    <title>RELIANCE.NS DCF Valuation | Reliance Industries Ltd (RELIANCE.NS) </title>\n\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1 minimum-scale=1\"/>\n\n    <meta name=\"keywords\" content=\"RELIANCE.NS dcf, dcf, discounted cash flows, RELIANCE.NS, is RELIANCE.NS a buy\"/>\n    <meta name=\"description\" content=\"What is RELIANCE.NS&#39;s DCF valuation? The Discounted Cash Flow (DCF) value of Reliance Industries L"
+      }
+    },
+    "TCS.NS": {
+      "bareUA": {
+        "ok": true,
+        "status": 200,
+        "finalUrl": "https://valueinvesting.io/TCS.NS/valuation/dcf-growth-exit-5y",
+        "ms": 41,
+        "server": "cloudflare",
+        "cfMitigated": null,
+        "cfRay": "a0bf52982cef392b-IAD",
+        "contentType": "text/html; charset=utf-8",
+        "bodyBytes": 200170,
+        "challengeDetected": false,
+        "first1kb": "<!DOCTYPE html>\n<html>\n<head>\n    \n    <script async src=\"https://www.googletagmanager.com/gtag/js?id=G-4KHY6KT2C0\"></script>\n    <script>\n        window.dataLayer = window.dataLayer || [];\n        function gtag(){dataLayer.push(arguments);}\n        gtag('js', new Date());\n\n        gtag('config', 'G-4KHY6KT2C0');\n    </script>\n    <script async src=\"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5071091637270549\"\n            crossorigin=\"anonymous\"></script>\n    <link rel=\"shortcut icon\" href=\"/static/img/ico.png\" type=\"image/x-icon\"/>\n    <title>TCS.NS DCF Valuation | Tata Consultancy Services Ltd (TCS.NS) </title>\n\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1 minimum-scale=1\"/>\n\n    <meta name=\"keywords\" content=\"TCS.NS dcf, dcf, discounted cash flows, TCS.NS, is TCS.NS a buy\"/>\n    <meta name=\"description\" content=\"What is TCS.NS&#39;s DCF valuation? The Discounted Cash Flow (DCF) value of Tata Consultancy Services Ltd (TCS.NS) is 1,0"
+      },
+      "browserUA": {
+        "ok": true,
+        "status": 200,
+        "finalUrl": "https://valueinvesting.io/TCS.NS/valuation/dcf-growth-exit-5y",
+        "ms": 39,
+        "server": "cloudflare",
+        "cfMitigated": null,
+        "cfRay": "a0bf52987d20392b-IAD",
+        "contentType": "text/html; charset=utf-8",
+        "bodyBytes": 200674,
+        "challengeDetected": false,
+        "first1kb": "<!DOCTYPE html>\n<html>\n<head>\n    \n    <script async src=\"https://www.googletagmanager.com/gtag/js?id=G-4KHY6KT2C0\"></script>\n    <script>\n        window.dataLayer = window.dataLayer || [];\n        function gtag(){dataLayer.push(arguments);}\n        gtag('js', new Date());\n\n        gtag('config', 'G-4KHY6KT2C0');\n    </script>\n    <script async src=\"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5071091637270549\"\n            crossorigin=\"anonymous\"></script>\n    <link rel=\"shortcut icon\" href=\"/static/img/ico.png\" type=\"image/x-icon\"/>\n    <title>TCS.NS DCF Valuation | Tata Consultancy Services Ltd (TCS.NS) </title>\n\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1 minimum-scale=1\"/>\n\n    <meta name=\"keywords\" content=\"TCS.NS dcf, dcf, discounted cash flows, TCS.NS, is TCS.NS a buy\"/>\n    <meta name=\"description\" content=\"What is TCS.NS&#39;s DCF valuation? The Discounted Cash Flow (DCF) value of Tata Consultancy Services Ltd (TCS.NS) is 1,0"
+      }
+    },
+    "HDFCBANK.NS": {
+      "bareUA": {
+        "ok": true,
+        "status": 200,
+        "finalUrl": "https://valueinvesting.io/HDFCBANK.NS/valuation/wacc",
+        "ms": 79,
+        "server": "cloudflare",
+        "cfMitigated": null,
+        "cfRay": "a0bf5298eef33891-IAD",
+        "contentType": "text/html; charset=utf-8",
+        "bodyBytes": 171814,
+        "challengeDetected": false,
+        "first1kb": "<!DOCTYPE html>\n<html>\n<head>\n    \n    <script async src=\"https://www.googletagmanager.com/gtag/js?id=G-4KHY6KT2C0\"></script>\n    <script>\n        window.dataLayer = window.dataLayer || [];\n        function gtag(){dataLayer.push(arguments);}\n        gtag('js', new Date());\n\n        gtag('config', 'G-4KHY6KT2C0');\n    </script>\n    <script async src=\"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5071091637270549\"\n            crossorigin=\"anonymous\"></script>\n    <link rel=\"shortcut icon\" href=\"/static/img/ico.png\" type=\"image/x-icon\"/>\n    <title>HDFCBANK.NS WACC, Cost of Equity, Cost of Debt and CAPM | HDFC Bank Ltd (HDFCBANK.NS)</title>\n\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1 minimum-scale=1\"/>\n\n    <meta name=\"keywords\" content=\"HDFCBANK.NS wacc, HDFCBANK.NS cost of equity, HDFCBANK.NS cost of debt, HDFCBANK.NS CAPM model, wacc, weighted average cost of capital, HDFCBANK.NS\"/>\n    <meta name=\"description\" content=\"The WACC of HD"
+      },
+      "browserUA": {
+        "ok": true,
+        "status": 200,
+        "finalUrl": "https://valueinvesting.io/HDFCBANK.NS/valuation/wacc",
+        "ms": 59,
+        "server": "cloudflare",
+        "cfMitigated": null,
+        "cfRay": "a0bf52995f4f3891-IAD",
+        "contentType": "text/html; charset=utf-8",
+        "bodyBytes": 172318,
+        "challengeDetected": false,
+        "first1kb": "<!DOCTYPE html>\n<html>\n<head>\n    \n    <script async src=\"https://www.googletagmanager.com/gtag/js?id=G-4KHY6KT2C0\"></script>\n    <script>\n        window.dataLayer = window.dataLayer || [];\n        function gtag(){dataLayer.push(arguments);}\n        gtag('js', new Date());\n\n        gtag('config', 'G-4KHY6KT2C0');\n    </script>\n    <script async src=\"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5071091637270549\"\n            crossorigin=\"anonymous\"></script>\n    <link rel=\"shortcut icon\" href=\"/static/img/ico.png\" type=\"image/x-icon\"/>\n    <title>HDFCBANK.NS WACC, Cost of Equity, Cost of Debt and CAPM | HDFC Bank Ltd (HDFCBANK.NS)</title>\n\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1 minimum-scale=1\"/>\n\n    <meta name=\"keywords\" content=\"HDFCBANK.NS wacc, HDFCBANK.NS cost of equity, HDFCBANK.NS cost of debt, HDFCBANK.NS CAPM model, wacc, weighted average cost of capital, HDFCBANK.NS\"/>\n    <meta name=\"description\" content=\"The WACC of HD"
+      }
+    }
+  },
+  "variants": {
+    "dcf-growth-exit-5y": 200,
+    "dcf-growth-exit-10y": 403,
+    "dcf-growth-exit": 200,
+    "dcf-perpetuity-growth-5y": 200,
+    "dcf-perpetuity-growth-10y": 200,
+    "dcf-perpetuity-growth": 200,
+    "dcf-simple": 200,
+    "dcf-2-stage": 200,
+    "dcf-three-stage": 200,
+    "reverse-dcf": 200,
+    "earnings-power-value": 200,
+    "ddm": 200,
+    "dividend-discount": 403,
+    "dcf": 200
+  },
+  "tickerFormats": {
+    "RELIANCE.NS": 200,
+    "RELIANCE.BO": 200,
+    "RELIANCE": 200,
+    "500325.BO": 200,
+    "TCS.BO": 429,
+    "INFY.NS": 429
+  },
+  "infra": {
+    "/robots.txt": {
+      "status": 200,
+      "bytes": 607,
+      "contentType": "text/plain; charset=utf-8",
+      "head": "User-agent: Googlebot\nDisallow: /*epv$\nDisallow: /*dcf-ebitda-exit-5y$\nDisallow: /*dcf-ebitda-exit-10y$\nDisallow: /*dcf-growth-exit-10y$\nDisallow: /*ddm-stable$\nDisallow: /*ddm-growth$\nDisallow: /*overview$\nDisallow: /*financials$\nDisallow: /*compare$\nDisallow: /*historical-price$\nDisallow: /*insider-transaction$\nDisallow: /*people$\nDisallow: /*all-watchlists$\nDisallow: /*updatelastweb$\nDisallow: /*valuation-overview$\nDisallow: /*valuation-metrics$\nDisallow: /*short-interest$\nDisallow: /*institutional-portfolios\nDisallow: /*l10n.js$\nDisallow: /discover\n\n\nsitemap: https://valueinvesting.io/site"
+    },
+    "/sitemap.xml": {
+      "status": 200,
+      "bytes": 295,
+      "contentType": "text/xml; charset=utf-8",
+      "head": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<sitemapindex xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n    <sitemap>\n        <loc>https://valueinvesting.io/sitemap1.xml</loc>\n    </sitemap>\n    <sitemap>\n        <loc>https://valueinvesting.io/sitemap2.xml</loc>\n    </sitemap>\n</sitemapindex>"
+    }
+  },
+  "search": {
+    "homeStatus": 200,
+    "searchEndpoints": []
+  },
+  "finishedAt": "2026-06-15T05:55:26.623Z"
+}

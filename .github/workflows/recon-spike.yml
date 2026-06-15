@@ -1,0 +1,95 @@
+name: recon-spike
+
+# Runs the valueinvesting.io DCF recon inside a GitHub Actions runner (open
+# internet + the exact environment a future production scraper would use).
+#
+# Triggers on push to the feature branch so it runs WITHOUT needing to live on
+# the default branch; workflow_dispatch is kept for manual re-runs once it does.
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - claude/optimistic-sagan-hmur0e
+    paths:
+      - 'recon/dcf-recon.mjs'
+      - '.github/workflows/recon-spike.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: recon-spike-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  recon:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout (branch ref so we can commit back)
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Playwright
+        run: npm install playwright
+
+      - name: Install Chromium + system deps
+        run: npx playwright install --with-deps chromium
+
+      - name: Run DCF recon
+        run: node recon/dcf-recon.mjs
+        env:
+          NODE_OPTIONS: --max-old-space-size=4096
+
+      - name: Echo RECON-REPORT.md into the workflow log
+        if: always()
+        run: |
+          echo '================ RECON-REPORT.md ================'
+          if [ -f recon/output/RECON-REPORT.md ]; then
+            cat recon/output/RECON-REPORT.md
+          else
+            echo "(no RECON-REPORT.md was produced)"
+          fi
+          echo '================ end of report ================'
+
+      - name: Upload recon output as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: recon-output
+          path: recon/output/
+          if-no-files-found: warn
+
+      - name: Commit recon/output back to the branch
+        if: always()
+        run: |
+          set -e
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f recon/output
+          if git diff --cached --quiet; then
+            echo "No recon output changes to commit."
+            exit 0
+          fi
+          git commit -m "recon: valueinvesting.io DCF recon output [skip ci]"
+          BR="${{ github.ref_name }}"
+          n=0
+          until [ "$n" -ge 5 ]; do
+            if git push origin "HEAD:$BR"; then
+              echo "pushed recon output to $BR"
+              break
+            fi
+            n=$((n+1))
+            echo "push failed (attempt $n); fetch + rebase + retry..."
+            git fetch origin "$BR" || true
+            git rebase "origin/$BR" || git rebase --abort || true
+            sleep "$((2**n))"
+          done

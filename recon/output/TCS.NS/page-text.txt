@@ -1,0 +1,78 @@
+Search tickers (stock/ETF/mutual fund)...
+Screener
+Watchlist
+Charts
+Gurus
+Filings Search
+Register
+TCS.NSTata Consultancy Services LtdPrice:  2,161.4 INRVolume:  2,124,656
+India | IT Services
+Add to Watchlist
+ValuationOverviewFinancialsForecastCompareHistorical PriceDividendsTransactionsPeople
+Valuation Summary
+Discounted Cash Flow
+Trading Multiples
+Peter Lynch Fair Value
+Earnings Power Value
+Dividend Discount Model
+WACC
+Similar Stocks to TCS.NS
+INFY.NS
+Infosys Ltd
+WIPRO.NS
+Wipro Ltd
+TECHM.NS
+Tech Mahindra Ltd
+PERSISTENT.NS
+Persistent Systems Ltd
+LTI.NS
+Larsen & Toubro Infotech Ltd
+MINDTREE.NS
+MindTree Ltd
+TCS.NS DCF Valuation - Growth Exit 5Y
+Growth Exit - 5Y 
+-49.8 %
+Upside
+What is the DCF valuation of TCS.NS?
+
+The Discounted Cash Flow (DCF) valuation of Tata Consultancy Services Ltd (TCS.NS) is 1,084.92 INR. With the latest stock price at 2,161.40 INR, the upside of Tata Consultancy Services Ltd based on DCF is -49.8%.
+
+Is TCS.NS a buy or a sell?
+
+Based on the latest price of 2,161.40 INR and our DCF valuation, Tata Consultancy Services Ltd (TCS.NS) is a sell. Selling TCS.NS stocks now will result in a potential gain of 49.8%.
+
+	Range	Selected
+WACC / Discount Rate	14.4% - 17.0%	15.7%
+Long-term Growth Rate	3.0% - 5.0%	4.0%
+Fair Price	937.37 - 1,303.28	1,084.92
+Upside	-56.6% - -39.7%	-49.8%
+2,161.40 INR
+Stock Price
+1,084.92 INR
+Fair Price
+REVENUE & EXPENSESCAPEXD&AWORKING CAPITALTERMINAL VALUE
+TCS.NS DCF Valuation: Revenue & Expenses Forecast
+(INR in millions)		Projections
+
+	03-2026	03-2027	03-2028	03-2029	03-2030	03-2031
+
+Revenue	2,670,210	2,814,878	3,014,563	3,074,854	3,262,205	3,341,381
+% Growth	5%	5%	7%	2%	6%	2%
+
+Cost of goods sold	(43,990)	(44,055)	(44,821)	(43,431)	(43,774)	(42,594)
+% of Revenue	2%	2%	1%	1%	1%	1%
+
+Selling, G&A expenses	(1,844,140)	(1,944,053)	(2,081,962)	(2,123,601)	(2,252,992)	(2,307,674)
+% of Revenue	69%	69%	69%	69%	69%	69%
+
+Research & Development	0	0	0	0	0	0
+% of Revenue	0%	0%	0%	0%	0%	0%
+
+Net interest & other expenses	(127,210)	(134,102)	(143,615)	(146,487)	(155,413)	(159,185)
+% of Revenue	5%	5%	5%	5%	5%	5%
+
+Tax expense	(160,330)	(177,405)	(190,594)	(194,992)	(207,463)	(213,072)
+Tax rate	24%	26%	26%	26%	26%	26%
+	
+Net profit	494,540	515,263	553,570	566,342	602,563	618,856
+% Margin	19%	18%	18%	18%	18%	19%

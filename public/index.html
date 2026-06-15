@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Intrinsic — Indian Equity DCF Valuations</title>
+  <meta name="description" content="Discounted cash flow valuations for NSE-listed companies." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+            display: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
+          },
+          colors: {
+            up: { DEFAULT: '#059669', soft: '#ecfdf5', ring: '#a7f3d0' },
+            down: { DEFAULT: '#e11d48', soft: '#fff1f2', ring: '#fecdd3' },
+          },
+        },
+      },
+    };
+  </script>
+  <!-- ExcelJS loaded now for the later Excel-export phase (unused in Phase 1) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js" defer></script>
+
+  <style>
+    body { background:
+      radial-gradient(1200px 600px at 12% -8%, #eef2ff 0%, rgba(238,242,255,0) 55%),
+      radial-gradient(1000px 600px at 100% 0%, #ecfeff 0%, rgba(236,254,255,0) 50%),
+      #f8fafc; }
+    .tnum { font-variant-numeric: tabular-nums; }
+    .card { background:#fff; border:1px solid #f1f5f9; box-shadow:0 1px 2px rgba(15,23,42,.04), 0 8px 24px -12px rgba(15,23,42,.10); }
+    .glass { background:rgba(255,255,255,.72); backdrop-filter:saturate(180%) blur(12px); }
+    .fade-in { animation: fade .35s ease both; }
+    @keyframes fade { from { opacity:0; transform: translateY(6px); } to { opacity:1; transform:none; } }
+    .skeleton { background:linear-gradient(90deg,#f1f5f9 25%,#e2e8f0 37%,#f1f5f9 63%); background-size:400% 100%; animation: sh 1.3s ease infinite; }
+    @keyframes sh { 0%{background-position:100% 0} 100%{background-position:-100% 0} }
+    .tab-active { background:#0f172a; color:#fff; }
+    ::-webkit-scrollbar { width:10px; height:10px; } ::-webkit-scrollbar-thumb { background:#e2e8f0; border-radius:9999px; }
+  </style>
+</head>
+<body class="font-sans text-slate-700 min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="glass sticky top-0 z-40 border-b border-slate-200/60">
+    <div class="max-w-6xl mx-auto px-5 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-2.5">
+        <div class="h-9 w-9 rounded-xl bg-slate-900 text-white grid place-items-center font-display font-extrabold">i</div>
+        <div>
+          <div class="font-display font-extrabold text-slate-900 leading-none tracking-tight">Intrinsic</div>
+          <div class="text-[11px] text-slate-400 leading-none mt-0.5">Indian Equity DCF</div>
+        </div>
+      </div>
+      <!-- client branding slot -->
+      <div id="brandingSlot" class="text-xs text-slate-400 font-medium">Powered by valueinvesting.io</div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-6xl w-full mx-auto px-5 pb-20">
+
+    <!-- Hero / search -->
+    <section class="pt-12 pb-7 text-center">
+      <h1 class="font-display font-extrabold tracking-tight text-slate-900 text-3xl sm:text-4xl">What's it really worth?</h1>
+      <p class="mt-2.5 text-slate-500 max-w-xl mx-auto">Discounted cash flow fair value for <span id="universeCount" class="font-semibold text-slate-700">NSE-listed</span> companies — search any name or ticker.</p>
+
+      <div class="relative max-w-xl mx-auto mt-7">
+        <div class="relative">
+          <svg class="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-3.5-3.5"/></svg>
+          <input id="search" type="text" autocomplete="off" spellcheck="false"
+            placeholder="Search “Reliance” or “TCS.NS”…"
+            class="w-full pl-12 pr-4 h-14 rounded-2xl card text-[15px] text-slate-800 placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-300 transition" />
+        </div>
+        <div id="dropdown" class="hidden absolute z-30 mt-2 w-full card rounded-2xl overflow-hidden text-left"></div>
+      </div>
+    </section>
+
+    <!-- Result region -->
+    <section id="result"></section>
+
+  </main>
+
+  <footer class="border-t border-slate-200/60">
+    <div class="max-w-6xl mx-auto px-5 py-5 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-400">
+      <div id="freshness">Loading data…</div>
+      <div>DCF data sourced from valueinvesting.io · Displayed for information, not investment advice.</div>
+    </div>
+  </footer>
+
+  <script type="module">
+    // ---------- Indian number formatting ----------
+    const indianGroup = (intStr) => {
+      let neg = intStr.startsWith('-'); if (neg) intStr = intStr.slice(1);
+      const last3 = intStr.slice(-3), rest = intStr.slice(0, -3);
+      const g = rest ? rest.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + ',' + last3 : last3;
+      return (neg ? '-' : '') + g;
+    };
+    const fmtRupee = (x, dec = 2) => {
+      if (x == null || !isFinite(x)) return '—';
+      const neg = x < 0, [i, f] = Math.abs(x).toFixed(dec).split('.');
+      return (neg ? '−' : '') + '₹' + indianGroup(i) + (dec ? '.' + f : '');
+    };
+    // amount given in millions of INR -> ₹ Cr / ₹ L Cr
+    const fmtCr = (mn) => {
+      if (mn == null || !isFinite(mn)) return '—';
+      const cr = mn / 10, neg = cr < 0, a = Math.abs(cr);
+      if (a >= 1e5) return (neg ? '−' : '') + '₹' + (a / 1e5).toFixed(2) + ' L Cr';
+      if (a >= 1) return (neg ? '−' : '') + '₹' + indianGroup(Math.round(a).toString()) + ' Cr';
+      return (neg ? '−' : '') + '₹' + (a * 100).toFixed(1) + ' L';
+    };
+    const fmtShares = (mn) => {
+      if (mn == null || !isFinite(mn)) return '—';
+      const cr = mn / 10;
+      if (cr < 1) return cr.toFixed(2) + ' Cr';
+      const [i, f] = cr.toFixed(2).split('.');
+      return indianGroup(i) + (f && f !== '00' ? '.' + f : '') + ' Cr';
+    };
+    const fmtPct = (r, d = 2) => r == null || !isFinite(r) ? '—' : (r * 100).toFixed(d) + '%';
+    const signedPct = (r, d = 1) => r == null || !isFinite(r) ? '—' : (r >= 0 ? '+' : '−') + Math.abs(r * 100).toFixed(d) + '%';
+    const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+    const VARIANTS = [
+      { key: 'dcf-growth-exit-5y', label: 'Growth-exit 5Y' },
+      { key: 'dcf-growth-exit-10y', label: 'Growth-exit 10Y' },
+      { key: 'dcf-ebitda-exit-5y', label: 'EBITDA-exit 5Y' },
+      { key: 'dcf-ebitda-exit-10y', label: 'EBITDA-exit 10Y' },
+    ];
+
+    const state = { index: [], meta: null, doc: null, variant: 'dcf-growth-exit-5y', active: -1, matches: [] };
+    const $ = (id) => document.getElementById(id);
+
+    // ---------- data load ----------
+    async function init() {
+      try {
+        const [meta, index] = await Promise.all([
+          fetch('data/dcf-metadata.json').then((r) => r.json()).catch(() => null),
+          fetch('data/index.json').then((r) => r.json()),
+        ]);
+        state.meta = meta; state.index = index.companies || [];
+        $('universeCount').textContent = (index.count || state.index.length).toLocaleString('en-IN') + ' NSE-listed';
+        if (meta?.generated_at) {
+          const d = new Date(meta.generated_at);
+          $('freshness').textContent = 'Data as of ' + d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) +
+            ` · ${(meta.covered ?? state.index.length).toLocaleString('en-IN')} companies covered`;
+        }
+        renderEmpty();
+        if (location.hash.length > 1) selectTicker(decodeURIComponent(location.hash.slice(1)));
+      } catch (e) {
+        $('result').innerHTML = `<div class="card rounded-2xl p-8 text-center text-slate-500">Couldn't load data. Please refresh.</div>`;
+        $('freshness').textContent = 'Data unavailable';
+      }
+    }
+
+    // ---------- search ----------
+    function searchIndex(q) {
+      q = q.trim().toLowerCase(); if (!q) return [];
+      const starts = [], contains = [];
+      for (const c of state.index) {
+        const t = c.ticker.toLowerCase(), n = (c.name || '').toLowerCase();
+        if (t.startsWith(q) || n.startsWith(q)) starts.push(c);
+        else if (t.includes(q) || n.includes(q)) contains.push(c);
+        if (starts.length >= 8) break;
+      }
+      return [...starts, ...contains].slice(0, 8);
+    }
+    function renderDropdown() {
+      const dd = $('dropdown');
+      if (!state.matches.length) { dd.classList.add('hidden'); return; }
+      dd.innerHTML = state.matches.map((c, i) => `
+        <button data-i="${i}" class="w-full flex items-center justify-between gap-3 px-4 py-3 text-left hover:bg-slate-50 ${i === state.active ? 'bg-slate-50' : ''} ${i ? 'border-t border-slate-100' : ''}">
+          <span class="min-w-0">
+            <span class="block font-semibold text-slate-800 truncate">${esc(c.name || c.ticker)}</span>
+            <span class="block text-xs text-slate-400 truncate">${esc(c.ticker)}${c.sector ? ' · ' + esc(c.sector) : ''}</span>
+          </span>
+          <span class="text-sm tnum ${c.upside_pct >= 0 ? 'text-up' : 'text-down'} font-semibold shrink-0">${signedPct(c.upside_pct)}</span>
+        </button>`).join('');
+      dd.classList.remove('hidden');
+      dd.querySelectorAll('button').forEach((b) => b.onclick = () => selectTicker(state.matches[+b.dataset.i].ticker));
+    }
+    function onInput() {
+      state.matches = searchIndex($('search').value); state.active = -1; renderDropdown();
+    }
+    function onKey(e) {
+      if (e.key === 'ArrowDown') { e.preventDefault(); state.active = Math.min(state.active + 1, state.matches.length - 1); renderDropdown(); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); state.active = Math.max(state.active - 1, 0); renderDropdown(); }
+      else if (e.key === 'Enter') { const c = state.matches[state.active] || state.matches[0]; if (c) selectTicker(c.ticker); }
+      else if (e.key === 'Escape') { $('dropdown').classList.add('hidden'); }
+    }
+
+    // ---------- company load + render ----------
+    async function selectTicker(ticker) {
+      $('dropdown').classList.add('hidden'); $('search').value = '';
+      location.hash = encodeURIComponent(ticker);
+      $('result').innerHTML = skeleton();
+      try {
+        const doc = await fetch('data/dcf/' + encodeURIComponent(ticker) + '.json').then((r) => { if (!r.ok) throw 0; return r.json(); });
+        state.doc = doc;
+        state.variant = doc.variants?.['dcf-growth-exit-5y']?.fair_value_per_share != null ? 'dcf-growth-exit-5y'
+          : (VARIANTS.find((v) => doc.variants?.[v.key]?.fair_value_per_share != null)?.key || 'dcf-growth-exit-5y');
+        renderCompany();
+      } catch {
+        $('result').innerHTML = `<div class="card rounded-2xl p-8 text-center text-slate-500">No DCF data for <b>${esc(ticker)}</b>.</div>`;
+      }
+    }
+
+    function verdict(up) {
+      if (up == null) return { label: 'No estimate', cls: 'slate', soft: 'bg-slate-100 text-slate-600' };
+      if (up > 0.02) return { label: 'Undervalued', cls: 'up', soft: 'bg-up-soft text-up' };
+      if (up < -0.02) return { label: 'Overvalued', cls: 'down', soft: 'bg-down-soft text-down' };
+      return { label: 'Fairly valued', cls: 'slate', soft: 'bg-slate-100 text-slate-600' };
+    }
+
+    function renderCompany() {
+      const d = state.doc, v = d.variants[state.variant] || {};
+      const up = v.upside_pct, V = verdict(up);
+      const isUp = up != null && up >= 0;
+      const fillPct = up == null ? 0 : Math.min(Math.abs(up), 1) * 50; // % of half-track
+      const term = v.terminal || {};
+      const termLabel = term.method === 'exit_multiple'
+        ? `Exit multiple · ${term.exit_multiple != null ? term.exit_multiple + '×' : '—'}`
+        : `Perpetuity growth · ${term.perp_growth != null ? fmtPct(term.perp_growth, 1) : '—'}`;
+
+      const tabs = VARIANTS.map((t) => {
+        const has = d.variants?.[t.key]?.fair_value_per_share != null;
+        const on = t.key === state.variant;
+        return `<button data-v="${t.key}" ${has ? '' : 'disabled'}
+          class="px-3.5 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition ${on ? 'tab-active' : has ? 'text-slate-500 hover:bg-slate-100' : 'text-slate-300 cursor-not-allowed'}">${t.label}</button>`;
+      }).join('');
+
+      const stat = (label, value, sub = '') => `
+        <div class="card rounded-2xl p-4">
+          <div class="text-[11px] uppercase tracking-wide text-slate-400 font-semibold">${label}</div>
+          <div class="mt-1 text-lg font-display font-bold text-slate-900 tnum">${value}</div>
+          ${sub ? `<div class="text-xs text-slate-400 mt-0.5">${sub}</div>` : ''}
+        </div>`;
+
+      $('result').innerHTML = `
+      <div class="fade-in space-y-5">
+        <!-- Hero -->
+        <div class="card rounded-3xl p-6 sm:p-8">
+          <div class="flex flex-col lg:flex-row lg:items-center gap-7">
+            <!-- identity + price -->
+            <div class="lg:w-[42%]">
+              <div class="flex items-center gap-2 text-xs">
+                <span class="px-2 py-0.5 rounded-md bg-slate-100 text-slate-500 font-semibold tnum">${esc(d.ticker)}</span>
+                ${d.sector ? `<span class="text-slate-400">${esc(d.sector)}</span>` : ''}
+              </div>
+              <h2 class="mt-2 font-display font-extrabold text-slate-900 text-2xl sm:text-3xl tracking-tight leading-tight">${esc(d.name || d.ticker)}</h2>
+              <div class="mt-4 flex items-end gap-6">
+                <div>
+                  <div class="text-[11px] uppercase tracking-wide text-slate-400 font-semibold">Current price</div>
+                  <div class="text-2xl font-bold text-slate-900 tnum mt-0.5">${fmtRupee(d.price_current)}</div>
+                </div>
+                <div>
+                  <div class="text-[11px] uppercase tracking-wide text-slate-400 font-semibold">DCF fair value</div>
+                  <div class="text-2xl font-bold tnum mt-0.5 ${isUp ? 'text-up' : 'text-down'}">${fmtRupee(v.fair_value_per_share)}</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- upside gauge -->
+            <div class="lg:flex-1 lg:border-l lg:border-slate-100 lg:pl-7">
+              <div class="flex items-center justify-between">
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-sm font-semibold ${V.soft}">
+                  <span class="h-1.5 w-1.5 rounded-full ${V.cls === 'up' ? 'bg-up' : V.cls === 'down' ? 'bg-down' : 'bg-slate-400'}"></span>${V.label}
+                </span>
+                <span class="text-3xl font-display font-extrabold tnum ${isUp ? 'text-up' : 'text-down'}">${signedPct(up)}</span>
+              </div>
+              <div class="relative mt-4 h-3 rounded-full bg-slate-100">
+                <div class="absolute top-0 bottom-0 left-1/2 w-px bg-slate-300"></div>
+                <div class="absolute top-0 bottom-0 rounded-full ${isUp ? 'bg-up' : 'bg-down'}"
+                  style="${isUp ? 'left:50%' : 'right:50%'};width:${fillPct}%"></div>
+              </div>
+              <div class="flex justify-between text-[11px] text-slate-400 mt-1.5 tnum"><span>−100%</span><span>fair</span><span>+100%</span></div>
+              <div class="mt-4 flex flex-wrap gap-2">${tabs}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- key stats -->
+        <div class="grid grid-cols-2 lg:grid-cols-5 gap-3">
+          ${stat('Market cap', fmtCr(d.market_cap))}
+          ${stat('WACC', fmtPct(d.wacc?.selected))}
+          ${stat('Terminal', term.method === 'exit_multiple' ? 'EBITDA exit' : 'Perpetuity', termLabel.split('·')[1]?.trim() || '')}
+          ${stat('Shares out.', fmtShares(d.shares_outstanding), 'shares')}
+          ${stat('Net debt', fmtCr(d.net_debt))}
+        </div>
+
+        <p class="text-xs text-slate-400 px-1">Figures as published by valueinvesting.io for the selected DCF method. Switch methods above. ${d.is_financial ? 'Financial company — DCF may be supplemented by a dividend model.' : ''}</p>
+      </div>`;
+
+      $('result').querySelectorAll('[data-v]').forEach((b) => b.onclick = () => { if (!b.disabled) { state.variant = b.dataset.v; renderCompany(); } });
+    }
+
+    // ---------- states ----------
+    function skeleton() {
+      return `<div class="space-y-5">
+        <div class="card rounded-3xl p-8"><div class="h-6 w-48 skeleton rounded-lg"></div><div class="mt-4 h-10 w-72 skeleton rounded-lg"></div><div class="mt-6 h-3 w-full skeleton rounded-full"></div></div>
+        <div class="grid grid-cols-2 lg:grid-cols-5 gap-3">${Array(5).fill('<div class="card rounded-2xl p-4 h-20 skeleton"></div>').join('')}</div>
+      </div>`;
+    }
+    function renderEmpty() {
+      const picks = ['RELIANCE.NS', 'TCS.NS', 'HDFCBANK.NS', 'INFY.NS', 'ITC.NS', 'TATAMOTORS.NS']
+        .filter((t) => state.index.some((c) => c.ticker === t));
+      $('result').innerHTML = `
+      <div class="card rounded-3xl p-10 text-center fade-in">
+        <div class="h-12 w-12 mx-auto rounded-2xl bg-slate-900/5 grid place-items-center">
+          <svg class="h-6 w-6 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m7 14 4-4 3 3 5-6"/></svg>
+        </div>
+        <h3 class="mt-4 font-display font-bold text-slate-800 text-lg">Search a company to see its valuation</h3>
+        <p class="text-slate-400 text-sm mt-1">Fair value, upside, and the full DCF method — for any covered NSE name.</p>
+        <div class="mt-5 flex flex-wrap gap-2 justify-center">
+          ${picks.map((t) => `<button data-pick="${t}" class="px-3.5 py-1.5 rounded-full text-sm font-medium bg-white border border-slate-200 text-slate-600 hover:border-slate-300 hover:text-slate-900 transition tnum">${esc(t.replace('.NS', ''))}</button>`).join('')}
+        </div>
+      </div>`;
+      $('result').querySelectorAll('[data-pick]').forEach((b) => b.onclick = () => selectTicker(b.dataset.pick));
+    }
+
+    // ---------- wire up ----------
+    $('search').addEventListener('input', onInput);
+    $('search').addEventListener('keydown', onKey);
+    $('search').addEventListener('focus', onInput);
+    document.addEventListener('click', (e) => { if (!e.target.closest('#dropdown') && e.target !== $('search')) $('dropdown').classList.add('hidden'); });
+    window.addEventListener('hashchange', () => { if (location.hash.length > 1 && (!state.doc || encodeURIComponent(state.doc.ticker) !== location.hash.slice(1))) selectTicker(decodeURIComponent(location.hash.slice(1))); });
+    init();
+  </script>
+</body>
+</html>
