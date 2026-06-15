@@ -26,12 +26,17 @@ jobs:
       - name: Install cheerio
         run: npm install cheerio@1
       - name: Scrape tickers
-        run: node scraper/dcf-scrape.mjs ${{ github.event.inputs.tickers }}
+        env:
+          TICKERS: ${{ github.event.inputs.tickers }}
+        run: node scraper/dcf-scrape.mjs $TICKERS  # env var (not script interpolation) -> no shell injection
       - name: Show results
         if: always()
+        env:
+          TICKERS: ${{ github.event.inputs.tickers }}
         run: |
-          for f in public/data/dcf/*.json; do
-            [ -f "$f" ] || continue
+          for t in $TICKERS; do
+            f="public/data/dcf/$t.json"
+            [ -f "$f" ] || { echo "=== $t: (no doc produced) ==="; continue; }
             echo "=== $f ==="
             node -e 'const d=require(process.argv[1]); const v=d.variants?.["dcf-growth-exit-5y"]||{}; console.log(JSON.stringify({ticker:d.ticker,name:d.name,carrier:d._debug?.carrier_found,fair5y:v.fair_value_per_share,upside:v.upside_pct,proj:d.shared_projection?.length,is_financial:d.is_financial},null,0))' "$f"
           done

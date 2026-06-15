@@ -27,10 +27,12 @@ async function pool(items, n, fn) {
 // Rebuild index.json + coverage stats from whatever docs are on disk (resume-safe).
 async function buildIndexAndStats(universe) {
   const companies = [];
-  let covered = 0, no_dcf = 0, failed = 0;
+  let covered = 0, no_dcf = 0, failed = 0, missing = 0, stale = 0;
   for (const u of universe.tickers) {
     const doc = await readJson(path.join(DCF, `${u.ticker}.json`));
-    if (!doc || !doc._debug?.carrier_found) { failed++; continue; }
+    if (!doc) { missing++; continue; }                      // Codex r4 #2: never attempted (out-of-slice) != failed
+    if (!doc._debug?.carrier_found) { failed++; continue; } // attempted, no model
+    if (doc._debug?.stale) { stale++; continue; }           // Codex r4 #3: preserved old data, never published as fresh
     const v = doc.variants?.[PRIMARY];
     const fair = v?.fair_value_per_share ?? null;
     if (fair != null) {
@@ -50,7 +52,7 @@ async function buildIndexAndStats(universe) {
     }
   }
   companies.sort((a, b) => a.ticker.localeCompare(b.ticker));
-  return { companies, covered, no_dcf, failed };
+  return { companies, covered, no_dcf, failed, missing, stale };
 }
 
 async function main() {
@@ -115,13 +117,15 @@ async function main() {
     covered: ds.covered,
     no_dcf: ds.no_dcf,
     failed: ds.failed,
+    missing: ds.missing,
+    stale: ds.stale,
     run: { start_at: START_AT, slice: slice.length, next_cursor: START_AT + slice.length < all.length ? START_AT + slice.length : null, ...run, duration_s: +(ms / 1000).toFixed(1), avg_ms_per_company: run.attempted ? Math.round(ms / run.attempted) : null },
     failures: failures.slice(0, 100),
   };
   await writeFile(path.join(OUT, 'dcf-metadata.json'), JSON.stringify(meta, null, 2));
 
   console.log(`[batch] run: attempted=${run.attempted} ok=${run.succeeded} no_dcf=${run.no_dcf} fail=${run.failed} stale=${run.stale_kept} in ${meta.run.duration_s}s (avg ${meta.run.avg_ms_per_company}ms)`);
-  console.log(`[batch] dataset: covered=${ds.covered} no_dcf=${ds.no_dcf} failed/missing=${ds.failed} | index.json companies=${ds.companies.length}`);
+  console.log(`[batch] dataset: covered=${ds.covered} no_dcf=${ds.no_dcf} failed=${ds.failed} missing=${ds.missing} stale=${ds.stale} | index.json companies=${ds.companies.length}`);
   if (meta.run.next_cursor != null) console.log(`[batch] resume next chunk with START_AT=${meta.run.next_cursor}`);
   if (run.attempted > 0 && run.succeeded + run.no_dcf === 0) { console.error('All attempted scrapes failed (likely rate-limited).'); process.exit(1); }
 }

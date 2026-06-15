@@ -188,12 +188,18 @@ export function parseDcfHtml(html, ctx = {}) {
     doc._debug.gated_hint = /sign in|log ?in|subscribe|upgrade|members? only/i.test(bodyText);
     return doc;
   }
-  doc._debug.carrier_found = true;
   doc.source.carrier = 'inline_script:window.most';
 
   const most = getWindowVar(carrier, 'most');
   const m = fieldMap(most);
   doc._debug.field_count = Object.keys(m).length;
+  // Codex r4 #1: a window.most script with 0 parsed fields means the markup/format
+  // changed — treat as a failure, not a valid empty doc, so a run fails loudly.
+  if (doc._debug.field_count === 0) {
+    warnings.push('carrier script present but 0 fields parsed (markup may have changed)');
+    return doc; // carrier_found stays false
+  }
+  doc._debug.carrier_found = true;
   const fNum = (f) => (m[f] ? cleanNum(m[f].value_numerical) : null);
   const fTxt = (f) => (m[f] ? m[f].value_text : null);
   // value_text is pre-parsed by deepJsonify when it's JSON; accept object or string
