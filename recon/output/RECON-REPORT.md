@@ -10,6 +10,8 @@
 
 DCF numbers are server-rendered into the HTML / embedded blob rather than a clean XHR JSON API.
 
+> ⚠️ **The auto-heuristic above is conservative.** It only recommends LIVE WORKER when a *JSON API* is found, so the absence of one pushed it toward Playwright. But the data is server-rendered into HTML that a **plain `fetch()` retrieves with a 200 from the runner IP** — which is exactly what a Cloudflare Worker can do. **See the analyst interpretation at the bottom: the evidence supports LIVE WORKER (fetch + HTML parse).**
+
 | Signal | Result |
 | --- | --- |
 | JSON API endpoint(s) present | ✅ yes |
@@ -223,3 +225,30 @@ _No search/autocomplete XHR observed (selector may not have matched; inspect hom
 - `recon/output/<TICKER>/embedded-*.json` — embedded data blobs (if any)
 - `recon/output/<TICKER>/plain-fetch-*.html` — raw no-browser fetch bodies
 - `recon/output/robots.txt`, `recon/output/sitemap.xml`
+
+---
+
+## Analyst interpretation (overrides the auto-TL;DR)
+
+**Recommendation: LIVE WORKER (Cloudflare Worker doing `fetch()` + HTML parse).**
+
+### Why (evidence)
+- **Not IP-blocked.** Plain `fetch()` returned **200** for all 3 tickers with both a bare (Node default) UA and a browser UA. No Cloudflare challenge / no `cf-mitigated`. The site is *fronted* by Cloudflare (`server=cloudflare`, `cf-ray` present) but served real content to a GitHub data-center IP.
+- **Data is in the served HTML.** The headline DCF fair value (`694.05`), the WACC range/selected (`12.4%–15.2%` / `13.8%`), the long-term growth (`2.0%`), the fair-price range (`565.88–887.46`), **and the full year-by-year projection table** (Revenue `10,756,750` … Net profit `956,100`/`1,191,539`/`2,140,858` for 03-2026 → 03-2031) are all present in `plain-fetch-bareUA.html`. The Excel-export model can be reconstructed from one `fetch()`.
+- **No JS rendering required.** Zero DCF numbers traced to any XHR. The 9 "JSON" responses are all third-party (Stripe, Google `adtrafficquality/sodar`, Tawk.to chat) — none are valueinvesting.io data. No `__NEXT_DATA__` / `__NUXT__` / Next-RSC / `<script type=application/json>` blob; it is plain SSR HTML.
+
+A Worker is therefore simpler, cheaper, and faster than Playwright. Playwright/Actions is **not needed for fetching** — keep it only as a CI fallback if Cloudflare ever turns on a JS challenge.
+
+### Caveats / risks to design around
+1. **Rate limiting (429).** Bursty probing triggered `429` late in the run (`TCS.BO`, `INFY.NS`). Throttle, cache aggressively (DCF changes ~daily), and back off on 429.
+2. **CF → CF egress unverified.** This run proves GitHub runner IPs (Azure ranges). Cloudflare Workers egress from Cloudflare's own network to a Cloudflare-fronted origin — usually fine, but confirm with one real Worker `fetch()` before committing.
+3. **HTML parsing is brittle.** No stable JSON contract — parse against resilient anchors (the sentence "The Discounted Cash Flow (DCF) valuation of … is X INR" and the labelled table rows) and add a schema check + alert on parse failure.
+4. **Gated / disallowed variants.** `dcf-growth-exit-10y` returned **403** anonymously and is `robots` Disallowed (Googlebot), as are `dcf-ebitda-exit-{5y,10y}`, `epv`, `ddm-stable/growth`. Only **`dcf-growth-exit-5y` is freely accessible**. If the product needs 10y/EBITDA-exit variants, expect gating (subscription) — scope accordingly.
+5. **robots.txt.** Only a `User-agent: Googlebot` block exists (no `User-agent: *`), and it does **not** disallow `dcf-growth-exit-5y`. So robots imposes no rule on our fetcher for the 5y page — **but Terms of Service is a separate question and has NOT been checked. Verify ToS for scraping/automated-access clauses before shipping.**
+6. **Cloudflare Pages/Workers Git integration is already wired to this repo** and fails/skips on every push (no Worker app yet). Decide whether to keep it (and scaffold a minimal Worker once architecture is approved) or detach it to stop the noise.
+
+### Universe enumeration
+`/sitemap.xml` is a **sitemap index** → `sitemap1.xml`, `sitemap2.xml`. Enumerate the covered universe from those two (one short follow-up fetch). No public search/autocomplete XHR was observed on the home page (selector didn't match; revisit if a search API is preferred over the sitemap).
+
+### Ticker format
+`{SYMBOL}.{EXCHANGE}` — `.NS` (NSE) and `.BO` (BSE) both 200; bare `RELIANCE` and BSE numeric `500325.BO` also 200; Japanese `.T` seen in nav. (`TCS.BO`/`INFY.NS` showed 429 = rate-limit, not format rejection.)
