@@ -1,0 +1,15 @@
+# Transient deps installed by the recon workflow (never committed)
+node_modules/
+package-lock.json
+package.json
+
+# Playwright leftovers
+playwright-report/
+test-results/
+.playwright/
+
+# misc
+*.log
+.DS_Store
+
+# NOTE: recon/output/ is intentionally NOT ignored — it is the recon deliverable.
