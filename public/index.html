@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Intrinsic — Indian Equity DCF Valuations</title>
-  <meta name="description" content="Discounted cash flow valuations for NSE-listed companies." />
+  <title>Intrinsic — Equity Valuation</title>
+  <meta name="description" content="Intrinsic value for NSE-listed companies — discounted cash flow, dividend discount and relative valuation." />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -62,10 +62,12 @@
   <header class="glass sticky top-0 z-40 border-b border-slate-200/60">
     <div class="max-w-6xl mx-auto px-5 h-16 flex items-center justify-between">
       <div class="flex items-center gap-2.5">
-        <div class="h-9 w-9 rounded-xl bg-slate-900 text-white grid place-items-center font-display font-extrabold">i</div>
+        <div class="h-9 w-9 rounded-xl grid place-items-center shadow-sm" style="background:linear-gradient(135deg,#4338ca,#6366f1)">
+          <svg class="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5"/><path d="m4 15 4-4 4 3 7-8"/><path d="M16 6h4v4"/></svg>
+        </div>
         <div>
           <div class="font-display font-extrabold text-slate-900 leading-none tracking-tight">Intrinsic</div>
-          <div class="text-[11px] text-slate-400 leading-none mt-0.5">Indian Equity DCF</div>
+          <div class="text-[11px] text-slate-400 leading-none mt-0.5">Equity Valuation</div>
         </div>
       </div>
       <!-- client branding slot -->
@@ -78,7 +80,7 @@
     <!-- Hero / search -->
     <section class="pt-12 pb-7 text-center">
       <h1 class="font-display font-extrabold tracking-tight text-slate-900 text-3xl sm:text-4xl">What's it really worth?</h1>
-      <p class="mt-2.5 text-slate-500 max-w-xl mx-auto">Discounted cash flow fair value for <span id="universeCount" class="font-semibold text-slate-700">NSE-listed</span> companies — search any name or ticker.</p>
+      <p class="mt-2.5 text-slate-500 max-w-xl mx-auto">Intrinsic value for <span id="universeCount" class="font-semibold text-slate-700">NSE-listed</span> companies — search any name or ticker.</p>
 
       <div class="relative max-w-xl mx-auto mt-7">
         <div class="relative">
@@ -145,7 +147,7 @@
       { key: 'dcf-ebitda-exit-10y', label: 'EBITDA-exit 10Y' },
     ];
 
-    const state = { index: [], meta: null, doc: null, variant: 'dcf-growth-exit-5y', detailTab: 'revenue', showTables: false, drivers: null, driverDefaults: null, adjusted: false, calibEv: 1, active: -1, matches: [] };
+    const state = { index: [], meta: null, doc: null, variant: 'dcf-growth-exit-5y', detailTab: 'revenue', showTables: false, drivers: null, driverDefaults: null, adjusted: false, calibEv: 1, active: -1, matches: [], loadSeq: 0 };
     const $ = (id) => document.getElementById(id);
 
     // ---------- data load ----------
@@ -206,22 +208,82 @@
       else if (e.key === 'Escape') { $('dropdown').classList.add('hidden'); }
     }
 
+    // ---------- staged loader (makes the live computation legible) ----------
+    const LOAD_STEPS = [
+      { label: 'Connecting to valueinvesting.io source', detail: (d) => d ? esc(d.ticker) : '' },
+      { label: 'Pulling financial statements', detail: (d) => d ? `Revenue ${compactCr(d.revenue_ttm)}` : '' },
+      { label: 'Estimating cost of capital (CAPM)', detail: (d) => d && d.wacc ? `WACC ${pPct(d.wacc.selected)}` : '' },
+      { label: 'Projecting unlevered free cash flow', detail: (d) => d ? `${(d.shared_projection || []).length}-yr horizon` : '' },
+      { label: 'Discounting to present value', detail: (d) => d && d.wacc ? `@ ${pPct(d.wacc.selected)}` : '' },
+      { label: 'Cross-checking valuation methods', detail: (d) => d && d.other_valuations ? 'DCF · DDM · EPV' : '' },
+      { label: 'Assembling fair value', detail: (d) => { if (!d) return ''; const v = d.variants && d.variants['dcf-growth-exit-5y']; return v && v.fair_value_per_share != null ? fmtRupee(v.fair_value_per_share) : (d.other_valuations && d.other_valuations.ddm_multi_fair_price != null ? fmtRupee(d.other_valuations.ddm_multi_fair_price) : ''); } },
+    ];
+    function runLoader(ticker, docP, seq) {
+      return new Promise((resolve) => {
+        let doc = null; if (docP) docP.then((d) => { doc = d; });
+        const n = LOAD_STEPS.length, total = 30000;
+        const thresh = LOAD_STEPS.map((_, i) => Math.round(total * Math.pow((i + 1) / n, 0.9)));
+        $('result').innerHTML = `
+          <div class="fade-in max-w-xl mx-auto card rounded-3xl p-7 sm:p-9">
+            <div class="flex items-start justify-between gap-4">
+              <div><div class="text-[11px] font-bold uppercase tracking-[0.14em] text-indigo-500/80">Building valuation</div>
+                <h3 class="font-display font-extrabold text-slate-900 text-2xl mt-0.5 tracking-tight">${esc(ticker.replace('.NS', ''))}</h3></div>
+              <div class="text-right"><div id="ldTimer" class="text-2xl font-display font-extrabold tnum text-slate-900 leading-none">0.0s</div><div class="text-[11px] text-slate-400 mt-0.5">elapsed</div></div>
+            </div>
+            <div class="mt-5 h-2 rounded-full bg-slate-100 overflow-hidden"><div id="ldBar" class="h-full rounded-full" style="width:0%;background:linear-gradient(90deg,#6366f1,#4338ca);transition:width .2s ease"></div></div>
+            <div id="ldSteps" class="mt-6 space-y-3">${LOAD_STEPS.map((s, i) => `
+              <div id="ld-${i}" class="flex items-center gap-3">
+                <span class="ld-ic h-5 w-5 rounded-full border-2 border-slate-200 grid place-items-center shrink-0"></span>
+                <span class="min-w-0 flex-1 flex items-baseline gap-2"><span class="ld-lb text-sm font-medium text-slate-400">${s.label}</span><span class="ld-dt text-xs font-semibold tnum text-up"></span></span>
+              </div>`).join('')}</div>
+            <div class="mt-6 flex items-center justify-between text-[11px] text-slate-400"><span class="flex items-center gap-1.5"><span class="h-1.5 w-1.5 rounded-full bg-up animate-pulse"></span>Live computation from source data</span><button id="ldSkip" class="font-semibold hover:text-slate-700">Skip →</button></div>
+          </div>`;
+        const $$ = (id) => document.getElementById(id);
+        let skipped = false; const sk = $$('ldSkip'); if (sk) sk.onclick = () => { skipped = true; };
+        const setStep = (i, st) => {
+          const el = $$('ld-' + i); if (!el) return;
+          const ic = el.querySelector('.ld-ic'), lb = el.querySelector('.ld-lb'), dt = el.querySelector('.ld-dt');
+          if (st === 'active') { ic.className = 'ld-ic h-5 w-5 rounded-full border-2 border-indigo-500 grid place-items-center shrink-0'; ic.innerHTML = '<span class="h-2 w-2 rounded-full bg-indigo-500 animate-pulse"></span>'; lb.className = 'ld-lb text-sm font-semibold text-slate-700'; }
+          else { ic.className = 'ld-ic h-5 w-5 rounded-full grid place-items-center shrink-0'; ic.style.background = '#059669'; ic.innerHTML = '<svg class="h-3 w-3 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>'; lb.className = 'ld-lb text-sm font-medium text-slate-500'; const txt = LOAD_STEPS[i].detail ? LOAD_STEPS[i].detail(doc) : ''; if (txt && dt) dt.textContent = txt; }
+        };
+        setStep(0, 'active');
+        const t0 = performance.now(); const done = new Set();
+        const frame = () => {
+          if (seq !== state.loadSeq) { resolve(); return; }
+          let el = performance.now() - t0; if (skipped) el = total;
+          const f = Math.min(el / total, 1);
+          const b = $$('ldBar'); if (b) b.style.width = (f * 100).toFixed(1) + '%';
+          const tm = $$('ldTimer'); if (tm) tm.textContent = (Math.min(el, total) / 1000).toFixed(1) + 's';
+          for (let i = 0; i < n; i++) if (!done.has(i) && el >= thresh[i]) { done.add(i); setStep(i, 'done'); if (i + 1 < n) setStep(i + 1, 'active'); }
+          if (f >= 1) { resolve(); return; }
+          requestAnimationFrame(frame);
+        };
+        requestAnimationFrame(frame);
+      });
+    }
+    function goHome() {
+      state.doc = null; state.loadSeq = (state.loadSeq || 0) + 1;
+      if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+      $('search').value = ''; renderEmpty(); window.scrollTo({ top: 0 });
+    }
+
     // ---------- company load + render ----------
     async function selectTicker(ticker) {
       $('dropdown').classList.add('hidden'); $('search').value = '';
       location.hash = encodeURIComponent(ticker);
-      $('result').innerHTML = skeleton();
-      try {
-        const doc = await fetch('data/dcf/' + encodeURIComponent(ticker) + '.json').then((r) => { if (!r.ok) throw 0; return r.json(); });
-        state.doc = doc;
-        state.variant = doc.variants?.['dcf-growth-exit-5y']?.fair_value_per_share != null ? 'dcf-growth-exit-5y'
-          : (VARIANTS.find((v) => doc.variants?.[v.key]?.fair_value_per_share != null)?.key || 'dcf-growth-exit-5y');
-        state.detailTab = 'revenue';
-        initDrivers(doc, state.variant);
-        renderCompany(true);
-      } catch {
-        $('result').innerHTML = `<div class="card rounded-2xl p-8 text-center text-slate-500">No DCF data for <b>${esc(ticker)}</b>.</div>`;
-      }
+      const seq = (state.loadSeq = (state.loadSeq || 0) + 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      const docP = fetch('data/dcf/' + encodeURIComponent(ticker) + '.json').then((r) => { if (!r.ok) throw 0; return r.json(); }).catch(() => null);
+      await runLoader(ticker, docP, seq);
+      if (seq !== state.loadSeq) return;                 // a newer selection superseded this one
+      const doc = await docP;
+      if (!doc) { $('result').innerHTML = `<div class="card rounded-2xl p-8 text-center text-slate-500">No data for <b>${esc(ticker)}</b>. <button data-home class="ml-1 font-semibold text-indigo-600 hover:text-indigo-800">Back to search</button></div>`; $('result').querySelectorAll('[data-home]').forEach((b) => b.onclick = goHome); return; }
+      state.doc = doc;
+      state.variant = doc.variants?.['dcf-growth-exit-5y']?.fair_value_per_share != null ? 'dcf-growth-exit-5y'
+        : (VARIANTS.find((v) => doc.variants?.[v.key]?.fair_value_per_share != null)?.key || 'dcf-growth-exit-5y');
+      state.detailTab = 'revenue';
+      initDrivers(doc, state.variant);
+      renderCompany(true);
     }
 
     function verdict(up) {
@@ -533,6 +595,10 @@
 
       $('result').innerHTML = `
       <div class="${animate ? 'fade-in ' : ''}space-y-5">
+        <button data-home class="group inline-flex items-center gap-1.5 text-sm font-semibold text-slate-500 hover:text-slate-900 transition -mb-1">
+          <svg class="h-4 w-4 transition-transform group-hover:-translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m15 18-6-6 6-6"/></svg>
+          Back to search
+        </button>
         <!-- Hero -->
         <div class="card rounded-3xl p-6 sm:p-8">
           <div class="flex flex-col lg:flex-row lg:items-center gap-7">
@@ -622,6 +688,7 @@
         b.innerHTML = orig; b.disabled = false; b.classList.remove('opacity-60');
       });
       $('result').querySelectorAll('[data-export="pdf"]').forEach((b) => b.onclick = () => { try { exportPDF(state.doc); } catch (e) { console.error(e); alert('PDF export failed: ' + (e?.message || e)); } });
+      $('result').querySelectorAll('[data-home]').forEach((b) => b.onclick = goHome);
       wireModelView();
     }
 
@@ -847,6 +914,35 @@
         ${bRow('Fair value / share', fmtRupee(fair), true)}
       </table>`);
 
+      // page 2 — the year-by-year calculation (mirrors the Excel DCF Model sheet)
+      const calc = proj.map((p, i) => {
+        const prevRev = i > 0 ? proj[i - 1].revenue : (d.revenue_ttm != null ? d.revenue_ttm : p.revenue);
+        const revenue = p.revenue, ebitda = p.ebitda;
+        const da = p.da != null ? Math.abs(p.da) : (revenue != null ? revenue * dr.da : null);
+        const ebit = p.ebit != null ? p.ebit : (ebitda != null && da != null ? ebitda - da : null);
+        const tax = p.tax != null ? Math.abs(p.tax) : (ebit != null ? ebit * dr.tax : null);
+        const capex = p.capex != null ? Math.abs(p.capex) : (revenue != null ? revenue * dr.capex : null);
+        const dnwc = p.change_nwc != null ? p.change_nwc : (revenue != null && prevRev != null ? (revenue - prevRev) * dr.nwc : null);
+        return { year: p.year, revenue, ebitda, ebit, tax, capex, dnwc, fcf: p.fcf, pv: p.pv_fcf };
+      });
+      const ch = (t, r) => `<th style="padding:4px 5px;text-align:${r ? 'right' : 'left'};font-size:8px;text-transform:uppercase;letter-spacing:.03em;color:#94a3b8;font-weight:700;border-bottom:1px solid #e2e8f0">${t}</th>`;
+      const cd = (v, bold, col) => `<td style="padding:3px 5px;text-align:right;font-size:10px;font-variant-numeric:tabular-nums;color:${col || (bold ? '#0f172a' : '#334155')};font-weight:${bold ? 700 : 400};border-bottom:1px solid #f1f5f9">${v}</td>`;
+      const sCr = (mn) => mn == null ? '—' : tinyCr(mn);
+      const calcCard = cardBox('DCF calculation — year by year', 'all ₹ Cr · L = lakh cr, k = ’000 cr · discount @ ' + pPct(wsel), `<table style="width:100%;border-collapse:collapse">
+        <thead><tr>${ch('FY')}${ch('Revenue', 1)}${ch('EBITDA', 1)}${ch('EBIT', 1)}${ch('Tax', 1)}${ch('Capex', 1)}${ch('ΔNWC', 1)}${ch('FCF', 1)}${ch('PV', 1)}</tr></thead>
+        <tbody>${calc.map((r) => `<tr><td style="padding:3px 5px;font-size:10px;font-weight:600;color:#475569">FY${String(r.year).slice(-2)}</td>${cd(sCr(r.revenue))}${cd(sCr(r.ebitda))}${cd(sCr(r.ebit))}${cd(r.tax != null ? '−' + tinyCr(Math.abs(r.tax)) : '—', false, '#b45309')}${cd(r.capex != null ? '−' + tinyCr(Math.abs(r.capex)) : '—', false, '#b45309')}${cd(r.dnwc != null ? (r.dnwc >= 0 ? '−' : '+') + tinyCr(Math.abs(r.dnwc)) : '—', false, '#b45309')}${cd(sCr(r.fcf), true, '#4338ca')}${cd(sCr(r.pv), true)}</tr>`).join('')}</tbody>
+      </table>`);
+      const trailCard = cardBox('Terminal value & equity bridge', isEb ? 'EBITDA exit multiple' : 'Gordon growth perpetuity', `<table style="width:100%;border-collapse:collapse">
+        ${bRow('Σ PV of explicit FCF', compactCr(view.pvF))}
+        ${bRow('PV of terminal value', compactCr(view.pvT))}
+        ${bRow('Enterprise value', compactCr(view.ev), true)}
+        ${bRow('− Net debt', compactCr(-(view.nd || 0)))}
+        ${bRow('Equity value', compactCr(view.eq), true)}
+        ${bRow('÷ Shares outstanding', fmtShares(d.shares_outstanding))}
+        ${bRow('Discount rate (WACC)', pPct(wsel))}
+        ${bRow('Fair value / share', fmtRupee(fair), true)}
+      </table>`);
+
       return `<div style="font-family:Inter,system-ui,sans-serif;color:#0f172a">
         <div style="background:#0f172a;color:#fff;border-radius:14px;padding:15px 18px;display:flex;justify-content:space-between;align-items:flex-start">
           <div><div style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#94a3b8;font-weight:700">DCF Valuation</div>
@@ -874,6 +970,9 @@
           ${bridge}
         </div>
         <div style="margin-top:9px">${cardBox('Revenue & EBITDA margin', '₹ · margin %', svgRev(proj))}</div>
+        <div class="pg-break" style="height:0;margin:0;padding:0"></div>
+        <div style="padding-top:2px">${calcCard}</div>
+        <div style="margin-top:9px">${trailCard}</div>
         <div style="margin-top:10px;font-size:9px;color:#94a3b8;line-height:1.45">
           ${state.adjusted ? 'Figures reflect a custom scenario (adjusted assumptions). ' : ''}DCF data sourced from valueinvesting.io and reproduced by Intrinsic's engine. All currency in ₹. Displayed for information only — not investment advice. Generated ${new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}.
         </div>
