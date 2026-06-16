@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-16T06:36:31.169Z",
+  "generated_at": "2026-06-16T07:11:45.357Z",
   "list_source": "NSE archives EQUITY_L",
   "seed_fallback_used": false,
   "list_attempts": [
@@ -14,7 +14,7 @@
     "NSE": 2346
   },
   "note": "Candidate list (no coverage-probe). Coverage is determined by the batch scrape; see dcf-metadata.json.",
-  "ms": 412,
+  "ms": 1345,
   "tickers": [
     {
       "ticker": "20MICRONS.NS",

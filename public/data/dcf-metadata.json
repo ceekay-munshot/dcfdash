@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-16T07:11:16.717Z",
+  "generated_at": "2026-06-16T07:46:31.851Z",
   "universe_total": 2346,
   "attempted": 2346,
   "covered": 2002,
@@ -17,7 +17,7 @@
     "no_dcf": 104,
     "failed": 240,
     "stale_kept": 0,
-    "duration_s": 2084.4,
+    "duration_s": 2085.7,
     "avg_ms_per_company": 889
   },
   "failures": [
@@ -90,11 +90,11 @@
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
-      "ticker": "AMANTA.NS",
+      "ticker": "AMBALALSA.NS",
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
-      "ticker": "AMBALALSA.NS",
+      "ticker": "AMANTA.NS",
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
@@ -342,11 +342,11 @@
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
-      "ticker": "GRANDOAK.NS",
+      "ticker": "GRADIENTE.NS",
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
-      "ticker": "GRADIENTE.NS",
+      "ticker": "GRANDOAK.NS",
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
@@ -378,11 +378,11 @@
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
-      "ticker": "HBESD.NS",
+      "ticker": "HBLENGINE.NS",
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
-      "ticker": "HBLENGINE.NS",
+      "ticker": "HBESD.NS",
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
