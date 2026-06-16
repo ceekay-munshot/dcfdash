@@ -44,6 +44,16 @@
     @keyframes sh { 0%{background-position:100% 0} 100%{background-position:-100% 0} }
     .tab-active { background:#0f172a; color:#fff; }
     ::-webkit-scrollbar { width:10px; height:10px; } ::-webkit-scrollbar-thumb { background:#e2e8f0; border-radius:9999px; }
+    /* ---- PDF tear-sheet (print only) ---- */
+    #printRoot { display:none; }
+    @media print {
+      @page { size: A4; margin: 11mm; }
+      html, body { background:#fff !important; }
+      body.printing > *:not(#printRoot) { display:none !important; }
+      body.printing #printRoot { display:block !important; }
+      #printRoot, #printRoot * { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
+      .avoid-break { break-inside:avoid; page-break-inside:avoid; }
+    }
   </style>
 </head>
 <body class="font-sans text-slate-700 min-h-screen flex flex-col">
@@ -92,6 +102,9 @@
       <div>DCF data sourced from valueinvesting.io · Displayed for information, not investment advice.</div>
     </div>
   </footer>
+
+  <!-- print-only tear-sheet target (populated on PDF export) -->
+  <div id="printRoot" aria-hidden="true"></div>
 
   <script type="module">
     // ---------- Indian number formatting ----------
@@ -530,11 +543,18 @@
                   <span class="px-2 py-0.5 rounded-md bg-slate-100 text-slate-500 font-semibold tnum shrink-0">${esc(d.ticker)}</span>
                   ${d.sector ? `<span class="text-slate-400 truncate">${esc(d.sector)}</span>` : ''}
                 </div>
-                <button data-export="xlsx" title="Download the full model as a live Excel workbook"
-                  class="shrink-0 inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-bold bg-slate-900 text-white hover:bg-slate-800 active:scale-95 transition tnum">
-                  <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M5 21h14"/></svg>
-                  Excel
-                </button>
+                <div class="shrink-0 flex items-center gap-1.5">
+                  <button data-export="pdf" title="Download a clean one-page PDF tear-sheet"
+                    class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-bold bg-white border border-slate-200 text-slate-700 hover:border-slate-300 hover:text-slate-900 active:scale-95 transition">
+                    <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg>
+                    PDF
+                  </button>
+                  <button data-export="xlsx" title="Download the full model as a live Excel workbook"
+                    class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-bold bg-slate-900 text-white hover:bg-slate-800 active:scale-95 transition tnum">
+                    <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M5 21h14"/></svg>
+                    Excel
+                  </button>
+                </div>
               </div>
               <h2 class="mt-2 font-display font-extrabold text-slate-900 text-2xl sm:text-3xl tracking-tight leading-tight">${esc(d.name || d.ticker)}</h2>
               <div class="mt-4 flex items-end gap-6">
@@ -601,6 +621,7 @@
         try { await exportExcel(state.doc); } catch (e) { console.error(e); alert('Excel export failed: ' + (e?.message || e)); }
         b.innerHTML = orig; b.disabled = false; b.classList.remove('opacity-60');
       });
+      $('result').querySelectorAll('[data-export="pdf"]').forEach((b) => b.onclick = () => { try { exportPDF(state.doc); } catch (e) { console.error(e); alert('PDF export failed: ' + (e?.message || e)); } });
       wireModelView();
     }
 
@@ -787,6 +808,86 @@
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a'); a.href = url; a.download = `${(d.ticker || 'company').replace(/[^\w.-]/g, '_')}_DCF.xlsx`;
       document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 3000);
+    }
+
+    // ---------- PDF tear-sheet (clean one-page, vector charts via print) ----------
+    function renderTearSheet(d) {
+      const vk = state.variant, isEb = vk.includes('ebitda');
+      const view = getView(d, vk);
+      const wsel = (state.adjusted ? state.drivers.wacc : (d.wacc && d.wacc.selected)) || 0.13;
+      const proj = (view.proj || []).map((p) => ({ ...p, pv_fcf: p.pv_fcf != null ? p.pv_fcf : (p.fcf != null && p.timing != null ? p.fcf * Math.pow(1 + wsel, -p.timing) : null) }));
+      const fair = view.fair, up = view.up;
+      const dr = state.drivers || state.driverDefaults || {}, def = state.driverDefaults || dr;
+      const V = verdict(up), upc = up == null ? '#475569' : (up >= 0 ? '#059669' : '#e11d48');
+      const asOf = state.meta && state.meta.generated_at ? new Date(state.meta.generated_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
+      const term = isEb ? `Exit ${(dr.mult || 0).toFixed(1)}× EBITDA` : `Perpetuity ${pPct(dr.tg)}`;
+      const vlabel = (VARIANTS.find((v) => v.key === vk) || {}).label || vk;
+
+      const hcard = (l, v, color, sub) => `<div style="border:1px solid #e2e8f0;border-radius:12px;padding:9px 11px;background:#fff"><div style="font-size:9px;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;font-weight:700">${l}</div><div style="font-size:19px;font-weight:800;font-family:'Plus Jakarta Sans',Inter;color:${color || '#0f172a'};margin-top:2px;line-height:1.1">${v}</div>${sub ? `<div style="font-size:9.5px;color:#64748b;margin-top:1px">${sub}</div>` : ''}</div>`;
+      const fact = (l, v) => `<div style="text-align:center;padding:0 4px"><div style="font-size:8.5px;text-transform:uppercase;letter-spacing:.04em;color:#94a3b8;font-weight:700">${l}</div><div style="font-size:12.5px;font-weight:700;color:#0f172a;margin-top:1px">${v}</div></div>`;
+      const cardBox = (title, note, inner) => `<div class="avoid-break" style="border:1px solid #e2e8f0;border-radius:14px;padding:11px 13px;background:#fff"><div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px"><div style="font-family:'Plus Jakarta Sans',Inter;font-weight:800;font-size:13px;color:#0f172a">${title}</div>${note ? `<div style="font-size:9.5px;color:#94a3b8">${note}</div>` : ''}</div>${inner}</div>`;
+      const aRow = (l, yv, bv) => `<tr><td style="padding:2.5px 0;color:#475569;font-size:11px">${l}</td><td style="padding:2.5px 8px;text-align:right;font-weight:700;color:#1d4ed8;font-size:11px;font-variant-numeric:tabular-nums">${yv}</td><td style="padding:2.5px 0;text-align:right;color:#94a3b8;font-size:11px;font-variant-numeric:tabular-nums">${bv}</td></tr>`;
+      const bRow = (l, v, bold) => `<tr><td style="padding:2.5px 0;color:${bold ? '#0f172a' : '#475569'};font-size:11px;font-weight:${bold ? 700 : 400}">${l}</td><td style="padding:2.5px 0;text-align:right;color:${bold ? '#0f172a' : '#334155'};font-size:11px;font-weight:${bold ? 700 : 600};font-variant-numeric:tabular-nums">${v}</td></tr>`;
+
+      const assumptions = cardBox('Assumptions', state.adjusted ? 'your scenario · VI base' : 'valueinvesting.io base', `<table style="width:100%;border-collapse:collapse"><tr><td></td><td style="text-align:right;font-size:8.5px;color:#94a3b8;text-transform:uppercase;font-weight:700;padding-right:8px">Used</td><td style="text-align:right;font-size:8.5px;color:#94a3b8;text-transform:uppercase;font-weight:700">VI base</td></tr>
+        ${aRow('Revenue growth (p.a.)', pPct(dr.g), pPct(def.g))}
+        ${aRow('EBITDA margin', pPct(dr.margin), pPct(def.margin))}
+        ${aRow('Capex (% revenue)', pPct(dr.capex), pPct(def.capex))}
+        ${aRow('Tax rate', pPct(dr.tax), pPct(def.tax))}
+        ${aRow('WACC (discount rate)', pPct(dr.wacc), pPct(def.wacc))}
+        ${aRow(isEb ? 'Exit EV/EBITDA' : 'Terminal growth', isEb ? (dr.mult || 0).toFixed(1) + '×' : pPct(dr.tg), isEb ? (def.mult || 0).toFixed(1) + '×' : pPct(def.tg))}
+      </table>`);
+      const bridge = cardBox('Valuation bridge', vlabel, `<table style="width:100%;border-collapse:collapse">
+        ${bRow('PV of explicit FCF', compactCr(view.pvF))}
+        ${bRow('PV of terminal value', compactCr(view.pvT))}
+        ${bRow('Enterprise value', compactCr(view.ev), true)}
+        ${bRow('Less: net debt', compactCr(-(view.nd || 0)))}
+        ${bRow('Equity value', compactCr(view.eq), true)}
+        ${bRow('÷ Shares outstanding', fmtShares(d.shares_outstanding))}
+        ${bRow('Fair value / share', fmtRupee(fair), true)}
+      </table>`);
+
+      return `<div style="font-family:Inter,system-ui,sans-serif;color:#0f172a">
+        <div style="background:#0f172a;color:#fff;border-radius:14px;padding:15px 18px;display:flex;justify-content:space-between;align-items:flex-start">
+          <div><div style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#94a3b8;font-weight:700">DCF Valuation</div>
+            <div style="font-family:'Plus Jakarta Sans',Inter;font-size:23px;font-weight:800;line-height:1.12;margin-top:1px">${esc(d.name || d.ticker)}</div>
+            <div style="font-size:11.5px;color:#cbd5e1;margin-top:2px">${esc(d.ticker)}${d.sector ? ' · ' + esc(d.sector) : ''}</div></div>
+          <div style="text-align:right"><div style="display:inline-block;background:${V.cls === 'up' ? '#064e3b' : V.cls === 'down' ? '#7f1d1d' : '#334155'};color:#fff;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px">${V.label}</div>
+            <div style="font-size:11px;color:#94a3b8;margin-top:6px">${asOf ? 'As of ' + asOf : ''}</div>
+            <div style="font-size:10px;color:#64748b">Source: valueinvesting.io</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:11px">
+          ${hcard('Current price', fmtRupee(d.price_current))}
+          ${hcard('DCF fair value', fmtRupee(fair), '#4338ca')}
+          ${hcard('Upside / downside', signedPct(up), upc)}
+          ${hcard('Method', isEb ? 'EBITDA exit' : 'Perpetuity', null, vlabel)}
+        </div>
+        <div style="display:flex;justify-content:space-between;gap:6px;border:1px solid #e2e8f0;border-radius:12px;padding:9px 6px;margin-top:9px;background:#f8fafc">
+          ${fact('Market cap', compactCr(d.market_cap))}${fact('WACC', pPct(dr.wacc))}${fact('Terminal', term)}${fact('Shares', fmtShares(d.shares_outstanding))}${fact('Net debt', compactCr(d.net_debt))}
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:9px">
+          ${cardBox('Path to fair value', 'EV → equity', svgWaterfall(view.pvF, view.pvT, view.ev, view.nd, view.eq))}
+          ${cardBox('Free cash flow', 'gross vs PV · ₹', svgFcf(proj))}
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:9px">
+          ${assumptions}
+          ${bridge}
+        </div>
+        <div style="margin-top:9px">${cardBox('Revenue & EBITDA margin', '₹ · margin %', svgRev(proj))}</div>
+        <div style="margin-top:10px;font-size:9px;color:#94a3b8;line-height:1.45">
+          ${state.adjusted ? 'Figures reflect a custom scenario (adjusted assumptions). ' : ''}DCF data sourced from valueinvesting.io and reproduced by Intrinsic's engine. All currency in ₹. Displayed for information only — not investment advice. Generated ${new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}.
+        </div>
+      </div>`;
+    }
+
+    function exportPDF(d) {
+      const root = document.getElementById('printRoot');
+      if (!root) return;
+      root.innerHTML = renderTearSheet(d);
+      document.body.classList.add('printing');
+      const cleanup = () => { document.body.classList.remove('printing'); root.innerHTML = ''; window.removeEventListener('afterprint', cleanup); };
+      window.addEventListener('afterprint', cleanup);
+      setTimeout(() => window.print(), 90);
     }
 
     // ---------- states ----------
