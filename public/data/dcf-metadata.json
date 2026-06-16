@@ -1,20 +1,23 @@
 {
-  "generated_at": "2026-06-16T06:33:23.761Z",
-  "universe_total": 2353,
-  "attempted": 2353,
-  "covered": 2007,
-  "no_dcf": 45,
-  "failed": 241,
+  "generated_at": "2026-06-16T07:11:16.717Z",
+  "universe_total": 2346,
+  "attempted": 2346,
+  "covered": 2002,
+  "ddm_covered": 60,
+  "no_dcf": 44,
+  "failed": 240,
+  "missing": 0,
+  "stale": 0,
   "run": {
     "start_at": 0,
-    "slice": 2353,
+    "slice": 2346,
     "next_cursor": null,
-    "attempted": 2353,
-    "succeeded": 2007,
-    "no_dcf": 105,
-    "failed": 241,
+    "attempted": 2346,
+    "succeeded": 2002,
+    "no_dcf": 104,
+    "failed": 240,
     "stale_kept": 0,
-    "duration_s": 2092.8,
+    "duration_s": 2084.4,
     "avg_ms_per_company": 889
   },
   "failures": [
@@ -35,11 +38,11 @@
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
-      "ticker": "ABREL.NS",
+      "ticker": "ABMKNO.NS",
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
-      "ticker": "ABMKNO.NS",
+      "ticker": "ABREL.NS",
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
@@ -191,11 +194,11 @@
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
-      "ticker": "BUILDPRO.NS",
+      "ticker": "BTTL.NS",
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
-      "ticker": "BTTL.NS",
+      "ticker": "BUILDPRO.NS",
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
@@ -208,10 +211,6 @@
     },
     {
       "ticker": "CEMPRO.NS",
-      "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
-    },
-    {
-      "ticker": "CLCIND.NS",
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
@@ -375,11 +374,11 @@
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
-      "ticker": "HBESD.NS",
+      "ticker": "HAWKINCOOK.NS",
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
-      "ticker": "HAWKINCOOK.NS",
+      "ticker": "HBESD.NS",
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
@@ -417,10 +416,10 @@
     {
       "ticker": "INDPRUD.NS",
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
+    },
+    {
+      "ticker": "INNOVISION.NS",
+      "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     }
-  ],
-  "ddm_covered": 60,
-  "missing": 0,
-  "stale": 0,
-  "reindexed_at": "2026-06-16T06:33:23.761Z"
+  ]
 }

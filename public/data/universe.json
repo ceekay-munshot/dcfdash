@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-06-15T08:10:53.826Z",
+  "generated_at": "2026-06-16T06:36:31.169Z",
   "list_source": "NSE archives EQUITY_L",
   "seed_fallback_used": false,
   "list_attempts": [
     {
       "name": "NSE archives EQUITY_L",
       "status": 200,
-      "rows": 2353
+      "rows": 2346
     }
   ],
-  "total": 2353,
+  "total": 2346,
   "by_exchange": {
-    "NSE": 2353
+    "NSE": 2346
   },
   "note": "Candidate list (no coverage-probe). Coverage is determined by the batch scrape; see dcf-metadata.json.",
-  "ms": 474,
+  "ms": 412,
   "tickers": [
     {
       "ticker": "20MICRONS.NS",
@@ -129,11 +129,6 @@
     {
       "ticker": "AAVAS.NS",
       "name": "Aavas Financiers Limited",
-      "exchange": "NSE"
-    },
-    {
-      "ticker": "ABAN.NS",
-      "name": "Aban Offshore Limited",
       "exchange": "NSE"
     },
     {
@@ -1712,11 +1707,6 @@
       "exchange": "NSE"
     },
     {
-      "ticker": "BLUECHIP.NS",
-      "name": "Blue Chip India Limited",
-      "exchange": "NSE"
-    },
-    {
       "ticker": "BLUECOAST.NS",
       "name": "Blue Coast Hotels Limited",
       "exchange": "NSE"
@@ -2184,11 +2174,6 @@
     {
       "ticker": "CIPLA.NS",
       "name": "Cipla Limited",
-      "exchange": "NSE"
-    },
-    {
-      "ticker": "CLCIND.NS",
-      "name": "CLC Industries Limited",
       "exchange": "NSE"
     },
     {
@@ -3644,11 +3629,6 @@
     {
       "ticker": "GFLLIMITED.NS",
       "name": "GFL Limited",
-      "exchange": "NSE"
-    },
-    {
-      "ticker": "GFSTEELS.NS",
-      "name": "Grand Foundry Limited",
       "exchange": "NSE"
     },
     {
@@ -7152,11 +7132,6 @@
       "exchange": "NSE"
     },
     {
-      "ticker": "NEUEON.NS",
-      "name": "Neueon Corporation Limited",
-      "exchange": "NSE"
-    },
-    {
       "ticker": "NEULANDLAB.NS",
       "name": "Neuland Laboratories Limited",
       "exchange": "NSE"
@@ -8292,11 +8267,6 @@
       "exchange": "NSE"
     },
     {
-      "ticker": "QUINTEGRA.NS",
-      "name": "Quintegra Solutions Limited",
-      "exchange": "NSE"
-    },
-    {
       "ticker": "RACE.NS",
       "name": "Race Eco Chain Limited",
       "exchange": "NSE"
@@ -8547,8 +8517,8 @@
       "exchange": "NSE"
     },
     {
-      "ticker": "RELINFRA.NS",
-      "name": "Reliance Infrastructure Limited",
+      "ticker": "RELTD-RE.NS",
+      "name": "Ravindra Energy Ltd-RE",
       "exchange": "NSE"
     },
     {
@@ -11009,11 +10979,6 @@
     {
       "ticker": "UNITEDTEA.NS",
       "name": "The United Nilgiri Tea Estates Company Limited",
-      "exchange": "NSE"
-    },
-    {
-      "ticker": "UNIVAFOODS.NS",
-      "name": "Univa Foods Limited",
       "exchange": "NSE"
     },
     {
