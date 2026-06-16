@@ -356,6 +356,21 @@ export function parseDcfHtml(html, ctx = {}) {
     trailing_ev_ebitda: fNum('avg_trailing_ev_ebitda'),
   };
 
+  // relative valuation — VI gives the peer set as ticker lists (the per-peer
+  // multiples are looked up client-side from each peer's own doc). Plus the
+  // subject's own multiples & forward EBITDA for the EV/EBITDA cross-check.
+  const asTickers = (v) => (Array.isArray(v) ? v.filter((x) => typeof x === 'string') : null);
+  doc.relative = {
+    peers_pe: asTickers(fTxt('peers_pe')),
+    peers_ev: asTickers(fTxt('peers_ev')),
+    forward_pe: fNum('forward_pe'),
+    trailing_pe: fNum('trailing_pe'),
+    forward_ev_ebitda: fNum('forward_ev_ebitda'),
+    trailing_ev_ebitda: fNum('avg_trailing_ev_ebitda'),
+    forward_ebitda: fNum('forward_ebitda'),
+    current_ebitda: fNum('current_ebitda'),
+  };
+
   // sanity: does our primary fair value match the headline?
   const primary = doc.variants['dcf-growth-exit-5y'];
   if (primary?.fair_value_per_share == null) warnings.push('primary growth-exit-5y fair value missing');
