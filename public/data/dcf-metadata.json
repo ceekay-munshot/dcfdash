@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-06-15T08:45:47.514Z",
+  "generated_at": "2026-06-16T06:33:23.761Z",
   "universe_total": 2353,
   "attempted": 2353,
   "covered": 2007,
-  "no_dcf": 105,
+  "no_dcf": 45,
   "failed": 241,
   "run": {
     "start_at": 0,
@@ -418,5 +418,9 @@
       "ticker": "INDPRUD.NS",
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     }
-  ]
+  ],
+  "ddm_covered": 60,
+  "missing": 0,
+  "stale": 0,
+  "reindexed_at": "2026-06-16T06:33:23.761Z"
 }

@@ -25,34 +25,44 @@ async function pool(items, n, fn) {
 }
 
 // Rebuild index.json + coverage stats from whatever docs are on disk (resume-safe).
-async function buildIndexAndStats(universe) {
+// DCF-covered names are searchable by DCF fair value; banks/financials with no DCF
+// fall back to VI's DDM fair value (method:'ddm') so they're searchable too.
+export async function buildIndexAndStats(universe) {
   const companies = [];
-  let covered = 0, no_dcf = 0, failed = 0, missing = 0, stale = 0;
+  let covered = 0, ddm_covered = 0, no_dcf = 0, failed = 0, missing = 0, stale = 0;
   for (const u of universe.tickers) {
     const doc = await readJson(path.join(DCF, `${u.ticker}.json`));
     if (!doc) { missing++; continue; }                      // Codex r4 #2: never attempted (out-of-slice) != failed
     if (!doc._debug?.carrier_found) { failed++; continue; } // attempted, no model
     if (doc._debug?.stale) { stale++; continue; }           // Codex r4 #3: preserved old data, never published as fresh
+    const base = {
+      ticker: doc.ticker || u.ticker,
+      name: doc.name || u.name || null,
+      exchange: doc.exchange || u.exchange || null,
+      sector: doc.sector || null,
+      currency: doc.currency || null,
+      price: doc.price_current ?? null,
+      is_financial: !!doc.is_financial,
+    };
     const v = doc.variants?.[PRIMARY];
     const fair = v?.fair_value_per_share ?? null;
     if (fair != null) {
       covered++;
-      companies.push({
-        ticker: doc.ticker || u.ticker,
-        name: doc.name || u.name || null,
-        exchange: doc.exchange || u.exchange || null,
-        sector: doc.sector || null,
-        currency: doc.currency || null,
-        price: doc.price_current ?? null,
-        fair_value: fair,
-        upside_pct: v?.upside_pct ?? null,
-      });
+      companies.push({ ...base, fair_value: fair, upside_pct: v?.upside_pct ?? null, method: 'dcf' });
     } else {
-      no_dcf++; // carrier present but no DCF (e.g., banks -> DDM); excluded from the DCF search index
+      // no DCF (typically a bank/financial) -> use VI's DDM fair value if present
+      const ov = doc.other_valuations || {};
+      const ddm = ov.ddm_multi_fair_price ?? ov.ddm_stable_fair_price ?? null;
+      if (ddm != null && base.price) {
+        ddm_covered++;
+        companies.push({ ...base, fair_value: ddm, upside_pct: ddm / base.price - 1, method: 'ddm', is_financial: true });
+      } else {
+        no_dcf++; // carrier present but neither DCF nor DDM -> not searchable
+      }
     }
   }
   companies.sort((a, b) => a.ticker.localeCompare(b.ticker));
-  return { companies, covered, no_dcf, failed, missing, stale };
+  return { companies, covered, ddm_covered, no_dcf, failed, missing, stale };
 }
 
 async function main() {
@@ -115,6 +125,7 @@ async function main() {
     universe_total: all.length,
     attempted: run.attempted,
     covered: ds.covered,
+    ddm_covered: ds.ddm_covered,
     no_dcf: ds.no_dcf,
     failed: ds.failed,
     missing: ds.missing,
@@ -130,4 +141,9 @@ async function main() {
   if (run.attempted > 0 && run.succeeded + run.no_dcf === 0) { console.error('All attempted scrapes failed (likely rate-limited).'); process.exit(1); }
 }
 
-await main();
+// Run the batch scrape only when invoked directly (not when imported, e.g. by
+// rebuild-index.mjs which reuses buildIndexAndStats without scraping).
+import { pathToFileURL } from 'node:url';
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  await main();
+}
