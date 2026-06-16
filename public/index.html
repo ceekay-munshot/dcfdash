@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Intrinsic — Equity Valuation</title>
   <meta name="description" content="Intrinsic value for NSE-listed companies — discounted cash flow, dividend discount and relative valuation." />
+  <!-- build 2026-06-16 rev2: peer multiples published across the universe -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%234338ca'/%3E%3Cpath d='M4 19V5M4 15l4-4 4 3 7-8M15 6h4v4' fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -77,8 +79,8 @@
 
   <main class="flex-1 max-w-6xl w-full mx-auto px-5 pb-20">
 
-    <!-- Hero / search -->
-    <section class="pt-12 pb-7 text-center">
+    <!-- Hero / search (home only; hidden on the company view — Back returns here) -->
+    <section id="hero" class="pt-12 pb-7 text-center">
       <h1 class="font-display font-extrabold tracking-tight text-slate-900 text-3xl sm:text-4xl">What's it really worth?</h1>
       <p class="mt-2.5 text-slate-500 max-w-xl mx-auto">Intrinsic value for <span id="universeCount" class="font-semibold text-slate-700">NSE-listed</span> companies — search any name or ticker.</p>
 
@@ -264,12 +266,14 @@
     function goHome() {
       state.doc = null; state.loadSeq = (state.loadSeq || 0) + 1;
       if (location.hash) history.replaceState(null, '', location.pathname + location.search);
-      $('search').value = ''; renderEmpty(); window.scrollTo({ top: 0 });
+      $('hero').classList.remove('hidden');   // bring the search hero back
+      $('search').value = ''; renderEmpty(); window.scrollTo({ top: 0 }); $('search').focus();
     }
 
     // ---------- company load + render ----------
     async function selectTicker(ticker) {
       $('dropdown').classList.add('hidden'); $('search').value = '';
+      $('hero').classList.add('hidden');   // focus the result; Back restores the search hero
       location.hash = encodeURIComponent(ticker);
       const seq = (state.loadSeq = (state.loadSeq || 0) + 1);
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1143,6 +1147,7 @@
       </div>`;
     }
     function renderEmpty() {
+      const hero = $('hero'); if (hero) hero.classList.remove('hidden');
       const picks = ['RELIANCE.NS', 'TCS.NS', 'HDFCBANK.NS', 'INFY.NS', 'ITC.NS', 'TATAMOTORS.NS']
         .filter((t) => state.index.some((c) => c.ticker === t));
       $('result').innerHTML = `
