@@ -132,7 +132,7 @@
       { key: 'dcf-ebitda-exit-10y', label: 'EBITDA-exit 10Y' },
     ];
 
-    const state = { index: [], meta: null, doc: null, variant: 'dcf-growth-exit-5y', detailTab: 'revenue', showTables: false, active: -1, matches: [] };
+    const state = { index: [], meta: null, doc: null, variant: 'dcf-growth-exit-5y', detailTab: 'revenue', showTables: false, drivers: null, driverDefaults: null, adjusted: false, calibEv: 1, active: -1, matches: [] };
     const $ = (id) => document.getElementById(id);
 
     // ---------- data load ----------
@@ -204,6 +204,7 @@
         state.variant = doc.variants?.['dcf-growth-exit-5y']?.fair_value_per_share != null ? 'dcf-growth-exit-5y'
           : (VARIANTS.find((v) => doc.variants?.[v.key]?.fair_value_per_share != null)?.key || 'dcf-growth-exit-5y');
         state.detailTab = 'revenue';
+        initDrivers(doc, state.variant);
         renderCompany(true);
       } catch {
         $('result').innerHTML = `<div class="card rounded-2xl p-8 text-center text-slate-500">No DCF data for <b>${esc(ticker)}</b>.</div>`;
@@ -259,6 +260,68 @@
       if (tv == null) return null;
       const ev = spv + tv / Math.pow(1 + wacc, ti.exitYear), eq = ev - (d.net_debt || 0);
       return d.shares_outstanding ? eq / d.shares_outstanding : null;
+    }
+
+    // ---------- forward DCF engine (driver-based what-if) ----------
+    const pPct = (x) => x == null ? '—' : (x * 100).toFixed(1) + '%';
+    function deriveDefaults(d, vk) {
+      const N = vk.includes('10y') ? 10 : 5, p = (d.shared_projection || []).slice(0, N), ed = d.assumptions_raw || {}, avg = (a) => a.length ? a.reduce((x, y) => x + y, 0) / a.length : 0;
+      const margins = p.map((x) => x.revenue ? x.ebitda / x.revenue : null).filter((x) => x != null);
+      const das = p.map((x) => x.revenue ? Math.abs(x.da || 0) / x.revenue : null).filter((x) => x != null);
+      const nwcL = (ed.current_nwc != null && d.revenue_ttm) ? ed.current_nwc / d.revenue_ttm : 0.05;
+      return {
+        N, method: vk.includes('ebitda') ? 'e' : 'g',
+        g: (p[0] && d.revenue_ttm) ? (p[0].revenue / d.revenue_ttm - 1) : 0.08,
+        margin: avg(margins) || 0.2, da: avg(das) || 0.04,
+        capex: Math.abs(ed.avg_capex_ratio != null ? ed.avg_capex_ratio : 0.05),
+        tax: ed.tax_rate_dcf != null ? ed.tax_rate_dcf : 0.25,
+        nwc: Math.max(Math.min(nwcL, 0.4), -0.1),
+        wacc: (d.wacc && d.wacc.selected) || 0.13,
+        tg: ed.avg_long_growth != null ? ed.avg_long_growth : 0.02,
+        mult: (d.variants && d.variants[vk] && d.variants[vk].terminal && d.variants[vk].terminal.exit_multiple) || 4,
+        rev0: d.revenue_ttm, netDebt: d.net_debt, shares: d.shares_outstanding,
+      };
+    }
+    function runModel(d, vk, dr) {
+      const N = dr.N, y0 = (d.shared_projection && d.shared_projection[0] && d.shared_projection[0].year) || (new Date().getFullYear() + 1);
+      let rev = dr.rev0 || 0; const projection = [];
+      for (let t = 1; t <= N; t++) { const prev = rev; rev = rev * (1 + dr.g); const ebitda = rev * dr.margin, da = rev * dr.da, ebit = ebitda - da, capex = rev * dr.capex, dnwc = (rev - prev) * dr.nwc; const fcf = ebit * (1 - dr.tax) + da - capex - dnwc, pv = fcf / Math.pow(1 + dr.wacc, t - 0.5); projection.push({ year: y0 + t - 1, revenue: rev, ebitda, fcf, pv_fcf: pv }); }
+      const last = projection[N - 1] || { fcf: 0, ebitda: 0 };
+      const tv = dr.method === 'e' ? last.ebitda * dr.mult : (dr.wacc - dr.tg > 0 ? last.fcf * (1 + dr.tg) / (dr.wacc - dr.tg) : 0);
+      const k = state.calibEv || 1;
+      const pvtv = (tv / Math.pow(1 + dr.wacc, N)) * k, sumpv = projection.reduce((a, p) => a + p.pv_fcf, 0) * k, ev = sumpv + pvtv, equity = ev - (dr.netDebt || 0);
+      return { fair: dr.shares ? equity / dr.shares : null, ev, equity, sumpv, pvtv, tv, projection };
+    }
+    // calibrate the model's EV to VI's at the base case, so base == VI and adjustments are smooth
+    function initDrivers(doc, vk) {
+      state.driverDefaults = deriveDefaults(doc, vk);
+      state.drivers = { ...state.driverDefaults };
+      state.adjusted = false; state.calibEv = 1;
+      const m = runModel(doc, vk, state.driverDefaults);
+      const viEv = doc.variants && doc.variants[vk] && doc.variants[vk].enterprise_value;
+      state.calibEv = (viEv != null && m.ev && isFinite(viEv / m.ev)) ? viEv / m.ev : 1;
+    }
+    function getView(d, vk) {
+      if (state.adjusted && state.drivers) { const m = runModel(d, vk, state.drivers); return { model: true, fair: m.fair, up: d.price_current ? m.fair / d.price_current - 1 : null, pvF: m.sumpv, pvT: m.pvtv, ev: m.ev, nd: d.net_debt, eq: m.equity, proj: m.projection }; }
+      const v = d.variants[vk] || {}; return { model: false, fair: v.fair_value_per_share, up: v.upside_pct, pvF: v.pv_projection, pvT: v.pv_terminal, ev: v.enterprise_value, nd: v.net_debt != null ? v.net_debt : d.net_debt, eq: v.equity_value, proj: (d.shared_projection || []).slice(0, vk.includes('10y') ? 10 : 5) };
+    }
+    function fairCell(d, vk, wacc, second) {
+      if (state.adjusted && state.drivers) { const dr = { ...state.drivers, wacc }; if (vk.includes('ebitda')) dr.mult = second; else dr.tg = second; return runModel(d, vk, dr).fair; }
+      return fairAt(d, vk, wacc, second);
+    }
+    function renderAssumptions(d) {
+      const vk = state.variant, def = state.driverDefaults || {}, dr = state.drivers || {}, isEb = vk.includes('ebitda');
+      const sl = (key, label, fmt, min, max, step) => `<div class="px-0.5">
+        <div class="flex justify-between items-baseline mb-1"><label class="text-xs font-semibold text-slate-600">${label}</label><span id="lbl-${key}" class="text-sm font-bold tnum text-indigo-700">${fmt(dr[key])}</span></div>
+        <input data-driver="${key}" type="range" min="${min}" max="${max}" step="${step}" value="${dr[key]}" class="w-full accent-indigo-600 cursor-pointer">
+        <div class="text-[10px] text-slate-400 mt-0.5">VI base ${fmt(def[key])}</div></div>`;
+      const sliders = sl('g', 'Revenue growth / yr', pPct, -0.1, 0.3, 0.005) + sl('margin', 'EBITDA margin', pPct, 0, 0.6, 0.01) + sl('tax', 'Tax rate', pPct, 0, 0.45, 0.01) + sl('capex', 'Capex (% revenue)', pPct, 0, 0.3, 0.005) + sl('wacc', 'WACC (discount rate)', pPct, 0.05, 0.25, 0.0025) + (isEb ? sl('mult', 'Exit EV/EBITDA', (x) => (x || 0).toFixed(1) + '×', 1, 30, 0.5) : sl('tg', 'Terminal growth', pPct, 0, 0.06, 0.0025));
+      return panel('Assumptions', 'Adjust the model — updates live', `
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-3.5">${sliders}</div>
+        <div class="flex items-center justify-between mt-4 pt-3 border-t border-slate-100">
+          <button data-reset class="text-xs font-semibold text-indigo-600 hover:text-indigo-800">↺ Reset to valueinvesting.io base case</button>
+          <span id="adjBadge" class="inline-flex items-center gap-1.5 text-[11px] font-semibold ${state.adjusted ? 'text-amber-600' : 'text-slate-400'}"><span class="h-1.5 w-1.5 rounded-full ${state.adjusted ? 'bg-amber-500' : 'bg-slate-300'}"></span>${state.adjusted ? 'Your scenario' : 'Base case · VI'}</span>
+        </div>`, 'founder what-if');
     }
 
     // ---------- SVG chart engine ----------
@@ -338,17 +401,18 @@
     // ---------- the visual model ----------
     function renderDetail(d) {
       const vk = state.variant, v = d.variants[vk] || {}, isEb = vk.includes('ebitda'), N = vk.includes('10y') ? 10 : 5;
-      const proj = (d.shared_projection || []).slice(0, N);
+      const view = getView(d, vk), proj = view.proj || [];
       const W = d.wacc || {}, B = W.build || {};
-      const fair = v.fair_value_per_share, up = v.upside_pct;
+      const fair = view.fair, up = view.up;
 
-      const water = svgWaterfall(v.pv_projection, v.pv_terminal, v.enterprise_value, v.net_debt != null ? v.net_debt : d.net_debt, v.equity_value);
-      const callout = v.enterprise_value == null ? '' : `<div class="flex items-center justify-between rounded-2xl px-4 py-2.5 mt-3 ${up >= 0 ? 'bg-up-soft' : 'bg-down-soft'}">
-        <div><div class="text-[11px] font-semibold uppercase tracking-wide ${up >= 0 ? 'text-up' : 'text-down'}">Equity ÷ ${fmtShares(d.shares_outstanding)} sh</div><div class="text-xs text-slate-500">Fair value / share</div></div>
+      const water = svgWaterfall(view.pvF, view.pvT, view.ev, view.nd, view.eq);
+      const wf = view.model ? ` <span class="align-middle text-[10px] font-bold uppercase tracking-wide text-amber-700 bg-amber-100 px-1.5 py-0.5 rounded">what-if</span>` : '';
+      const callout = view.ev == null ? '' : `<div class="flex items-center justify-between rounded-2xl px-4 py-2.5 mt-3 ${up >= 0 ? 'bg-up-soft' : 'bg-down-soft'}">
+        <div><div class="text-[11px] font-semibold uppercase tracking-wide ${up >= 0 ? 'text-up' : 'text-down'}">${view.model ? 'Your fair value' : 'Fair value'} / share${wf}</div><div class="text-xs text-slate-500">Equity ÷ ${fmtShares(d.shares_outstanding)} sh</div></div>
         <div class="text-right"><div class="text-2xl font-display font-extrabold tnum leading-none ${up >= 0 ? 'text-up' : 'text-down'}">${fmtRupee(fair)}</div><div class="text-xs font-semibold tnum mt-0.5 ${up >= 0 ? 'text-up' : 'text-down'}">${signedPct(up)} vs ${fmtRupee(d.price_current)}</div></div>
       </div>`;
 
-      const fcfLegend = `<div class="flex items-center gap-4 mt-1 text-[11px] text-slate-500"><span class="flex items-center gap-1.5"><span class="h-2.5 w-3 rounded-sm" style="background:#e0e7ff"></span>Projected FCF</span><span class="flex items-center gap-1.5"><span class="h-2.5 w-3 rounded-sm" style="background:#4338ca"></span>Present value</span><span class="ml-auto">discount @ ${fmtPct(W.selected, 1)} WACC</span></div>`;
+      const fcfLegend = `<div class="flex items-center gap-4 mt-1 text-[11px] text-slate-500"><span class="flex items-center gap-1.5"><span class="h-2.5 w-3 rounded-sm" style="background:#e0e7ff"></span>FCF</span><span class="flex items-center gap-1.5"><span class="h-2.5 w-3 rounded-sm" style="background:#4338ca"></span>Present value</span><span class="ml-auto">discount @ ${pPct(state.adjusted ? state.drivers.wacc : W.selected)} WACC</span></div>`;
 
       const rf = mid(B.long_term_bond_rate), erp = mid(B.equity_risk_premium), beta = W.beta != null ? W.beta : mid(B.adjusted_beta), addj = mid(B.additional_risk_adjustment) || 0;
       const coe = W.cost_of_equity_selected != null ? W.cost_of_equity_selected : (rf != null && beta != null && erp != null ? rf + beta * erp + addj : null);
@@ -358,39 +422,40 @@
       const chip = (l, val, dark) => `<div class="rounded-xl ${dark ? 'bg-slate-900' : 'bg-slate-50'} px-2.5 py-2 text-center"><div class="text-[9px] uppercase tracking-wide ${dark ? 'text-white/55' : 'text-slate-400'} font-semibold">${l}</div><div class="text-sm font-bold ${dark ? 'text-white' : 'text-slate-900'} tnum mt-0.5">${val}</div></div>`;
       const waccBody = `<div class="grid md:grid-cols-5 gap-5 items-center">
         <div class="md:col-span-3">
-          ${coe ? `<div class="flex justify-between text-xs font-semibold text-slate-500 mb-1.5"><span>Cost of equity (CAPM)</span><span class="tnum">${fmtPct(coe, 1)}</span></div>
-          <div class="flex h-9 rounded-xl overflow-hidden ring-1 ring-slate-200/60">${segs.map((s) => `<div class="flex items-center justify-center text-white text-[10px] font-semibold" style="width:${(s[1] / segSum * 100).toFixed(1)}%;background:${s[2]}" title="${s[0]} · ${fmtPct(s[1], 1)}">${s[1] / segSum > 0.17 ? s[0] : ''}</div>`).join('')}</div>
-          <div class="flex justify-between text-[10px] text-slate-400 mt-1"><span>Risk-free ${fmtPct(rf, 1)}</span><span>β ${beta != null ? beta.toFixed(2) : '—'} × ERP ${fmtPct(erp, 1)}</span><span>+ adj ${fmtPct(addj, 1)}</span></div>` : '<div class="text-sm text-slate-400 py-2">WACC build not available.</div>'}
+          ${coe ? `<div class="flex justify-between text-xs font-semibold text-slate-500 mb-1.5"><span>Cost of equity (CAPM)</span><span class="tnum">${pPct(coe)}</span></div>
+          <div class="flex h-9 rounded-xl overflow-hidden ring-1 ring-slate-200/60">${segs.map((s) => `<div class="flex items-center justify-center text-white text-[10px] font-semibold" style="width:${(s[1] / segSum * 100).toFixed(1)}%;background:${s[2]}" title="${s[0]} · ${pPct(s[1])}">${s[1] / segSum > 0.17 ? s[0] : ''}</div>`).join('')}</div>
+          <div class="flex justify-between text-[10px] text-slate-400 mt-1"><span>Risk-free ${pPct(rf)}</span><span>β ${beta != null ? beta.toFixed(2) : '—'} × ERP ${pPct(erp)}</span><span>+ adj ${pPct(addj)}</span></div>` : '<div class="text-sm text-slate-400 py-2">WACC build not available.</div>'}
         </div>
         <div class="md:col-span-2 grid grid-cols-3 gap-2">
-          ${chip('Cost of equity', fmtPct(coe, 1))}${chip('Cost of debt', fmtPct(cod, 1))}${chip('D / E', de != null ? de.toFixed(2) : '—')}
-          ${chip('Tax', fmtPct(mid(B.tax_rate), 1))}${chip('Beta', beta != null ? beta.toFixed(2) : '—')}${chip('WACC', fmtPct(wsel, 1), true)}
+          ${chip('Cost of equity', pPct(coe))}${chip('Cost of debt', pPct(cod))}${chip('D / E', de != null ? de.toFixed(2) : '—')}
+          ${chip('Tax', pPct(mid(B.tax_rate)))}${chip('Beta', beta != null ? beta.toFixed(2) : '—')}${chip('WACC', pPct(wsel), true)}
         </div>
       </div>`;
 
-      const baseW = W.selected, sens = v.sensitivity || {};
+      const baseW = state.adjusted ? state.drivers.wacc : W.selected, sens = v.sensitivity || {};
       let heat = '<div class="text-sm text-slate-400 py-6 text-center">Not available.</div>';
       if (baseW != null) {
         const waccs = [-0.02, -0.01, 0, 0.01, 0.02].map((x) => baseW + x);
         let cols, colLabels, secLabel, selCol = 2;
-        if (isEb) { const bs = v.terminal && v.terminal.exit_multiple; if (bs) { cols = [-0.2, -0.1, 0, 0.1, 0.2].map((x) => bs * (1 + x)); colLabels = cols.map((c) => c.toFixed(1) + '×'); secLabel = 'exit multiple →'; } }
-        else { const bs = d.assumptions_raw && d.assumptions_raw.avg_long_growth; if (bs != null) { cols = [-0.01, -0.005, 0, 0.005, 0.01].map((x) => bs + x); colLabels = cols.map((c) => (c * 100).toFixed(1) + '%'); secLabel = 'growth →'; } }
+        const baseSec = state.adjusted ? (isEb ? state.drivers.mult : state.drivers.tg) : (isEb ? (v.terminal && v.terminal.exit_multiple) : (d.assumptions_raw && d.assumptions_raw.avg_long_growth));
+        if (isEb) { if (baseSec) { cols = [-0.2, -0.1, 0, 0.1, 0.2].map((x) => baseSec * (1 + x)); colLabels = cols.map((c) => c.toFixed(1) + '×'); secLabel = 'exit multiple →'; } }
+        else { if (baseSec != null) { cols = [-0.01, -0.005, 0, 0.005, 0.01].map((x) => baseSec + x); colLabels = cols.map((c) => (c * 100).toFixed(1) + '%'); secLabel = 'growth →'; } }
         if (cols) {
           const price = d.price_current;
           heat = `<div class="text-[11px] text-slate-400 mb-2">${secLabel} &nbsp;·&nbsp; ↓ WACC &nbsp;·&nbsp; cell = fair value/share</div>
           <div class="overflow-x-auto -mx-1"><table class="border-separate text-xs w-full" style="border-spacing:3px;min-width:420px">
             <thead><tr><th class="w-10"></th>${colLabels.map((l, ci) => `<th class="px-1 py-1 text-center font-semibold ${ci === selCol ? 'text-slate-900' : 'text-slate-400'} tnum">${l}</th>`).join('')}</tr></thead>
             <tbody>${waccs.map((w, ri) => `<tr><th class="pr-2 text-right font-semibold ${ri === 2 ? 'text-slate-900' : 'text-slate-400'} tnum">${(w * 100).toFixed(1)}%</th>${cols.map((c, ci) => {
-            const f = fairAt(d, vk, w, c), u = f != null && price ? f / price - 1 : null, a = u == null ? 0 : Math.min(Math.abs(u), 0.5) / 0.5 * 0.82, bg = u == null ? '#f8fafc' : (u >= 0 ? `rgba(5,150,105,${a})` : `rgba(225,29,72,${a})`), sel = ri === 2 && ci === selCol;
+            const f = fairCell(d, vk, w, c), u = f != null && price ? f / price - 1 : null, a = u == null ? 0 : Math.min(Math.abs(u), 0.5) / 0.5 * 0.82, bg = u == null ? '#f8fafc' : (u >= 0 ? `rgba(5,150,105,${a})` : `rgba(225,29,72,${a})`), sel = ri === 2 && ci === selCol;
             return `<td class="px-1.5 py-2 text-center tnum rounded-lg ${sel ? 'ring-2 ring-slate-900 font-extrabold' : 'font-medium'}" style="background:${bg};color:${a > 0.45 ? '#fff' : '#0f172a'}">${f != null ? Math.round(f).toLocaleString('en-IN') : '—'}</td>`;
           }).join('')}</tr>`).join('')}</tbody></table></div>
-          <div class="mt-2.5 text-[11px] text-slate-500">Ringed = base case <b class="tnum text-slate-700">${fmtRupee(fair)}</b>. Grid range <b class="tnum text-slate-700">${rangeRupee(sens.fair_price_range)}</b>.</div>`;
+          <div class="mt-2.5 text-[11px] text-slate-500">Ringed = ${view.model ? 'your case' : 'base case'} <b class="tnum text-slate-700">${fmtRupee(fair)}</b>.</div>`;
         }
       }
 
       const drawer = `<div class="card rounded-3xl overflow-hidden">
         <button data-drawer class="w-full flex items-center justify-between px-5 py-3.5 text-left hover:bg-slate-50/60 transition">
-          <span class="font-display font-bold text-slate-800 text-sm">Detailed figures <span class="text-slate-400 font-sans font-normal">— full model tables</span></span>
+          <span class="font-display font-bold text-slate-800 text-sm">Detailed figures <span class="text-slate-400 font-sans font-normal">— valueinvesting.io model tables</span></span>
           <svg class="h-5 w-5 text-slate-400 transition-transform ${state.showTables ? 'rotate-180' : ''}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
         </button>
         ${state.showTables ? `<div class="px-5 pb-5 pt-1 space-y-5 border-t border-slate-100">${renderRawTables(d)}</div>` : ''}
@@ -398,10 +463,10 @@
 
       return `<div class="space-y-4">
         <div class="grid lg:grid-cols-2 gap-4">
-          ${panel('Valuation', 'Path to fair value', water + callout, '₹ waterfall')}
+          ${panel('Valuation', view.model ? 'Your path to fair value' : 'Path to fair value', water + callout, '₹ waterfall')}
           ${panel('Cash flows', 'FCF — gross vs present value', svgFcf(proj) + fcfLegend, N + 'yr · ₹')}
         </div>
-        ${panel('Discount rate', 'WACC build-up', waccBody, 'CAPM')}
+        ${panel('Discount rate', 'WACC build-up', waccBody, 'CAPM · VI')}
         <div class="grid lg:grid-cols-2 gap-4">
           ${panel('Top line', 'Revenue & EBITDA margin', svgRev(proj), '₹ · margin %')}
           ${panel('What if', 'Sensitivity of fair value', heat, isEb ? 'WACC × multiple' : 'WACC × growth')}
@@ -505,14 +570,26 @@
           ${stat('Net debt', fmtCr(d.net_debt))}
         </div>
 
-        <p class="text-xs text-slate-400 px-1">Figures as published by valueinvesting.io for the selected DCF method. Switch methods above. ${d.is_financial ? 'Financial company — DCF may be supplemented by a dividend model.' : ''}</p>
+        <p class="text-xs text-slate-400 px-1">Base case = valueinvesting.io's published figures. Adjust the assumptions below to run your own scenario. ${d.is_financial ? 'Financial company — DCF may be supplemented by a dividend model.' : ''}</p>
 
-        ${renderDetail(d)}
+        ${renderAssumptions(d)}
+        <div id="modelView">${renderDetail(d)}</div>
       </div>`;
 
-      $('result').querySelectorAll('[data-v]').forEach((b) => b.onclick = () => { if (!b.disabled) { state.variant = b.dataset.v; renderCompany(false); } });
-      $('result').querySelectorAll('[data-tab]').forEach((b) => b.onclick = () => { if (!b.disabled) { state.detailTab = b.dataset.tab; renderCompany(false); } });
-      $('result').querySelectorAll('[data-drawer]').forEach((b) => b.onclick = () => { state.showTables = !state.showTables; renderCompany(false); });
+      const wireModelView = () => {
+        $('result').querySelectorAll('#modelView [data-tab]').forEach((b) => b.onclick = () => { if (!b.disabled) { state.detailTab = b.dataset.tab; refreshModel(); } });
+        $('result').querySelectorAll('#modelView [data-drawer]').forEach((b) => b.onclick = () => { state.showTables = !state.showTables; refreshModel(); });
+      };
+      const refreshModel = () => { const mv = document.getElementById('modelView'); if (mv) { mv.innerHTML = renderDetail(d); wireModelView(); } };
+      $('result').querySelectorAll('[data-v]').forEach((b) => b.onclick = () => { if (!b.disabled) { state.variant = b.dataset.v; initDrivers(d, b.dataset.v); renderCompany(false); } });
+      $('result').querySelectorAll('[data-driver]').forEach((inp) => inp.oninput = () => {
+        const k = inp.dataset.driver; state.drivers[k] = parseFloat(inp.value); state.adjusted = true;
+        const lbl = document.getElementById('lbl-' + k); if (lbl) lbl.textContent = k === 'mult' ? parseFloat(inp.value).toFixed(1) + '×' : (parseFloat(inp.value) * 100).toFixed(1) + '%';
+        const bd = document.getElementById('adjBadge'); if (bd) { bd.innerHTML = '<span class="h-1.5 w-1.5 rounded-full bg-amber-500"></span>Your scenario'; bd.className = 'inline-flex items-center gap-1.5 text-[11px] font-semibold text-amber-600'; }
+        refreshModel();
+      });
+      $('result').querySelectorAll('[data-reset]').forEach((b) => b.onclick = () => { state.drivers = { ...state.driverDefaults }; state.adjusted = false; renderCompany(false); });
+      wireModelView();
     }
 
     // ---------- states ----------
