@@ -73,7 +73,7 @@
         </div>
       </div>
       <!-- client branding slot -->
-      <div id="brandingSlot" class="text-xs text-slate-400 font-medium">Powered by valueinvesting.io</div>
+      <div id="brandingSlot" class="text-xs text-slate-400 font-medium">Powered by Munshot</div>
     </div>
   </header>
 
@@ -103,7 +103,7 @@
   <footer class="border-t border-slate-200/60">
     <div class="max-w-6xl mx-auto px-5 py-5 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-400">
       <div id="freshness">Loading data…</div>
-      <div>DCF data sourced from valueinvesting.io · Displayed for information, not investment advice.</div>
+      <div>DCF data by Munshot · Displayed for information, not investment advice.</div>
     </div>
   </footer>
 
@@ -212,7 +212,7 @@
 
     // ---------- staged loader (makes the live computation legible) ----------
     const LOAD_STEPS = [
-      { label: 'Connecting to valueinvesting.io source', detail: (d) => d ? esc(d.ticker) : '' },
+      { label: 'Connecting to Munshot data', detail: (d) => d ? esc(d.ticker) : '' },
       { label: 'Pulling financial statements', detail: (d) => d ? `Revenue ${compactCr(d.revenue_ttm)}` : '' },
       { label: 'Estimating cost of capital (CAPM)', detail: (d) => d && d.wacc ? `WACC ${pPct(d.wacc.selected)}` : '' },
       { label: 'Projecting unlevered free cash flow', detail: (d) => d ? `${(d.shared_projection || []).length}-yr horizon` : '' },
@@ -299,7 +299,7 @@
       return { label: 'Fairly valued', cls: 'slate', soft: 'bg-slate-100 text-slate-600' };
     }
 
-    // ---------- detailed model (VI's exact tables) ----------
+    // ---------- detailed model (source model tables) ----------
     const RK = {
       'dcf-growth-exit-5y': 'R_end_5', 'dcf-growth-exit-10y': 'R_end_10',
       'dcf-ebitda-exit-5y': 'R_end_ebitda_5', 'dcf-ebitda-exit-10y': 'R_end_ebitda_10',
@@ -373,7 +373,7 @@
       const pvtv = (tv / Math.pow(1 + dr.wacc, N)) * k, sumpv = projection.reduce((a, p) => a + p.pv_fcf, 0) * k, ev = sumpv + pvtv, equity = ev - (dr.netDebt || 0);
       return { fair: dr.shares ? equity / dr.shares : null, ev, equity, sumpv, pvtv, tv, projection };
     }
-    // calibrate the model's EV to VI's at the base case, so base == VI and adjustments are smooth
+    // calibrate the model's EV to the published base case, so base == base and adjustments are smooth
     function initDrivers(doc, vk) {
       state.driverDefaults = deriveDefaults(doc, vk);
       state.drivers = { ...state.driverDefaults };
@@ -395,13 +395,13 @@
       const sl = (key, label, fmt, min, max, step) => `<div class="px-0.5">
         <div class="flex justify-between items-baseline mb-1"><label class="text-xs font-semibold text-slate-600">${label}</label><span id="lbl-${key}" class="text-sm font-bold tnum text-indigo-700">${fmt(dr[key])}</span></div>
         <input data-driver="${key}" type="range" min="${min}" max="${max}" step="${step}" value="${dr[key]}" class="w-full accent-indigo-600 cursor-pointer">
-        <div class="text-[10px] text-slate-400 mt-0.5">VI base ${fmt(def[key])}</div></div>`;
+        <div class="text-[10px] text-slate-400 mt-0.5">Munshot base ${fmt(def[key])}</div></div>`;
       const sliders = sl('g', 'Revenue growth / yr', pPct, -0.1, 0.3, 0.005) + sl('margin', 'EBITDA margin', pPct, 0, 0.6, 0.01) + sl('tax', 'Tax rate', pPct, 0, 0.45, 0.01) + sl('capex', 'Capex (% revenue)', pPct, 0, 0.3, 0.005) + sl('wacc', 'WACC (discount rate)', pPct, 0.05, 0.25, 0.0025) + (isEb ? sl('mult', 'Exit EV/EBITDA', (x) => (x || 0).toFixed(1) + '×', 1, 30, 0.5) : sl('tg', 'Terminal growth', pPct, 0, 0.06, 0.0025));
       return panel('Assumptions', 'Adjust the model — updates live', `
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-3.5">${sliders}</div>
         <div class="flex items-center justify-between mt-4 pt-3 border-t border-slate-100">
-          <button data-reset class="text-xs font-semibold text-indigo-600 hover:text-indigo-800">↺ Reset to valueinvesting.io base case</button>
-          <span id="adjBadge" class="inline-flex items-center gap-1.5 text-[11px] font-semibold ${state.adjusted ? 'text-amber-600' : 'text-slate-400'}"><span class="h-1.5 w-1.5 rounded-full ${state.adjusted ? 'bg-amber-500' : 'bg-slate-300'}"></span>${state.adjusted ? 'Your scenario' : 'Base case · VI'}</span>
+          <button data-reset class="text-xs font-semibold text-indigo-600 hover:text-indigo-800">↺ Reset to Munshot base case</button>
+          <span id="adjBadge" class="inline-flex items-center gap-1.5 text-[11px] font-semibold ${state.adjusted ? 'text-amber-600' : 'text-slate-400'}"><span class="h-1.5 w-1.5 rounded-full ${state.adjusted ? 'bg-amber-500' : 'bg-slate-300'}"></span>${state.adjusted ? 'Your scenario' : 'Base case · Munshot'}</span>
         </div>`, 'founder what-if');
     }
 
@@ -536,7 +536,7 @@
 
       const drawer = `<div class="card rounded-3xl overflow-hidden">
         <button data-drawer class="w-full flex items-center justify-between px-5 py-3.5 text-left hover:bg-slate-50/60 transition">
-          <span class="font-display font-bold text-slate-800 text-sm">Detailed figures <span class="text-slate-400 font-sans font-normal">— valueinvesting.io model tables</span></span>
+          <span class="font-display font-bold text-slate-800 text-sm">Detailed figures <span class="text-slate-400 font-sans font-normal">— Munshot model tables</span></span>
           <svg class="h-5 w-5 text-slate-400 transition-transform ${state.showTables ? 'rotate-180' : ''}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
         </button>
         ${state.showTables ? `<div class="px-5 pb-5 pt-1 space-y-5 border-t border-slate-100">${renderRawTables(d)}</div>` : ''}
@@ -547,7 +547,7 @@
           ${panel('Valuation', view.model ? 'Your path to fair value' : 'Path to fair value', water + callout, '₹ waterfall')}
           ${panel('Cash flows', 'FCF — gross vs present value', svgFcf(proj) + fcfLegend, N + 'yr · ₹')}
         </div>
-        ${panel('Discount rate', 'WACC build-up', waccBody, 'CAPM · VI')}
+        ${panel('Discount rate', 'WACC build-up', waccBody, 'CAPM · Munshot')}
         <div class="grid lg:grid-cols-2 gap-4">
           ${panel('Top line', 'Revenue & EBITDA margin', svgRev(proj), '₹ · margin %')}
           ${panel('What if', 'Sensitivity of fair value', heat, isEb ? 'WACC × multiple' : 'WACC × growth')}
@@ -674,7 +674,7 @@
         </div>
         ${state.view === 'relative'
           ? `<div id="relView">${renderRelative(d)}</div>`
-          : `<p class="text-xs text-slate-400 px-1">Base case = valueinvesting.io's published figures. Adjust the assumptions below to run your own scenario.</p>${renderAssumptions(d)}<div id="modelView">${renderDetail(d)}</div>`}
+          : `<p class="text-xs text-slate-400 px-1">Base case = Munshot's published figures. Adjust the assumptions below to run your own scenario.</p>${renderAssumptions(d)}<div id="modelView">${renderDetail(d)}</div>`}
       </div>`;
 
       const wireModelView = () => {
@@ -755,7 +755,7 @@
               </div>
               <div class="relative mt-4 h-3 rounded-full bg-slate-100"><div class="absolute top-0 bottom-0 left-1/2 w-px bg-slate-300"></div><div class="absolute top-0 bottom-0 rounded-full ${isUp ? 'bg-up' : 'bg-down'}" style="${isUp ? 'left:50%' : 'right:50%'};width:${fillPct}%"></div></div>
               <div class="flex justify-between text-[11px] text-slate-400 mt-1.5 tnum"><span>−100%</span><span>fair</span><span>+100%</span></div>
-              <p class="mt-3 text-xs text-slate-500">Banks &amp; financials are valued on dividends (DDM), not DCF — valueinvesting.io's method for this sector.</p>
+              <p class="mt-3 text-xs text-slate-500">Banks &amp; financials are valued on dividends (DDM), not DCF — Munshot's method for this sector.</p>
             </div>
           </div>
         </div>
@@ -833,7 +833,7 @@
       const cell = (v) => `<td class="px-3 py-1.5 text-right tnum text-slate-600">${v != null ? (+v).toFixed(1) + '×' : '—'}</td>`;
       const html = `<div>
         <div class="grid sm:grid-cols-3 gap-3">${card('Implied · Forward P/E', impFwd, rel.forward_pe, medFpe)}${card('Implied · Trailing P/E', impTrl, rel.trailing_pe, medTpe)}${card('Implied · EV/EBITDA', impEv, rel.trailing_ev_ebitda, medEvb)}</div>
-        <div class="text-[11px] text-slate-400 mt-3 mb-1">Peer set from valueinvesting.io — ${rows.length} NSE peers shown (foreign listings excluded). Implied value = peer-median multiple applied to this company.</div>
+        <div class="text-[11px] text-slate-400 mt-3 mb-1">Peer set from Munshot — ${rows.length} NSE peers shown (foreign listings excluded). Implied value = peer-median multiple applied to this company.</div>
         <div class="overflow-x-auto -mx-1"><table class="w-full text-sm" style="min-width:440px"><thead><tr><th class="text-left px-3 py-2 text-[11px] uppercase text-slate-400 font-semibold">Peer</th><th class="text-right px-3 py-2 text-[11px] uppercase text-slate-400 font-semibold">Fwd P/E</th><th class="text-right px-3 py-2 text-[11px] uppercase text-slate-400 font-semibold">Trail P/E</th><th class="text-right px-3 py-2 text-[11px] uppercase text-slate-400 font-semibold">EV/EBITDA</th></tr></thead><tbody>
           ${rows.map((r) => `<tr class="border-t border-slate-100"><td class="px-3 py-1.5 text-slate-700 truncate" style="max-width:220px">${esc(r.name || r.ticker.replace('.NS', ''))}</td>${cell(r.fpe)}${cell(r.tpe)}${cell(r.evb)}</tr>`).join('')}
           <tr class="border-t-2 border-slate-200"><td class="px-3 py-1.5 font-bold text-slate-900">Peer median</td><td class="px-3 py-1.5 text-right tnum font-bold text-slate-900">${medFpe != null ? medFpe.toFixed(1) + '×' : '—'}</td><td class="px-3 py-1.5 text-right tnum font-bold text-slate-900">${medTpe != null ? medTpe.toFixed(1) + '×' : '—'}</td><td class="px-3 py-1.5 text-right tnum font-bold text-slate-900">${medEvb != null ? medEvb.toFixed(1) + '×' : '—'}</td></tr>
@@ -880,7 +880,7 @@
       // create tabs up front so cross-sheet refs resolve in a friendly order
       const su = wb.addWorksheet('Summary', { views: [{ showGridLines: false }] });
       const ws = wb.addWorksheet('DCF Model', { views: [{ showGridLines: false }] });
-      const wc = wb.addWorksheet('WACC (VI)', { views: [{ showGridLines: false }] });
+      const wc = wb.addWorksheet('WACC', { views: [{ showGridLines: false }] });
 
       // ====================== DCF MODEL (the live engine) ======================
       ws.getColumn(1).width = 2.5; ws.getColumn(2).width = 30; ws.getColumn(3).width = 15;
@@ -888,13 +888,13 @@
       titleBar(ws, lastCol, 'DCF MODEL', `${d.name || d.ticker}  ·  ${d.ticker}${d.sector ? '  ·  ' + d.sector : ''}  ·  ${(VARIANTS.find((v) => v.key === vk) || {}).label || vk}`);
 
       // assumptions (blue = editable)
-      sect(ws, 'B4', 'C4', 'ASSUMPTIONS — edit the blue cells'); put(ws, 'D4', 'VI base', { font: F(9, S400, true), fill: S50, align: R }); put(ws, 'E4', '', { fill: S50 });
+      sect(ws, 'B4', 'C4', 'ASSUMPTIONS — edit the blue cells'); put(ws, 'D4', 'Munshot base', { font: F(9, S400, true), fill: S50, align: R }); put(ws, 'E4', '', { fill: S50 });
       const arows = [['Revenue growth (p.a.)', 'g', P2, 'per year'], ['EBITDA margin', 'margin', P1, 'of revenue'], ['D&A (% of revenue)', 'da', P1, 'of revenue'], ['Capex (% of revenue)', 'capex', P1, 'of revenue'], ['Tax rate', 'tax', P1, 'on EBIT'], ['Δ NWC (% of Δ revenue)', 'nwc', P1, 'incremental'], ['WACC (discount rate)', 'wacc', P2, 'CAPM']];
       let r = 5; for (const [labl, key, fmt, note] of arows) { lab(ws, 'B' + r, labl); editable(ws, 'C' + r, dr[key], fmt); soft(ws, 'D' + r, def[key], fmt); put(ws, 'E' + r, note, { font: F(9, S400), align: L }); r++; }
       if (isEb) { lab(ws, 'B12', 'Exit EV / EBITDA'); editable(ws, 'C12', dr.mult, MUL); soft(ws, 'D12', def.mult, MUL); }
       else { lab(ws, 'B12', 'Terminal growth (g∞)'); editable(ws, 'C12', dr.tg, P2); soft(ws, 'D12', def.tg, P2); }
       put(ws, 'E12', 'steady state', { font: F(9, S400), align: L });
-      lab(ws, 'B13', 'Reconciliation to VI'); editable(ws, 'C13', k, '0.0000'); soft(ws, 'D13', 1, '0.0000'); put(ws, 'E13', '1.0 = raw model', { font: F(9, S400), align: L });
+      lab(ws, 'B13', 'Reconciliation to Munshot'); editable(ws, 'C13', k, '0.0000'); soft(ws, 'D13', 1, '0.0000'); put(ws, 'E13', '1.0 = raw model', { font: F(9, S400), align: L });
 
       // base inputs (₹ Crore)
       sect(ws, 'B15', 'C15', 'BASE INPUTS — ₹ Crore');
@@ -983,14 +983,14 @@
       lab(su, 'B' + (br + 2), 'Less: net debt'); put(su, 'C' + (br + 2), { formula: "'DCF Model'!C17" }, { font: F(10, INK), numFmt: CR, align: R });
       lab(su, 'B' + (br + 3), 'Equity value'); put(su, 'C' + (br + 3), { formula: "'DCF Model'!C48" }, { font: F(10, INK, true), numFmt: CR, align: R, border: { top: thin(S200) } });
       const hu = br + 5; su.mergeCells('B' + hu + ':D' + hu); put(su, 'B' + hu, 'HOW TO USE', { font: F(10, IND, true), fill: S50, align: L, border: { bottom: thin(S200) } });
-      su.mergeCells('B' + (hu + 1) + ':D' + (hu + 3)); put(su, 'B' + (hu + 1), 'Edit any blue cell on the “DCF Model” sheet — revenue growth, margins, WACC, terminal assumptions — and the fair value, equity bridge and sensitivity grid recalculate automatically. “Reconciliation to VI” anchors the base case to valueinvesting.io’s published enterprise value; set it to 1.0000 to see the uncalibrated forward DCF.', { font: F(9, S500), align: { horizontal: 'left', vertical: 'top', wrapText: true } });
+      su.mergeCells('B' + (hu + 1) + ':D' + (hu + 3)); put(su, 'B' + (hu + 1), 'Edit any blue cell on the “DCF Model” sheet — revenue growth, margins, WACC, terminal assumptions — and the fair value, equity bridge and sensitivity grid recalculate automatically. “Reconciliation to Munshot” anchors the base case to Munshot’s published enterprise value; set it to 1.0000 to see the uncalibrated forward DCF.', { font: F(9, S500), align: { horizontal: 'left', vertical: 'top', wrapText: true } });
       su.getRow(hu + 1).height = 60;
-      const dz = hu + 5; su.mergeCells('B' + dz + ':D' + dz); put(su, 'B' + dz, 'DCF data sourced from valueinvesting.io. For information only — not investment advice.', { font: F(8, S400, false, true), align: L });
+      const dz = hu + 5; su.mergeCells('B' + dz + ':D' + dz); put(su, 'B' + dz, 'DCF data by Munshot. For information only — not investment advice.', { font: F(8, S400, false, true), align: L });
       su.pageSetup = { orientation: 'portrait', fitToPage: true, fitToWidth: 1, fitToHeight: 0, margins: { left: 0.5, right: 0.5, top: 0.5, bottom: 0.5, header: 0.3, footer: 0.3 } };
 
       // ====================== WACC (CAPM reference) ======================
       wc.getColumn(1).width = 2.5; wc.getColumn(2).width = 34; wc.getColumn(3).width = 13; wc.getColumn(4).width = 13; wc.getColumn(5).width = 13;
-      titleBar(wc, 'E', 'WACC — CAPM build', 'valueinvesting.io reference — low / high / selected (midpoint)', 14);
+      titleBar(wc, 'E', 'WACC — CAPM build', 'Munshot reference — low / high / selected (midpoint)', 14);
       const WB = d.wacc && d.wacc.build;
       if (WB) {
         ['Low', 'High', 'Selected'].forEach((t, i) => put(wc, ['C', 'D', 'E'][i] + '4', t, { font: F(9, S400, true), align: R, fill: S50, border: { bottom: thin(S200) } }));
@@ -1015,7 +1015,7 @@
         wc.mergeCells('B18:E18'); put(wc, 'B18', `The DCF discounts at WACC = ${fmtPct(d.wacc && d.wacc.selected)} (the selected midpoint). To run a different rate, edit ‘DCF Model’!C11.`, { font: F(9, S500, false, true), align: { horizontal: 'left', wrapText: true } });
       } else {
         lab(wc, 'B4', 'WACC (selected)', true); val(wc, 'C4', d.wacc && d.wacc.selected, P2, true);
-        wc.mergeCells('B6:E6'); put(wc, 'B6', 'Detailed CAPM build not available for this company; the model uses valueinvesting.io’s selected WACC.', { font: F(9, S500, false, true), align: { horizontal: 'left', wrapText: true } });
+        wc.mergeCells('B6:E6'); put(wc, 'B6', 'Detailed CAPM build not available for this company; the model uses Munshot’s selected WACC.', { font: F(9, S500, false, true), align: { horizontal: 'left', wrapText: true } });
       }
       wc.pageSetup = { orientation: 'portrait', fitToPage: true, fitToWidth: 1, fitToHeight: 0 };
 
@@ -1046,7 +1046,7 @@
       const aRow = (l, yv, bv) => `<tr><td style="padding:2.5px 0;color:#475569;font-size:11px">${l}</td><td style="padding:2.5px 8px;text-align:right;font-weight:700;color:#1d4ed8;font-size:11px;font-variant-numeric:tabular-nums">${yv}</td><td style="padding:2.5px 0;text-align:right;color:#94a3b8;font-size:11px;font-variant-numeric:tabular-nums">${bv}</td></tr>`;
       const bRow = (l, v, bold) => `<tr><td style="padding:2.5px 0;color:${bold ? '#0f172a' : '#475569'};font-size:11px;font-weight:${bold ? 700 : 400}">${l}</td><td style="padding:2.5px 0;text-align:right;color:${bold ? '#0f172a' : '#334155'};font-size:11px;font-weight:${bold ? 700 : 600};font-variant-numeric:tabular-nums">${v}</td></tr>`;
 
-      const assumptions = cardBox('Assumptions', state.adjusted ? 'your scenario · VI base' : 'valueinvesting.io base', `<table style="width:100%;border-collapse:collapse"><tr><td></td><td style="text-align:right;font-size:8.5px;color:#94a3b8;text-transform:uppercase;font-weight:700;padding-right:8px">Used</td><td style="text-align:right;font-size:8.5px;color:#94a3b8;text-transform:uppercase;font-weight:700">VI base</td></tr>
+      const assumptions = cardBox('Assumptions', state.adjusted ? 'your scenario · Munshot base' : 'Munshot base', `<table style="width:100%;border-collapse:collapse"><tr><td></td><td style="text-align:right;font-size:8.5px;color:#94a3b8;text-transform:uppercase;font-weight:700;padding-right:8px">Used</td><td style="text-align:right;font-size:8.5px;color:#94a3b8;text-transform:uppercase;font-weight:700">Munshot base</td></tr>
         ${aRow('Revenue growth (p.a.)', pPct(dr.g), pPct(def.g))}
         ${aRow('EBITDA margin', pPct(dr.margin), pPct(def.margin))}
         ${aRow('Capex (% revenue)', pPct(dr.capex), pPct(def.capex))}
@@ -1100,7 +1100,7 @@
             <div style="font-size:11.5px;color:#cbd5e1;margin-top:2px">${esc(d.ticker)}${d.sector ? ' · ' + esc(d.sector) : ''}</div></div>
           <div style="text-align:right"><div style="display:inline-block;background:${V.cls === 'up' ? '#064e3b' : V.cls === 'down' ? '#7f1d1d' : '#334155'};color:#fff;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px">${V.label}</div>
             <div style="font-size:11px;color:#94a3b8;margin-top:6px">${asOf ? 'As of ' + asOf : ''}</div>
-            <div style="font-size:10px;color:#64748b">Source: valueinvesting.io</div></div>
+            <div style="font-size:10px;color:#64748b">Source: Munshot</div></div>
         </div>
         <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:11px">
           ${hcard('Current price', fmtRupee(d.price_current))}
@@ -1124,7 +1124,7 @@
         <div style="padding-top:2px">${calcCard}</div>
         <div style="margin-top:9px">${trailCard}</div>
         <div style="margin-top:10px;font-size:9px;color:#94a3b8;line-height:1.45">
-          ${state.adjusted ? 'Figures reflect a custom scenario (adjusted assumptions). ' : ''}DCF data sourced from valueinvesting.io and reproduced by Intrinsic's engine. All currency in ₹. Displayed for information only — not investment advice. Generated ${new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}.
+          ${state.adjusted ? 'Figures reflect a custom scenario (adjusted assumptions). ' : ''}DCF model by Munshot. All currency in ₹. Displayed for information only — not investment advice. Generated ${new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}.
         </div>
       </div>`;
     }
