@@ -5,6 +5,8 @@
 //
 // Env: START_AT (0), MAX_COMPANIES (all), CONCURRENCY (2), DELAY_MS (500).
 // Politeness targets ~3-4 req/s; the reader honors Retry-After on 429.
+// Manual refresh 2026-06-16: re-run the full scrape to top up names that
+// returned stale in the prior pass (no behaviour change).
 
 import { scrapeTicker, emptyDoc } from './dcf-scrape.mjs';
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
