@@ -391,12 +391,26 @@
     }
     function renderAssumptions(d) {
       const vk = state.variant, def = state.driverDefaults || {}, dr = state.drivers || {}, isEb = vk.includes('ebitda');
-      const sl = (key, label, fmt, min, max, step) => `<div class="px-0.5">
-        <div class="flex justify-between items-baseline mb-1"><label class="text-xs font-semibold text-slate-600">${label}</label><span id="lbl-${key}" class="text-sm font-bold tnum text-indigo-700">${fmt(dr[key])}</span></div>
-        <input data-driver="${key}" type="range" min="${min}" max="${max}" step="${step}" value="${dr[key]}" class="w-full accent-indigo-600 cursor-pointer">
-        <div class="text-[10px] text-slate-400 mt-0.5">Munshot base ${fmt(def[key])}</div></div>`;
-      const sliders = sl('g', 'Revenue growth / yr', pPct, -0.1, 0.3, 0.005) + sl('margin', 'EBITDA margin', pPct, 0, 0.6, 0.01) + sl('tax', 'Tax rate', pPct, 0, 0.45, 0.01) + sl('capex', 'Capex (% revenue)', pPct, 0, 0.3, 0.005) + sl('wacc', 'WACC (discount rate)', pPct, 0.05, 0.25, 0.0025) + (isEb ? sl('mult', 'Exit EV/EBITDA', (x) => (x || 0).toFixed(1) + '×', 1, 30, 0.5) : sl('tg', 'Terminal growth', pPct, 0, 0.06, 0.0025));
-      return panel('Assumptions', 'Adjust the model — updates live', `
+      // editable number input + slider; the number field is uncapped (type any value),
+      // the slider just gives a generous drag range.
+      const sl = (key, label, min, max, step) => {
+        const isMult = key === 'mult';
+        const fmtBase = isMult ? ((x) => (x == null ? '—' : x.toFixed(1) + '×')) : pPct;
+        const disp = dr[key] == null ? '' : (isMult ? dr[key].toFixed(1) : (dr[key] * 100).toFixed(1));
+        return `<div class="px-0.5">
+          <div class="flex justify-between items-baseline mb-1">
+            <label class="text-xs font-semibold text-slate-600">${label}</label>
+            <span class="inline-flex items-baseline gap-0.5 text-indigo-700">
+              <input data-driver-num="${key}" type="number" step="${isMult ? 0.5 : 0.1}" value="${disp}" inputmode="decimal"
+                class="w-12 text-right text-sm font-bold tnum bg-transparent outline-none border-b border-transparent hover:border-indigo-200 focus:border-indigo-500 transition" />
+              <span class="text-sm font-bold">${isMult ? '×' : '%'}</span>
+            </span>
+          </div>
+          <input data-driver="${key}" type="range" min="${min}" max="${max}" step="${step}" value="${dr[key]}" class="w-full accent-indigo-600 cursor-pointer">
+          <div class="text-[10px] text-slate-400 mt-0.5">Munshot base ${fmtBase(def[key])}</div></div>`;
+      };
+      const sliders = sl('g', 'Revenue growth / yr', -0.5, 1, 0.005) + sl('margin', 'EBITDA margin', 0, 1, 0.005) + sl('tax', 'Tax rate', 0, 0.6, 0.005) + sl('capex', 'Capex (% revenue)', 0, 1, 0.005) + sl('wacc', 'WACC (discount rate)', 0.02, 0.5, 0.0025) + (isEb ? sl('mult', 'Exit EV/EBITDA', 0.5, 60, 0.5) : sl('tg', 'Terminal growth', -0.05, 0.2, 0.0025));
+      return panel('Assumptions', 'Adjust the model — type any value, no caps', `
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-3.5">${sliders}</div>
         <div class="flex items-center justify-between mt-4 pt-3 border-t border-slate-100">
           <button data-reset class="text-xs font-semibold text-indigo-600 hover:text-indigo-800">↺ Reset to Munshot base case</button>
@@ -496,7 +510,7 @@
 
       const rf = mid(B.long_term_bond_rate), erp = mid(B.equity_risk_premium), beta = W.beta != null ? W.beta : mid(B.adjusted_beta), addj = mid(B.additional_risk_adjustment) || 0;
       const coe = W.cost_of_equity_selected != null ? W.cost_of_equity_selected : (rf != null && beta != null && erp != null ? rf + beta * erp + addj : null);
-      const cod = W.cost_of_debt_selected, de = mid(B.debt_equity_ratio), wsel = W.selected;
+      const cod = W.cost_of_debt_selected, de = mid(B.debt_equity_ratio), wsel = state.adjusted ? state.drivers.wacc : W.selected;
       const segs = coe ? [['Risk-free', rf, '#94a3b8'], ['β × ERP', (beta != null && erp != null) ? beta * erp : null, '#6366f1'], ['Risk adj', addj || null, '#c4b5fd']].filter((s) => s[1]) : [];
       const segSum = segs.reduce((a, s) => a + s[1], 0) || 1;
       const chip = (l, val, dark) => `<div class="rounded-xl ${dark ? 'bg-slate-900' : 'bg-slate-50'} px-2.5 py-2 text-center"><div class="text-[9px] uppercase tracking-wide ${dark ? 'text-white/55' : 'text-slate-400'} font-semibold">${l}</div><div class="text-sm font-bold ${dark ? 'text-white' : 'text-slate-900'} tnum mt-0.5">${val}</div></div>`;
@@ -574,40 +588,25 @@
       return sub('Valuation bridge (₹ mn)', bridge) + sub('Discounted cash flow (₹ mn)', dcf) + sub('WACC build', wacc) + sub('Forecast', `<div class="flex flex-wrap gap-2 mb-3">${tabs}</div>${ft}`);
     }
 
-    function renderCompany(animate) {
-      const d = state.doc, v = d.variants[state.variant] || {};
-      const up = v.upside_pct, V = verdict(up);
-      const isUp = up != null && up >= 0;
-      const fillPct = up == null ? 0 : Math.min(Math.abs(up), 1) * 50; // % of half-track
-      const term = v.terminal || {};
-      const termLabel = term.method === 'exit_multiple'
-        ? `Exit multiple · ${term.exit_multiple != null ? term.exit_multiple + '×' : '—'}`
-        : `Perpetuity growth · ${term.perp_growth != null ? fmtPct(term.perp_growth, 1) : '—'}`;
-
+    // Hero + key stats — driven by getView so they track the adjusted scenario live.
+    function renderHero(d) {
+      const vk = state.variant, v = d.variants[vk] || {}, isEb = vk.includes('ebitda'), adj = state.adjusted, dr = state.drivers || state.driverDefaults || {};
+      const view = getView(d, vk), fair = view.fair, up = view.up, V = verdict(up), isUp = up != null && up >= 0;
+      const fillPct = up == null ? 0 : Math.min(Math.abs(up), 1) * 50;
+      const waccVal = adj ? dr.wacc : (d.wacc && d.wacc.selected);
+      const termSub = adj
+        ? (isEb ? (dr.mult || 0).toFixed(1) + '×' : pPct(dr.tg))
+        : (v.terminal && v.terminal.method === 'exit_multiple'
+            ? (v.terminal.exit_multiple != null ? v.terminal.exit_multiple + '×' : '—')
+            : (v.terminal && v.terminal.perp_growth != null ? fmtPct(v.terminal.perp_growth, 1) : '—'));
       const tabs = VARIANTS.map((t) => {
-        const has = d.variants?.[t.key]?.fair_value_per_share != null;
-        const on = t.key === state.variant;
-        return `<button data-v="${t.key}" ${has ? '' : 'disabled'}
-          class="px-3.5 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition ${on ? 'tab-active' : has ? 'text-slate-500 hover:bg-slate-100' : 'text-slate-300 cursor-not-allowed'}">${t.label}</button>`;
+        const has = d.variants?.[t.key]?.fair_value_per_share != null, on = t.key === state.variant;
+        return `<button data-v="${t.key}" ${has ? '' : 'disabled'} class="px-3.5 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition ${on ? 'tab-active' : has ? 'text-slate-500 hover:bg-slate-100' : 'text-slate-300 cursor-not-allowed'}">${t.label}</button>`;
       }).join('');
-
-      const stat = (label, value, sub = '') => `
-        <div class="card rounded-2xl p-4">
-          <div class="text-[11px] uppercase tracking-wide text-slate-400 font-semibold">${label}</div>
-          <div class="mt-1 text-lg font-display font-bold text-slate-900 tnum">${value}</div>
-          ${sub ? `<div class="text-xs text-slate-400 mt-0.5">${sub}</div>` : ''}
-        </div>`;
-
-      $('result').innerHTML = `
-      <div class="${animate ? 'fade-in ' : ''}space-y-5">
-        <button data-home class="group inline-flex items-center gap-1.5 text-sm font-semibold text-slate-500 hover:text-slate-900 transition -mb-1">
-          <svg class="h-4 w-4 transition-transform group-hover:-translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m15 18-6-6 6-6"/></svg>
-          Back to search
-        </button>
-        <!-- Hero -->
+      const stat = (label, value, sub = '') => `<div class="card rounded-2xl p-4"><div class="text-[11px] uppercase tracking-wide text-slate-400 font-semibold">${label}</div><div class="mt-1 text-lg font-display font-bold text-slate-900 tnum">${value}</div>${sub ? `<div class="text-xs text-slate-400 mt-0.5">${sub}</div>` : ''}</div>`;
+      return `
         <div class="card rounded-3xl p-6 sm:p-8">
           <div class="flex flex-col lg:flex-row lg:items-center gap-7">
-            <!-- identity + price -->
             <div class="lg:w-[42%]">
               <div class="flex items-center justify-between gap-2">
                 <div class="flex items-center gap-2 text-xs min-w-0">
@@ -615,86 +614,91 @@
                   ${d.sector ? `<span class="text-slate-400 truncate">${esc(d.sector)}</span>` : ''}
                 </div>
                 <div class="shrink-0 flex items-center gap-1.5">
-                  <button data-export="pdf" title="Download a clean one-page PDF tear-sheet"
-                    class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-bold bg-white border border-slate-200 text-slate-700 hover:border-slate-300 hover:text-slate-900 active:scale-95 transition">
-                    <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg>
-                    PDF
-                  </button>
-                  <button data-export="xlsx" title="Download the full model as a live Excel workbook"
-                    class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-bold bg-slate-900 text-white hover:bg-slate-800 active:scale-95 transition tnum">
-                    <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M5 21h14"/></svg>
-                    Excel
-                  </button>
+                  <button data-export="pdf" title="Download a clean one-page PDF tear-sheet" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-bold bg-white border border-slate-200 text-slate-700 hover:border-slate-300 hover:text-slate-900 active:scale-95 transition"><svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg>PDF</button>
+                  <button data-export="xlsx" title="Download the full model as a live Excel workbook" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-bold bg-slate-900 text-white hover:bg-slate-800 active:scale-95 transition tnum"><svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M5 21h14"/></svg>Excel</button>
                 </div>
               </div>
               <h2 class="mt-2 font-display font-extrabold text-slate-900 text-2xl sm:text-3xl tracking-tight leading-tight">${esc(d.name || d.ticker)}</h2>
               <div class="mt-4 flex items-end gap-6">
-                <div>
-                  <div class="text-[11px] uppercase tracking-wide text-slate-400 font-semibold">Current price</div>
-                  <div class="text-2xl font-bold text-slate-900 tnum mt-0.5">${fmtRupee(d.price_current)}</div>
-                </div>
-                <div>
-                  <div class="text-[11px] uppercase tracking-wide text-slate-400 font-semibold">DCF fair value</div>
-                  <div class="text-2xl font-bold tnum mt-0.5 ${isUp ? 'text-up' : 'text-down'}">${fmtRupee(v.fair_value_per_share)}</div>
-                </div>
+                <div><div class="text-[11px] uppercase tracking-wide text-slate-400 font-semibold">Current price</div><div class="text-2xl font-bold text-slate-900 tnum mt-0.5">${fmtRupee(d.price_current)}</div></div>
+                <div><div class="text-[11px] uppercase tracking-wide text-slate-400 font-semibold">${adj ? 'Your fair value' : 'DCF fair value'}</div><div class="text-2xl font-bold tnum mt-0.5 ${isUp ? 'text-up' : 'text-down'}">${fmtRupee(fair)}</div></div>
               </div>
             </div>
-
-            <!-- upside gauge -->
             <div class="lg:flex-1 lg:border-l lg:border-slate-100 lg:pl-7">
               <div class="flex items-center justify-between">
-                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-sm font-semibold ${V.soft}">
-                  <span class="h-1.5 w-1.5 rounded-full ${V.cls === 'up' ? 'bg-up' : V.cls === 'down' ? 'bg-down' : 'bg-slate-400'}"></span>${V.label}
-                </span>
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-sm font-semibold ${V.soft}"><span class="h-1.5 w-1.5 rounded-full ${V.cls === 'up' ? 'bg-up' : V.cls === 'down' ? 'bg-down' : 'bg-slate-400'}"></span>${V.label}</span>
                 <span class="text-3xl font-display font-extrabold tnum ${isUp ? 'text-up' : 'text-down'}">${signedPct(up)}</span>
               </div>
               <div class="relative mt-4 h-3 rounded-full bg-slate-100">
                 <div class="absolute top-0 bottom-0 left-1/2 w-px bg-slate-300"></div>
-                <div class="absolute top-0 bottom-0 rounded-full ${isUp ? 'bg-up' : 'bg-down'}"
-                  style="${isUp ? 'left:50%' : 'right:50%'};width:${fillPct}%"></div>
+                <div class="absolute top-0 bottom-0 rounded-full ${isUp ? 'bg-up' : 'bg-down'}" style="${isUp ? 'left:50%' : 'right:50%'};width:${fillPct}%"></div>
               </div>
               <div class="flex justify-between text-[11px] text-slate-400 mt-1.5 tnum"><span>−100%</span><span>fair</span><span>+100%</span></div>
               <div class="mt-4 flex flex-wrap gap-2">${tabs}</div>
             </div>
           </div>
         </div>
-
-        <!-- key stats -->
-        <div class="grid grid-cols-2 lg:grid-cols-5 gap-3">
+        <div class="grid grid-cols-2 lg:grid-cols-5 gap-3 mt-5">
           ${stat('Market cap', fmtCr(d.market_cap))}
-          ${stat('WACC', fmtPct(d.wacc?.selected))}
-          ${stat('Terminal', term.method === 'exit_multiple' ? 'EBITDA exit' : 'Perpetuity', termLabel.split('·')[1]?.trim() || '')}
+          ${stat('WACC', fmtPct(waccVal))}
+          ${stat('Terminal', isEb ? 'EBITDA exit' : 'Perpetuity', termSub)}
           ${stat('Shares out.', fmtShares(d.shares_outstanding), 'shares')}
           ${stat('Net debt', fmtCr(d.net_debt))}
-        </div>
+        </div>`;
+    }
+
+    function renderCompany(animate) {
+      const d = state.doc;
+      $('result').innerHTML = `
+      <div class="${animate ? 'fade-in ' : ''}space-y-5">
+        <button data-home class="group inline-flex items-center gap-1.5 text-sm font-semibold text-slate-500 hover:text-slate-900 transition -mb-1">
+          <svg class="h-4 w-4 transition-transform group-hover:-translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m15 18-6-6 6-6"/></svg>
+          Back to search
+        </button>
+        <div id="heroBlock">${renderHero(d)}</div>
 
         <div class="flex items-center gap-1 border-b border-slate-200">
           ${[['dcf', 'Discounted cash flow'], ['relative', 'Relative valuation']].map(([k, l]) => `<button data-view="${k}" class="px-4 py-2.5 text-sm font-semibold border-b-2 -mb-px transition ${state.view === k ? 'border-indigo-600 text-indigo-700' : 'border-transparent text-slate-400 hover:text-slate-700'}">${l}</button>`).join('')}
         </div>
         ${state.view === 'relative'
-          ? `<div id="relView">${renderRelative(d)}</div>`
+          ? `<div id="modelView">${renderRelative(d)}</div>`
           : `<p class="text-xs text-slate-400 px-1">Base case = Munshot's published figures. Adjust the assumptions below to run your own scenario.</p>${renderAssumptions(d)}<div id="modelView">${renderDetail(d)}</div>`}
       </div>`;
 
+      const wireHero = () => {
+        $('result').querySelectorAll('#heroBlock [data-v]').forEach((b) => b.onclick = () => { if (!b.disabled) { state.variant = b.dataset.v; initDrivers(d, b.dataset.v); renderCompany(false); } });
+        $('result').querySelectorAll('#heroBlock [data-export="xlsx"]').forEach((b) => b.onclick = async () => {
+          const orig = b.innerHTML; b.disabled = true; b.classList.add('opacity-60'); b.innerHTML = '<span class="animate-pulse">Generating…</span>';
+          try { await exportExcel(state.doc); } catch (e) { console.error(e); alert('Excel export failed: ' + (e?.message || e)); }
+          b.innerHTML = orig; b.disabled = false; b.classList.remove('opacity-60');
+        });
+        $('result').querySelectorAll('#heroBlock [data-export="pdf"]').forEach((b) => b.onclick = () => { try { exportPDF(state.doc); } catch (e) { console.error(e); alert('PDF export failed: ' + (e?.message || e)); } });
+      };
       const wireModelView = () => {
         $('result').querySelectorAll('#modelView [data-tab]').forEach((b) => b.onclick = () => { if (!b.disabled) { state.detailTab = b.dataset.tab; refreshModel(); } });
         $('result').querySelectorAll('#modelView [data-drawer]').forEach((b) => b.onclick = () => { state.showTables = !state.showTables; refreshModel(); });
       };
-      const refreshModel = () => { const mv = document.getElementById('modelView'); if (mv) { mv.innerHTML = renderDetail(d); wireModelView(); } };
-      $('result').querySelectorAll('[data-v]').forEach((b) => b.onclick = () => { if (!b.disabled) { state.variant = b.dataset.v; initDrivers(d, b.dataset.v); renderCompany(false); } });
+      // re-render hero + model on any driver change. The assumptions panel (sliders +
+      // number fields) is left untouched, so a drag/typing is never interrupted.
+      const refreshModel = () => {
+        const hb = document.getElementById('heroBlock'); if (hb) { hb.innerHTML = renderHero(d); wireHero(); }
+        const mv = document.getElementById('modelView'); if (mv) { mv.innerHTML = renderDetail(d); wireModelView(); }
+      };
+      const markAdjusted = () => { const bd = document.getElementById('adjBadge'); if (bd) { bd.innerHTML = '<span class="h-1.5 w-1.5 rounded-full bg-amber-500"></span>Your scenario'; bd.className = 'inline-flex items-center gap-1.5 text-[11px] font-semibold text-amber-600'; } };
+      const syncNum = (k) => { const ni = document.querySelector('[data-driver-num="' + k + '"]'); if (ni && document.activeElement !== ni) ni.value = (k === 'mult' ? state.drivers[k].toFixed(1) : (state.drivers[k] * 100).toFixed(1)); };
+      wireHero();
       $('result').querySelectorAll('[data-driver]').forEach((inp) => inp.oninput = () => {
-        const k = inp.dataset.driver; state.drivers[k] = parseFloat(inp.value); state.adjusted = true;
-        const lbl = document.getElementById('lbl-' + k); if (lbl) lbl.textContent = k === 'mult' ? parseFloat(inp.value).toFixed(1) + '×' : (parseFloat(inp.value) * 100).toFixed(1) + '%';
-        const bd = document.getElementById('adjBadge'); if (bd) { bd.innerHTML = '<span class="h-1.5 w-1.5 rounded-full bg-amber-500"></span>Your scenario'; bd.className = 'inline-flex items-center gap-1.5 text-[11px] font-semibold text-amber-600'; }
-        refreshModel();
+        const k = inp.dataset.driver, val = parseFloat(inp.value); if (!isFinite(val)) return;
+        state.drivers[k] = val; state.adjusted = true; syncNum(k); markAdjusted(); refreshModel();
+      });
+      $('result').querySelectorAll('[data-driver-num]').forEach((inp) => inp.oninput = () => {
+        const k = inp.dataset.driverNum, raw = parseFloat(inp.value); if (!isFinite(raw)) return;
+        const val = k === 'mult' ? raw : raw / 100;                       // % field -> decimal; no cap
+        state.drivers[k] = val; state.adjusted = true;
+        const sl = document.querySelector('[data-driver="' + k + '"]'); if (sl) sl.value = val;   // move thumb (clamped); state keeps the exact value
+        markAdjusted(); refreshModel();
       });
       $('result').querySelectorAll('[data-reset]').forEach((b) => b.onclick = () => { state.drivers = { ...state.driverDefaults }; state.adjusted = false; renderCompany(false); });
-      $('result').querySelectorAll('[data-export="xlsx"]').forEach((b) => b.onclick = async () => {
-        const orig = b.innerHTML; b.disabled = true; b.classList.add('opacity-60'); b.innerHTML = '<span class="animate-pulse">Generating…</span>';
-        try { await exportExcel(state.doc); } catch (e) { console.error(e); alert('Excel export failed: ' + (e?.message || e)); }
-        b.innerHTML = orig; b.disabled = false; b.classList.remove('opacity-60');
-      });
-      $('result').querySelectorAll('[data-export="pdf"]').forEach((b) => b.onclick = () => { try { exportPDF(state.doc); } catch (e) { console.error(e); alert('PDF export failed: ' + (e?.message || e)); } });
       $('result').querySelectorAll('[data-home]').forEach((b) => b.onclick = goHome);
       $('result').querySelectorAll('[data-view]').forEach((b) => b.onclick = () => { if (state.view !== b.dataset.view) { state.view = b.dataset.view; renderCompany(false); } });
       wireModelView();
