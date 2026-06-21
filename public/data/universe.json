@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-06-16T08:06:44.068Z",
+  "generated_at": "2026-06-21T06:50:53.669Z",
   "list_source": "NSE archives EQUITY_L",
   "seed_fallback_used": false,
   "list_attempts": [
     {
       "name": "NSE archives EQUITY_L",
       "status": 200,
-      "rows": 2346
+      "rows": 2348
     }
   ],
-  "total": 2346,
+  "total": 2348,
   "by_exchange": {
-    "NSE": 2346
+    "NSE": 2348
   },
   "note": "Candidate list (no coverage-probe). Coverage is determined by the batch scrape; see dcf-metadata.json.",
-  "ms": 404,
+  "ms": 1291,
   "tickers": [
     {
       "ticker": "20MICRONS.NS",
@@ -6662,11 +6662,6 @@
       "exchange": "NSE"
     },
     {
-      "ticker": "MIRCELECTR.NS",
-      "name": "MIRC Electronics Limited",
-      "exchange": "NSE"
-    },
-    {
       "ticker": "MIRZAINT.NS",
       "name": "Mirza International Limited",
       "exchange": "NSE"
@@ -7482,6 +7477,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "ONIDA.NS",
+      "name": "Onida Electronics Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "ONMOBILE.NS",
       "name": "OnMobile Global Limited",
       "exchange": "NSE"
@@ -8239,6 +8239,11 @@
     {
       "ticker": "PYRAMID.NS",
       "name": "Pyramid Technoplast Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "QMSMEDI.NS",
+      "name": "QMS Medical Allied Services Limited",
       "exchange": "NSE"
     },
     {
@@ -9999,6 +10004,11 @@
     {
       "ticker": "SULA.NS",
       "name": "Sula Vineyards Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "SUMEET-RE.NS",
+      "name": "Sumeet Industries Limited-RE",
       "exchange": "NSE"
     },
     {
