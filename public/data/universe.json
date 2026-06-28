@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-06-21T06:50:53.669Z",
+  "generated_at": "2026-06-28T06:17:43.008Z",
   "list_source": "NSE archives EQUITY_L",
   "seed_fallback_used": false,
   "list_attempts": [
     {
       "name": "NSE archives EQUITY_L",
       "status": 200,
-      "rows": 2348
+      "rows": 2345
     }
   ],
-  "total": 2348,
+  "total": 2345,
   "by_exchange": {
-    "NSE": 2348
+    "NSE": 2345
   },
   "note": "Candidate list (no coverage-probe). Coverage is determined by the batch scrape; see dcf-metadata.json.",
-  "ms": 1291,
+  "ms": 2397,
   "tickers": [
     {
       "ticker": "20MICRONS.NS",
@@ -8522,11 +8522,6 @@
       "exchange": "NSE"
     },
     {
-      "ticker": "RELTD-RE.NS",
-      "name": "Ravindra Energy Ltd-RE",
-      "exchange": "NSE"
-    },
-    {
       "ticker": "RELTD.NS",
       "name": "Ravindra Energy Limited",
       "exchange": "NSE"
@@ -9277,11 +9272,6 @@
       "exchange": "NSE"
     },
     {
-      "ticker": "SHAH-RE1.NS",
-      "name": "Shah Metacorp Ltd-RE",
-      "exchange": "NSE"
-    },
-    {
       "ticker": "SHAH.NS",
       "name": "Shah Metacorp Limited",
       "exchange": "NSE"
@@ -9494,11 +9484,6 @@
     {
       "ticker": "SICAGEN.NS",
       "name": "Sicagen India Limited",
-      "exchange": "NSE"
-    },
-    {
-      "ticker": "SICALLOG.NS",
-      "name": "Sical Logistics Limited",
       "exchange": "NSE"
     },
     {

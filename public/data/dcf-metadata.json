@@ -1,24 +1,24 @@
 {
-  "generated_at": "2026-06-21T07:25:32.333Z",
-  "universe_total": 2348,
-  "attempted": 2348,
-  "covered": 2016,
-  "ddm_covered": 60,
-  "no_dcf": 90,
-  "failed": 182,
+  "generated_at": "2026-06-28T06:52:02.964Z",
+  "universe_total": 2345,
+  "attempted": 2345,
+  "covered": 2068,
+  "ddm_covered": 61,
+  "no_dcf": 37,
+  "failed": 179,
   "missing": 0,
   "stale": 0,
   "run": {
     "start_at": 0,
-    "slice": 2348,
+    "slice": 2345,
     "next_cursor": null,
-    "attempted": 2348,
-    "succeeded": 2016,
-    "no_dcf": 150,
-    "failed": 182,
+    "attempted": 2345,
+    "succeeded": 2068,
+    "no_dcf": 98,
+    "failed": 179,
     "stale_kept": 0,
-    "duration_s": 2077.6,
-    "avg_ms_per_company": 885
+    "duration_s": 2059.1,
+    "avg_ms_per_company": 878
   },
   "failures": [
     {
