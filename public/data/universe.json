@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-06-28T06:17:43.008Z",
+  "generated_at": "2026-07-05T06:04:14.838Z",
   "list_source": "NSE archives EQUITY_L",
   "seed_fallback_used": false,
   "list_attempts": [
     {
       "name": "NSE archives EQUITY_L",
       "status": 200,
-      "rows": 2345
+      "rows": 2354
     }
   ],
-  "total": 2345,
+  "total": 2354,
   "by_exchange": {
-    "NSE": 2345
+    "NSE": 2354
   },
   "note": "Candidate list (no coverage-probe). Coverage is determined by the batch scrape; see dcf-metadata.json.",
-  "ms": 2397,
+  "ms": 423,
   "tickers": [
     {
       "ticker": "20MICRONS.NS",
@@ -129,6 +129,11 @@
     {
       "ticker": "AAVAS.NS",
       "name": "Aavas Financiers Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "ABAN.NS",
+      "name": "Aban Offshore Limited",
       "exchange": "NSE"
     },
     {
@@ -404,6 +409,11 @@
     {
       "ticker": "AGIIL.NS",
       "name": "Agi Infra Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "AGL.NS",
+      "name": "Allcargo Global Limited",
       "exchange": "NSE"
     },
     {
@@ -2302,6 +2312,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "CORDELIA.NS",
+      "name": "Waterways Leisure Tourism Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "CORDSCABLE.NS",
       "name": "Cords Cable Industries Limited",
       "exchange": "NSE"
@@ -2394,6 +2409,11 @@
     {
       "ticker": "CSLFINANCE.NS",
       "name": "CSL Finance Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "CSM.NS",
+      "name": "CSM Technologies Limited",
       "exchange": "NSE"
     },
     {
@@ -4067,8 +4087,8 @@
       "exchange": "NSE"
     },
     {
-      "ticker": "GUJGASLTD.NS",
-      "name": "Gujarat Gas Limited",
+      "ticker": "GUJENERGY.NS",
+      "name": "GUJARAT ENERGY LIMITED",
       "exchange": "NSE"
     },
     {
@@ -7127,6 +7147,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "NEUEON.NS",
+      "name": "Neueon Corporation Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "NEULANDLAB.NS",
       "name": "Neuland Laboratories Limited",
       "exchange": "NSE"
@@ -8377,6 +8402,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "RAMBHAJO.NS",
+      "name": "Advit Jewels Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "RAMCOCEM.NS",
       "name": "The Ramco Cements Limited",
       "exchange": "NSE"
@@ -9453,7 +9483,7 @@
     },
     {
       "ticker": "SHRIPISTON.NS",
-      "name": "Shriram Pistons & Rings Limited",
+      "name": "SPR Auto Technologies Limited",
       "exchange": "NSE"
     },
     {
@@ -9484,6 +9514,11 @@
     {
       "ticker": "SICAGEN.NS",
       "name": "Sicagen India Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "SICALLOG.NS",
+      "name": "Sical Logistics Limited",
       "exchange": "NSE"
     },
     {
@@ -10802,6 +10837,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "TURTLEMINT.NS",
+      "name": "Turtlemint Fintech Solutions Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "TVSELECT.NS",
       "name": "TVS Electronics Limited",
       "exchange": "NSE"
@@ -11374,6 +11414,11 @@
     {
       "ticker": "VMSTMT.NS",
       "name": "VMS TMT Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "VOEPL.NS",
+      "name": "Virtuoso Optoelectronics Limited",
       "exchange": "NSE"
     },
     {
