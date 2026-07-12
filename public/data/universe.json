@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-07-05T06:04:14.838Z",
+  "generated_at": "2026-07-12T05:27:52.603Z",
   "list_source": "NSE archives EQUITY_L",
   "seed_fallback_used": false,
   "list_attempts": [
     {
       "name": "NSE archives EQUITY_L",
       "status": 200,
-      "rows": 2354
+      "rows": 2357
     }
   ],
-  "total": 2354,
+  "total": 2357,
   "by_exchange": {
-    "NSE": 2354
+    "NSE": 2357
   },
   "note": "Candidate list (no coverage-probe). Coverage is determined by the batch scrape; see dcf-metadata.json.",
-  "ms": 423,
+  "ms": 1437,
   "tickers": [
     {
       "ticker": "20MICRONS.NS",
@@ -124,6 +124,11 @@
     {
       "ticker": "AARVI.NS",
       "name": "Aarvi Encon Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "AASTHA.NS",
+      "name": "Aastha Spintex Limited",
       "exchange": "NSE"
     },
     {
@@ -1089,11 +1094,6 @@
     {
       "ticker": "AUBANK.NS",
       "name": "AU Small Finance Bank Limited",
-      "exchange": "NSE"
-    },
-    {
-      "ticker": "AURIGROW.NS",
-      "name": "Auri Grow India Limited",
       "exchange": "NSE"
     },
     {
@@ -3547,6 +3547,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "GANGAFO-RE.NS",
+      "name": "Ganga Forging Ltd-RE",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "GANGAFORGE.NS",
       "name": "Ganga Forging Limited",
       "exchange": "NSE"
@@ -4134,6 +4139,11 @@
     {
       "ticker": "GVT&D.NS",
       "name": "GE Vernova T&D India Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "GYFTR.NS",
+      "name": "Gyftr Limited",
       "exchange": "NSE"
     },
     {
@@ -5689,6 +5699,11 @@
     {
       "ticker": "KMSUGAR.NS",
       "name": "K.M.Sugar Mills Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "KNACK.NS",
+      "name": "Knack Packaging Limited",
       "exchange": "NSE"
     },
     {
