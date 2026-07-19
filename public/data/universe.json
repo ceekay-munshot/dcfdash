@@ -1,20 +1,25 @@
 {
-  "generated_at": "2026-07-12T05:27:52.603Z",
-  "list_source": "NSE archives EQUITY_L",
+  "generated_at": "2026-07-19T05:21:50.666Z",
+  "list_source": "NSE nsearchives EQUITY_L",
   "seed_fallback_used": false,
   "list_attempts": [
     {
       "name": "NSE archives EQUITY_L",
+      "status": 503,
+      "rows": 0
+    },
+    {
+      "name": "NSE nsearchives EQUITY_L",
       "status": 200,
-      "rows": 2357
+      "rows": 2358
     }
   ],
-  "total": 2357,
+  "total": 2358,
   "by_exchange": {
-    "NSE": 2357
+    "NSE": 2358
   },
   "note": "Candidate list (no coverage-probe). Coverage is determined by the batch scrape; see dcf-metadata.json.",
-  "ms": 1437,
+  "ms": 19553,
   "tickers": [
     {
       "ticker": "20MICRONS.NS",
@@ -1112,6 +1117,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "AURUS.NS",
+      "name": "AURUS GEM CORPORATION LIMITED",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "AUSOMENT.NS",
       "name": "Ausom Enterprise Limited",
       "exchange": "NSE"
@@ -1714,6 +1724,11 @@
     {
       "ticker": "BLSE.NS",
       "name": "BLS E-Services Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "BLUECHIP.NS",
+      "name": "Blue Chip India Limited",
       "exchange": "NSE"
     },
     {
@@ -3547,11 +3562,6 @@
       "exchange": "NSE"
     },
     {
-      "ticker": "GANGAFO-RE.NS",
-      "name": "Ganga Forging Ltd-RE",
-      "exchange": "NSE"
-    },
-    {
       "ticker": "GANGAFORGE.NS",
       "name": "Ganga Forging Limited",
       "exchange": "NSE"
@@ -5162,11 +5172,6 @@
       "exchange": "NSE"
     },
     {
-      "ticker": "JBCHEPHARM.NS",
-      "name": "JB Chemicals & Pharmaceuticals Limited",
-      "exchange": "NSE"
-    },
-    {
       "ticker": "JBMA.NS",
       "name": "JBM Auto Limited",
       "exchange": "NSE"
@@ -5917,6 +5922,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "KUSUMGAR.NS",
+      "name": "Kusumgar Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "KWIL.NS",
       "name": "Kwality Wall's (India) Limited",
       "exchange": "NSE"
@@ -5969,6 +5979,11 @@
     {
       "ticker": "LASA.NS",
       "name": "Lasa Supergenerics Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "LASERPOWER.NS",
+      "name": "Laser Power & Infra Limited",
       "exchange": "NSE"
     },
     {
@@ -6199,11 +6214,6 @@
     {
       "ticker": "LYKALABS.NS",
       "name": "Lyka Labs Limited",
-      "exchange": "NSE"
-    },
-    {
-      "ticker": "LYPSAGEMS.NS",
-      "name": "Lypsa Gems & Jewellery Limited",
       "exchange": "NSE"
     },
     {
@@ -7423,7 +7433,7 @@
     },
     {
       "ticker": "OBCL.NS",
-      "name": "Orissa Bengal Carrier Limited",
+      "name": "OBCL Limited",
       "exchange": "NSE"
     },
     {
@@ -8634,6 +8644,11 @@
     {
       "ticker": "RIIL.NS",
       "name": "Reliance Industrial Infrastructure Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "RIR.NS",
+      "name": "RIR Power Electronics Limited",
       "exchange": "NSE"
     },
     {
@@ -10039,11 +10054,6 @@
     {
       "ticker": "SULA.NS",
       "name": "Sula Vineyards Limited",
-      "exchange": "NSE"
-    },
-    {
-      "ticker": "SUMEET-RE.NS",
-      "name": "Sumeet Industries Limited-RE",
       "exchange": "NSE"
     },
     {
