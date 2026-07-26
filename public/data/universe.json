@@ -1,25 +1,20 @@
 {
-  "generated_at": "2026-07-19T05:21:50.666Z",
-  "list_source": "NSE nsearchives EQUITY_L",
+  "generated_at": "2026-07-26T05:31:21.492Z",
+  "list_source": "NSE archives EQUITY_L",
   "seed_fallback_used": false,
   "list_attempts": [
     {
       "name": "NSE archives EQUITY_L",
-      "status": 503,
-      "rows": 0
-    },
-    {
-      "name": "NSE nsearchives EQUITY_L",
       "status": 200,
-      "rows": 2358
+      "rows": 2361
     }
   ],
-  "total": 2358,
+  "total": 2361,
   "by_exchange": {
-    "NSE": 2358
+    "NSE": 2361
   },
   "note": "Candidate list (no coverage-probe). Coverage is determined by the batch scrape; see dcf-metadata.json.",
-  "ms": 19553,
+  "ms": 681,
   "tickers": [
     {
       "ticker": "20MICRONS.NS",
@@ -372,6 +367,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "AEROPLANE.NS",
+      "name": "Amir Chand Jagdish Kumar (Exports) Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "AETHER.NS",
       "name": "Aether Industries Limited",
       "exchange": "NSE"
@@ -622,6 +622,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "ALPINETEX.NS",
+      "name": "Alpine Texworld Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "AMAGI.NS",
       "name": "Amagi Media Labs Limited",
       "exchange": "NSE"
@@ -659,11 +664,6 @@
     {
       "ticker": "AMDIND.NS",
       "name": "AMD Industries Limited",
-      "exchange": "NSE"
-    },
-    {
-      "ticker": "AMIRCHAND.NS",
-      "name": "Amir Chand Jagdish Kumar (Exports) Limited",
       "exchange": "NSE"
     },
     {
@@ -2222,6 +2222,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "CMLL.NS",
+      "name": "Caliber Mining and Logistics Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "CMPDI.NS",
       "name": "Central Mine Planning & Design Institute Limited",
       "exchange": "NSE"
@@ -2364,6 +2369,11 @@
     {
       "ticker": "CPEDU.NS",
       "name": "Career Point Edutech Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "CPL.NS",
+      "name": "Captain Polyplast Limited",
       "exchange": "NSE"
     },
     {
@@ -7172,11 +7182,6 @@
       "exchange": "NSE"
     },
     {
-      "ticker": "NEUEON.NS",
-      "name": "Neueon Corporation Limited",
-      "exchange": "NSE"
-    },
-    {
       "ticker": "NEULANDLAB.NS",
       "name": "Neuland Laboratories Limited",
       "exchange": "NSE"
@@ -9164,6 +9169,11 @@
     {
       "ticker": "SBICARD.NS",
       "name": "SBI Cards and Payment Services Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "SBIFUNDS.NS",
+      "name": "SBI Funds Management Limited",
       "exchange": "NSE"
     },
     {
