@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-07-26T05:31:21.492Z",
+  "generated_at": "2026-08-02T05:26:36.807Z",
   "list_source": "NSE archives EQUITY_L",
   "seed_fallback_used": false,
   "list_attempts": [
     {
       "name": "NSE archives EQUITY_L",
       "status": 200,
-      "rows": 2361
+      "rows": 2364
     }
   ],
-  "total": 2361,
+  "total": 2364,
   "by_exchange": {
-    "NSE": 2361
+    "NSE": 2364
   },
   "note": "Candidate list (no coverage-probe). Coverage is determined by the batch scrape; see dcf-metadata.json.",
-  "ms": 681,
+  "ms": 935,
   "tickers": [
     {
       "ticker": "20MICRONS.NS",
@@ -952,8 +952,8 @@
       "exchange": "NSE"
     },
     {
-      "ticker": "ASHIKA.NS",
-      "name": "Ashika Credit Capital Limited",
+      "ticker": "ASHIKAG.NS",
+      "name": "Ashika Global Securities Limited",
       "exchange": "NSE"
     },
     {
@@ -1023,7 +1023,7 @@
     },
     {
       "ticker": "ASTERDM.NS",
-      "name": "Aster DM Healthcare Limited",
+      "name": "Aster DM Quality Care Limited",
       "exchange": "NSE"
     },
     {
@@ -4822,6 +4822,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "INDOMIM.NS",
+      "name": "INDO-MIM Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "INDORAMA.NS",
       "name": "Indo Rama Synthetics (India) Limited",
       "exchange": "NSE"
@@ -6029,6 +6034,11 @@
     {
       "ticker": "LCCINFOTEC.NS",
       "name": "LCC Infotech Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "LCL.NS",
+      "name": "Lohia Corp Limited",
       "exchange": "NSE"
     },
     {
@@ -11699,6 +11709,11 @@
     {
       "ticker": "XTGLOBAL.NS",
       "name": "Xtglobal Infotech Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "XTRANET.NS",
+      "name": "Xtranet Technologies Limited",
       "exchange": "NSE"
     },
     {
