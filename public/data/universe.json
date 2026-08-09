@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-08-02T05:26:36.807Z",
+  "generated_at": "2026-08-09T03:41:09.269Z",
   "list_source": "NSE archives EQUITY_L",
   "seed_fallback_used": false,
   "list_attempts": [
     {
       "name": "NSE archives EQUITY_L",
       "status": 200,
-      "rows": 2364
+      "rows": 2369
     }
   ],
-  "total": 2364,
+  "total": 2369,
   "by_exchange": {
-    "NSE": 2364
+    "NSE": 2369
   },
   "note": "Candidate list (no coverage-probe). Coverage is determined by the batch scrape; see dcf-metadata.json.",
-  "ms": 935,
+  "ms": 2195,
   "tickers": [
     {
       "ticker": "20MICRONS.NS",
@@ -2202,6 +2202,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "CLCIND.NS",
+      "name": "CLC Industries Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "CLEAN.NS",
       "name": "Clean Science and Technology Limited",
       "exchange": "NSE"
@@ -2919,6 +2924,11 @@
     {
       "ticker": "DSFCL.NS",
       "name": "DCM Shriram Fine Chemicals Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "DSKULKARNI.NS",
+      "name": "DS Kulkarni Developers Limited",
       "exchange": "NSE"
     },
     {
@@ -5307,6 +5317,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "JNPR.NS",
+      "name": "Juniper Green Energy Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "JOCIL.NS",
       "name": "Jocil Limited",
       "exchange": "NSE"
@@ -6422,6 +6437,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "MANIPALHOS.NS",
+      "name": "Manipal Health Enterprises Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "MANKIND.NS",
       "name": "Mankind Pharma Limited",
       "exchange": "NSE"
@@ -6974,6 +6994,11 @@
     {
       "ticker": "MUTHOOTMF.NS",
       "name": "Muthoot Microfin Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "MVELECTRO.NS",
+      "name": "MV Electrosystems Limited",
       "exchange": "NSE"
     },
     {
@@ -8592,6 +8617,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "RELINFRA.NS",
+      "name": "Reliance Infrastructure Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "RELTD.NS",
       "name": "Ravindra Energy Limited",
       "exchange": "NSE"
@@ -8914,11 +8944,6 @@
     {
       "ticker": "SAATVIKGL.NS",
       "name": "Saatvik Green Energy Limited",
-      "exchange": "NSE"
-    },
-    {
-      "ticker": "SABEVENTS.NS",
-      "name": "Sab Events & Governance Now Media Limited",
       "exchange": "NSE"
     },
     {
