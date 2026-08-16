@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-08-09T03:41:09.269Z",
+  "generated_at": "2026-08-16T02:58:29.758Z",
   "list_source": "NSE archives EQUITY_L",
   "seed_fallback_used": false,
   "list_attempts": [
     {
       "name": "NSE archives EQUITY_L",
       "status": 200,
-      "rows": 2369
+      "rows": 2378
     }
   ],
-  "total": 2369,
+  "total": 2378,
   "by_exchange": {
-    "NSE": 2369
+    "NSE": 2378
   },
   "note": "Candidate list (no coverage-probe). Coverage is determined by the batch scrape; see dcf-metadata.json.",
-  "ms": 2195,
+  "ms": 438,
   "tickers": [
     {
       "ticker": "20MICRONS.NS",
@@ -717,6 +717,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "ANNAPURNA.NS",
+      "name": "Annapurna Swadisht Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "ANTELOPUS.NS",
       "name": "Antelopus Selan Energy Limited",
       "exchange": "NSE"
@@ -824,6 +829,11 @@
     {
       "ticker": "ARCHIES.NS",
       "name": "Archies Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "ARDEE.NS",
+      "name": "Ardee Industries Limited",
       "exchange": "NSE"
     },
     {
@@ -1039,11 +1049,6 @@
     {
       "ticker": "ASTRAZEN.NS",
       "name": "AstraZeneca Pharma India Limited",
-      "exchange": "NSE"
-    },
-    {
-      "ticker": "ASTRON.NS",
-      "name": "Astron Paper & Board Mill Limited",
       "exchange": "NSE"
     },
     {
@@ -1894,6 +1899,11 @@
     {
       "ticker": "BUILDPRO.NS",
       "name": "Shankara Buildpro Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "BURNPUR.NS",
+      "name": "Burnpur Cement Limited",
       "exchange": "NSE"
     },
     {
@@ -3654,6 +3664,11 @@
     {
       "ticker": "GENCON.NS",
       "name": "Generic Engineering Construction and Projects Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "GENESYS-RE.NS",
+      "name": "Genesys International Corporation Limited-RE",
       "exchange": "NSE"
     },
     {
@@ -6057,6 +6072,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "LEAPIND.NS",
+      "name": "LEAP India Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "LEMERITE.NS",
       "name": "Le Merite Exports Limited",
       "exchange": "NSE"
@@ -7214,6 +7234,11 @@
     {
       "ticker": "NETWORK18.NS",
       "name": "Network18 Media & Investments Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "NEUEON.NS",
+      "name": "Neueon Corporation Limited",
       "exchange": "NSE"
     },
     {
@@ -9412,6 +9437,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "SHANTI-RE.NS",
+      "name": "Shanti Gold International Limited-RE",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "SHANTI.NS",
       "name": "Shanti Overseas (India) Limited",
       "exchange": "NSE"
@@ -9569,6 +9599,11 @@
     {
       "ticker": "SHRIRAMPPS.NS",
       "name": "Shriram Properties Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "SHUKRAPHAR.NS",
+      "name": "Shukra Pharmaceuticals Limited",
       "exchange": "NSE"
     },
     {
@@ -10297,6 +10332,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "SWARAJ.NS",
+      "name": "Swaraj Suiting Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "SWARAJENG.NS",
       "name": "Swaraj Engines Limited",
       "exchange": "NSE"
@@ -10358,7 +10398,7 @@
     },
     {
       "ticker": "TAKE.NS",
-      "name": "Take Solutions Limited",
+      "name": "TAKE Limited",
       "exchange": "NSE"
     },
     {
@@ -10519,6 +10559,11 @@
     {
       "ticker": "TECHM.NS",
       "name": "Tech Mahindra Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "TECHNOCRAF.NS",
+      "name": "Technocraft Ventures Limited",
       "exchange": "NSE"
     },
     {

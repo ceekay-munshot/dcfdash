@@ -1,24 +1,24 @@
 {
-  "generated_at": "2026-08-09T04:15:23.034Z",
-  "universe_total": 2369,
-  "attempted": 2369,
-  "covered": 2070,
+  "generated_at": "2026-08-16T03:33:04.120Z",
+  "universe_total": 2378,
+  "attempted": 2378,
+  "covered": 2073,
   "ddm_covered": 60,
   "no_dcf": 50,
-  "failed": 189,
+  "failed": 195,
   "missing": 0,
   "stale": 0,
   "run": {
     "start_at": 0,
-    "slice": 2369,
+    "slice": 2378,
     "next_cursor": null,
-    "attempted": 2369,
-    "succeeded": 2070,
+    "attempted": 2378,
+    "succeeded": 2073,
     "no_dcf": 110,
-    "failed": 189,
+    "failed": 195,
     "stale_kept": 0,
-    "duration_s": 2052.6,
-    "avg_ms_per_company": 866
+    "duration_s": 2073.3,
+    "avg_ms_per_company": 872
   },
   "failures": [
     {
@@ -75,6 +75,10 @@
     },
     {
       "ticker": "AMBALALSA.NS",
+      "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
+    },
+    {
+      "ticker": "ARDEE.NS",
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
@@ -262,6 +266,10 @@
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
+      "ticker": "GENESYS-RE.NS",
+      "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
+    },
+    {
       "ticker": "GKSL.NS",
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
@@ -398,6 +406,10 @@
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
+      "ticker": "LEAPIND.NS",
+      "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
+    },
+    {
       "ticker": "LEXUS.NS",
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
@@ -407,18 +419,6 @@
     },
     {
       "ticker": "MADHAVIPL.NS",
-      "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
-    },
-    {
-      "ticker": "MAFATIND.NS",
-      "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
-    },
-    {
-      "ticker": "MAJESAUT.NS",
-      "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
-    },
-    {
-      "ticker": "MANIPALHOS.NS",
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     }
   ]
