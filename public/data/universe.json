@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-08-23T03:00:49.977Z",
+  "generated_at": "2026-08-30T07:54:20.490Z",
   "list_source": "NSE archives EQUITY_L",
   "seed_fallback_used": false,
   "list_attempts": [
     {
       "name": "NSE archives EQUITY_L",
       "status": 200,
-      "rows": 2525
+      "rows": 2531
     }
   ],
-  "total": 2525,
+  "total": 2531,
   "by_exchange": {
-    "NSE": 2525
+    "NSE": 2531
   },
   "note": "Candidate list (no coverage-probe). Coverage is determined by the batch scrape; see dcf-metadata.json.",
-  "ms": 1959,
+  "ms": 2442,
   "tickers": [
     {
       "ticker": "20MICRONS.NS",
@@ -2347,11 +2347,6 @@
       "exchange": "NSE"
     },
     {
-      "ticker": "CLCIND.NS",
-      "name": "CLC Industries Limited",
-      "exchange": "NSE"
-    },
-    {
       "ticker": "CLEAN.NS",
       "name": "Clean Science and Technology Limited",
       "exchange": "NSE"
@@ -3752,6 +3747,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "GAJA.NS",
+      "name": "Gaja Alternative Asset Management Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "GALAPREC.NS",
       "name": "Gala Precision Engineering Limited",
       "exchange": "NSE"
@@ -4769,6 +4769,11 @@
     {
       "ticker": "HONDAPOWER.NS",
       "name": "Honda India Power Products Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "HORIZONIND.NS",
+      "name": "Horizon Industrial Parks Limited",
       "exchange": "NSE"
     },
     {
@@ -6227,6 +6232,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "KSHITIJ-RE.NS",
+      "name": "Kshitij Polyline Ltd-RE",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "KSHITIJPOL.NS",
       "name": "Kshitij Polyline Limited",
       "exchange": "NSE"
@@ -6289,6 +6299,11 @@
     {
       "ticker": "LAL.NS",
       "name": "Lorenzini Apparels Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "LALITHAA.NS",
+      "name": "Lalithaa Jewellery Mart Limited",
       "exchange": "NSE"
     },
     {
@@ -9957,6 +9972,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "SHANKESH.NS",
+      "name": "Shankesh Jewellers Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "SHANTI.NS",
       "name": "Shanti Overseas (India) Limited",
       "exchange": "NSE"
@@ -10792,6 +10812,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "SUNSHINE.NS",
+      "name": "Sunshine Pictures Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "SUNTECK.NS",
       "name": "Sunteck Realty Limited",
       "exchange": "NSE"
@@ -11214,6 +11239,11 @@
     {
       "ticker": "TEMBO.NS",
       "name": "Tembo Global Industries Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "TEMPSENS.NS",
+      "name": "Tempsens Instruments (India) Limited",
       "exchange": "NSE"
     },
     {
