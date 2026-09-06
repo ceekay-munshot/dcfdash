@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-08-30T07:54:20.490Z",
+  "generated_at": "2026-09-06T06:52:04.880Z",
   "list_source": "NSE archives EQUITY_L",
   "seed_fallback_used": false,
   "list_attempts": [
     {
       "name": "NSE archives EQUITY_L",
       "status": 200,
-      "rows": 2531
+      "rows": 2542
     }
   ],
-  "total": 2531,
+  "total": 2542,
   "by_exchange": {
-    "NSE": 2531
+    "NSE": 2542
   },
   "note": "Candidate list (no coverage-probe). Coverage is determined by the batch scrape; see dcf-metadata.json.",
-  "ms": 2442,
+  "ms": 434,
   "tickers": [
     {
       "ticker": "20MICRONS.NS",
@@ -762,6 +762,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "ANNU.NS",
+      "name": "Annu Projects Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "ANSALBU.NS",
       "name": "Ansal Buildwell Limited",
       "exchange": "NSE"
@@ -1174,6 +1179,11 @@
     {
       "ticker": "AUBANK.NS",
       "name": "AU Small Finance Bank Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "AUGMONT.NS",
+      "name": "Augmont Enterprises Limited",
       "exchange": "NSE"
     },
     {
@@ -1829,11 +1839,6 @@
     {
       "ticker": "BLSE.NS",
       "name": "BLS E-Services Limited",
-      "exchange": "NSE"
-    },
-    {
-      "ticker": "BLUECHIP.NS",
-      "name": "Blue Chip India Limited",
       "exchange": "NSE"
     },
     {
@@ -3117,6 +3122,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "DUCON-RE1.NS",
+      "name": "Ducon Infratech Ltd-RE",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "DUCON.NS",
       "name": "Ducon Infratechnologies Limited",
       "exchange": "NSE"
@@ -3454,6 +3464,11 @@
     {
       "ticker": "ESCORTS.NS",
       "name": "Escorts Kubota Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "ESDS.NS",
+      "name": "ESDS Software Solution Limited",
       "exchange": "NSE"
     },
     {
@@ -4802,6 +4817,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "HTEL.NS",
+      "name": "Hy-Tech Engineers Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "HTMEDIA.NS",
       "name": "HT Media Limited",
       "exchange": "NSE"
@@ -5457,6 +5477,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "JAYKAY-RE1.NS",
+      "name": "Jaykay Enterprises Limited-RE",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "JAYKAY.NS",
       "name": "Jaykay Enterprises Limited",
       "exchange": "NSE"
@@ -5869,6 +5894,11 @@
     {
       "ticker": "KDDL.NS",
       "name": "KDDL Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "KDGREEN.NS",
+      "name": "KD Green Industries Limited",
       "exchange": "NSE"
     },
     {
@@ -6587,6 +6617,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "LUMINO.NS",
+      "name": "Lumino Industries Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "LUPIN.NS",
       "name": "Lupin Limited",
       "exchange": "NSE"
@@ -6772,11 +6807,6 @@
       "exchange": "NSE"
     },
     {
-      "ticker": "MANBRO.NS",
-      "name": "Manbro Industries Limited",
-      "exchange": "NSE"
-    },
-    {
       "ticker": "MANCREDIT.NS",
       "name": "Mangal Credit and Fincorp Limited",
       "exchange": "NSE"
@@ -6944,6 +6974,11 @@
     {
       "ticker": "MBAPL.NS",
       "name": "Madhya Bharat Agro Products Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "MBECL.NS",
+      "name": "Mcnally Bharat Engineering Company Limited",
       "exchange": "NSE"
     },
     {
@@ -8737,6 +8772,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "PRIORITY.NS",
+      "name": "Priority Jewels Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "PRISMX.NS",
       "name": "Prismx Global Ventures Limited",
       "exchange": "NSE"
@@ -10357,6 +10397,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "SKYWAYS.NS",
+      "name": "Skyways Air Services Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "SMARTLINK.NS",
       "name": "Smartlink Holdings Limited",
       "exchange": "NSE"
@@ -10994,6 +11039,11 @@
     {
       "ticker": "SWSOLAR.NS",
       "name": "Sterling and Wilson Renewable Energy Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "SYMBIOTEC.NS",
+      "name": "Symbiotec Pharmalab Limited",
       "exchange": "NSE"
     },
     {
@@ -12064,6 +12114,11 @@
     {
       "ticker": "VHL.NS",
       "name": "Vardhman Holdings Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "VHLTD-RE1.NS",
+      "name": "Viceroy Hotels Ltd-RE",
       "exchange": "NSE"
     },
     {
