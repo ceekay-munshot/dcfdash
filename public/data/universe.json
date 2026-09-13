@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-09-06T06:52:04.880Z",
+  "generated_at": "2026-09-13T07:11:08.535Z",
   "list_source": "NSE archives EQUITY_L",
   "seed_fallback_used": false,
   "list_attempts": [
     {
       "name": "NSE archives EQUITY_L",
       "status": 200,
-      "rows": 2542
+      "rows": 2541
     }
   ],
-  "total": 2542,
+  "total": 2541,
   "by_exchange": {
-    "NSE": 2542
+    "NSE": 2541
   },
   "note": "Candidate list (no coverage-probe). Coverage is determined by the batch scrape; see dcf-metadata.json.",
-  "ms": 434,
+  "ms": 450,
   "tickers": [
     {
       "ticker": "20MICRONS.NS",
@@ -2567,6 +2567,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "CRESTO.NS",
+      "name": "CRESTO TECHNO LIMITED",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "CRISIL.NS",
       "name": "Crisil Limited",
       "exchange": "NSE"
@@ -2817,6 +2822,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "DEEPA.NS",
+      "name": "Deepa Jewellers Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "DEEPAKFERT.NS",
       "name": "Deepak Fertilizers and Petrochemicals Corporation Limited",
       "exchange": "NSE"
@@ -3047,6 +3057,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "DOLLEX.NS",
+      "name": "Dollex Agrotech Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "DOLPHIN.NS",
       "name": "Dolphin Offshore Enterprises (India) Limited",
       "exchange": "NSE"
@@ -3119,11 +3134,6 @@
     {
       "ticker": "DTIL.NS",
       "name": "Dhunseri Tea & Industries Limited",
-      "exchange": "NSE"
-    },
-    {
-      "ticker": "DUCON-RE1.NS",
-      "name": "Ducon Infratech Ltd-RE",
       "exchange": "NSE"
     },
     {
@@ -3914,6 +3924,11 @@
     {
       "ticker": "GFLLIMITED.NS",
       "name": "GFL Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "GFSTEELS.NS",
+      "name": "Grand Foundry Limited",
       "exchange": "NSE"
     },
     {
@@ -6262,11 +6277,6 @@
       "exchange": "NSE"
     },
     {
-      "ticker": "KSHITIJ-RE.NS",
-      "name": "Kshitij Polyline Ltd-RE",
-      "exchange": "NSE"
-    },
-    {
       "ticker": "KSHITIJPOL.NS",
       "name": "Kshitij Polyline Limited",
       "exchange": "NSE"
@@ -6369,11 +6379,6 @@
     {
       "ticker": "LAOPALA.NS",
       "name": "La Opala RG Limited",
-      "exchange": "NSE"
-    },
-    {
-      "ticker": "LASA.NS",
-      "name": "Lasa Supergenerics Limited",
       "exchange": "NSE"
     },
     {
@@ -7284,6 +7289,11 @@
     {
       "ticker": "MOLDTKPAC.NS",
       "name": "Mold-Tek Packaging Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "MOMSBELIEF.NS",
+      "name": "Rays of Belief Limited",
       "exchange": "NSE"
     },
     {
@@ -8394,6 +8404,11 @@
     {
       "ticker": "PERMAGN.NS",
       "name": "Permanent Magnets Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "PERNIASPOP.NS",
+      "name": "Purple Style Labs Limited",
       "exchange": "NSE"
     },
     {
@@ -9887,11 +9902,6 @@
       "exchange": "NSE"
     },
     {
-      "ticker": "SELMC.NS",
-      "name": "SEL Manufacturing Company Limited",
-      "exchange": "NSE"
-    },
-    {
       "ticker": "SEMAC.NS",
       "name": "Semac Construction Limited",
       "exchange": "NSE"
@@ -10307,11 +10317,6 @@
       "exchange": "NSE"
     },
     {
-      "ticker": "SILLYMONKS.NS",
-      "name": "Silly Monks Entertainment Limited",
-      "exchange": "NSE"
-    },
-    {
       "ticker": "SILVERTUC.NS",
       "name": "Silver Touch Technologies Limited",
       "exchange": "NSE"
@@ -10544,11 +10549,6 @@
     {
       "ticker": "SPECTRUM.NS",
       "name": "Spectrum Electrical Industries Limited",
-      "exchange": "NSE"
-    },
-    {
-      "ticker": "SPELS.NS",
-      "name": "SPEL Semiconductor Limited",
       "exchange": "NSE"
     },
     {
@@ -12114,11 +12114,6 @@
     {
       "ticker": "VHL.NS",
       "name": "Vardhman Holdings Limited",
-      "exchange": "NSE"
-    },
-    {
-      "ticker": "VHLTD-RE1.NS",
-      "name": "Viceroy Hotels Ltd-RE",
       "exchange": "NSE"
     },
     {
