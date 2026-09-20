@@ -1,24 +1,24 @@
 {
-  "generated_at": "2026-09-13T07:50:04.758Z",
-  "universe_total": 2541,
-  "attempted": 2541,
+  "generated_at": "2026-09-20T08:07:12.651Z",
+  "universe_total": 2551,
+  "attempted": 2551,
   "covered": 2076,
   "ddm_covered": 60,
   "no_dcf": 54,
-  "failed": 351,
+  "failed": 361,
   "missing": 0,
   "stale": 0,
   "run": {
     "start_at": 0,
-    "slice": 2541,
+    "slice": 2551,
     "next_cursor": null,
-    "attempted": 2541,
+    "attempted": 2551,
     "succeeded": 2076,
     "no_dcf": 114,
-    "failed": 351,
+    "failed": 361,
     "stale_kept": 0,
-    "duration_s": 2335.1,
-    "avg_ms_per_company": 919
+    "duration_s": 2342.7,
+    "avg_ms_per_company": 918
   },
   "failures": [
     {
@@ -106,15 +106,19 @@
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
-      "ticker": "ANNU.NS",
-      "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
-    },
-    {
       "ticker": "ANSALBU.NS",
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
+      "ticker": "ANNU.NS",
+      "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
+    },
+    {
       "ticker": "APOORVA.NS",
+      "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
+    },
+    {
+      "ticker": "ARCIL.NS",
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
@@ -234,11 +238,11 @@
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
-      "ticker": "BNAGROCHEM.NS",
+      "ticker": "BNALTD.NS",
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
-      "ticker": "BNALTD.NS",
+      "ticker": "BNAGROCHEM.NS",
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
@@ -415,10 +419,6 @@
     },
     {
       "ticker": "ENKEIWHEL.NS",
-      "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
-    },
-    {
-      "ticker": "ESDS.NS",
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     }
   ]

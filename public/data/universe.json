@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-09-13T07:11:08.535Z",
+  "generated_at": "2026-09-20T07:28:09.001Z",
   "list_source": "NSE archives EQUITY_L",
   "seed_fallback_used": false,
   "list_attempts": [
     {
       "name": "NSE archives EQUITY_L",
       "status": 200,
-      "rows": 2541
+      "rows": 2551
     }
   ],
-  "total": 2541,
+  "total": 2551,
   "by_exchange": {
-    "NSE": 2541
+    "NSE": 2551
   },
   "note": "Candidate list (no coverage-probe). Coverage is determined by the batch scrape; see dcf-metadata.json.",
-  "ms": 450,
+  "ms": 484,
   "tickers": [
     {
       "ticker": "20MICRONS.NS",
@@ -884,6 +884,11 @@
     {
       "ticker": "ARCHIES.NS",
       "name": "Archies Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "ARCIL.NS",
+      "name": "Asset Reconstruction Company (India) Limited",
       "exchange": "NSE"
     },
     {
@@ -4002,6 +4007,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "GLASSWALL.NS",
+      "name": "Glass Wall Systems (India) Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "GLAXO.NS",
       "name": "GlaxoSmithKline Pharmaceuticals Limited",
       "exchange": "NSE"
@@ -5492,11 +5502,6 @@
       "exchange": "NSE"
     },
     {
-      "ticker": "JAYKAY-RE1.NS",
-      "name": "Jaykay Enterprises Limited-RE",
-      "exchange": "NSE"
-    },
-    {
       "ticker": "JAYKAY.NS",
       "name": "Jaykay Enterprises Limited",
       "exchange": "NSE"
@@ -5847,6 +5852,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "KANOHAR.NS",
+      "name": "Kanohar Electricals Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "KANORICHEM.NS",
       "name": "Kanoria Chemicals & Industries Limited",
       "exchange": "NSE"
@@ -5864,6 +5874,11 @@
     {
       "ticker": "KAPSTON.NS",
       "name": "Kapston Services Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "KARAMTARA.NS",
+      "name": "Karamtara Engineering Limited",
       "exchange": "NSE"
     },
     {
@@ -6419,6 +6434,11 @@
     {
       "ticker": "LCCINFOTEC.NS",
       "name": "LCC Infotech Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "LCCPROJECT.NS",
+      "name": "LCC Projects Limited",
       "exchange": "NSE"
     },
     {
@@ -7349,6 +7369,11 @@
     {
       "ticker": "MPHASIS.NS",
       "name": "MphasiS Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "MPIMANIPAL.NS",
+      "name": "Manipal Payment and Identity Solutions Limited",
       "exchange": "NSE"
     },
     {
@@ -8573,7 +8598,7 @@
     },
     {
       "ticker": "PNC.NS",
-      "name": "Pritish Nandy Communications Limited",
+      "name": "PNC Media and Entertainment Limited",
       "exchange": "NSE"
     },
     {
@@ -8709,6 +8734,16 @@
     {
       "ticker": "PRAKASHSTL.NS",
       "name": "Prakash Steelage Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "PRANAV.NS",
+      "name": "Pranav Constructions Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "PRASOLCHEM.NS",
+      "name": "Prasol Chemicals Limited",
       "exchange": "NSE"
     },
     {
@@ -9199,6 +9234,11 @@
     {
       "ticker": "REMSONSIND.NS",
       "name": "Remsons Industries Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "RENTOMOJO.NS",
+      "name": "Rentomojo Limited",
       "exchange": "NSE"
     },
     {
@@ -10672,6 +10712,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "STEAMHOUSE.NS",
+      "name": "Steamhouse India Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "STEELCAS.NS",
       "name": "Steelcast Limited",
       "exchange": "NSE"
@@ -12049,6 +12094,11 @@
     {
       "ticker": "VEEDOL.NS",
       "name": "Veedol Corporation Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "VEEGALAND.NS",
+      "name": "Veegaland Developers Limited",
       "exchange": "NSE"
     },
     {
