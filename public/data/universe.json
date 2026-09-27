@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-09-20T07:28:09.001Z",
+  "generated_at": "2026-09-27T07:37:10.659Z",
   "list_source": "NSE archives EQUITY_L",
   "seed_fallback_used": false,
   "list_attempts": [
     {
       "name": "NSE archives EQUITY_L",
       "status": 200,
-      "rows": 2551
+      "rows": 2558
     }
   ],
-  "total": 2551,
+  "total": 2558,
   "by_exchange": {
-    "NSE": 2551
+    "NSE": 2558
   },
   "note": "Candidate list (no coverage-probe). Coverage is determined by the batch scrape; see dcf-metadata.json.",
-  "ms": 484,
+  "ms": 618,
   "tickers": [
     {
       "ticker": "20MICRONS.NS",
@@ -424,6 +424,11 @@
     {
       "ticker": "AGARWALEYE.NS",
       "name": "Dr. Agarwal's Health Care Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "AGASTYAEN.NS",
+      "name": "Agastya Energy and Infrastructure Limited",
       "exchange": "NSE"
     },
     {
@@ -2204,6 +2209,11 @@
     {
       "ticker": "CENTENKA.NS",
       "name": "Century Enka Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "CENTEXT-RE.NS",
+      "name": "Century Extrusions Limited-RE",
       "exchange": "NSE"
     },
     {
@@ -4597,8 +4607,8 @@
       "exchange": "NSE"
     },
     {
-      "ticker": "HEG.NS",
-      "name": "HEG Limited",
+      "ticker": "HEGAM.NS",
+      "name": "HEG Advanced Materials Limited",
       "exchange": "NSE"
     },
     {
@@ -4624,6 +4634,11 @@
     {
       "ticker": "HEROMOTOCO.NS",
       "name": "Hero MotoCorp Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "HEROMOTORS.NS",
+      "name": "Hero Motors Limited",
       "exchange": "NSE"
     },
     {
@@ -5664,6 +5679,11 @@
     {
       "ticker": "JSFB.NS",
       "name": "Jana Small Finance Bank Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "JSIPL.NS",
+      "name": "Jindal Supreme (India) Limited",
       "exchange": "NSE"
     },
     {
@@ -6844,6 +6864,11 @@
     {
       "ticker": "MANGLMCEM.NS",
       "name": "Mangalam Cement Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "MANIKA.NS",
+      "name": "Manika Plastech Limited",
       "exchange": "NSE"
     },
     {
@@ -8322,6 +8347,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "PARIN.NS",
+      "name": "Parin Enterprises Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "PARKHOSPS.NS",
       "name": "Park Medi World Limited",
       "exchange": "NSE"
@@ -9737,11 +9767,6 @@
       "exchange": "NSE"
     },
     {
-      "ticker": "SANGINITA.NS",
-      "name": "Sanginita Chemicals Limited",
-      "exchange": "NSE"
-    },
-    {
       "ticker": "SANOFI.NS",
       "name": "Sanofi India Limited",
       "exchange": "NSE"
@@ -10527,6 +10552,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "SONA.NS",
+      "name": "Sonaselection India Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "SONACOMS.NS",
       "name": "Sona BLW Precision Forgings Limited",
       "exchange": "NSE"
@@ -10664,6 +10694,11 @@
     {
       "ticker": "SSDL.NS",
       "name": "Saraswati Saree Depot Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "SSRETAIL.NS",
+      "name": "SS Retail Limited",
       "exchange": "NSE"
     },
     {

@@ -1,24 +1,24 @@
 {
-  "generated_at": "2026-09-20T08:07:12.651Z",
-  "universe_total": 2551,
-  "attempted": 2551,
-  "covered": 2076,
+  "generated_at": "2026-09-27T08:16:25.721Z",
+  "universe_total": 2558,
+  "attempted": 2558,
+  "covered": 2074,
   "ddm_covered": 60,
-  "no_dcf": 54,
-  "failed": 361,
+  "no_dcf": 55,
+  "failed": 369,
   "missing": 0,
   "stale": 0,
   "run": {
     "start_at": 0,
-    "slice": 2551,
+    "slice": 2558,
     "next_cursor": null,
-    "attempted": 2551,
-    "succeeded": 2076,
-    "no_dcf": 114,
-    "failed": 361,
+    "attempted": 2558,
+    "succeeded": 2074,
+    "no_dcf": 115,
+    "failed": 369,
     "stale_kept": 0,
-    "duration_s": 2342.7,
-    "avg_ms_per_company": 918
+    "duration_s": 2353.9,
+    "avg_ms_per_company": 920
   },
   "failures": [
     {
@@ -74,6 +74,10 @@
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
+      "ticker": "AGASTYAEN.NS",
+      "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
+    },
+    {
       "ticker": "AGL.NS",
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
@@ -106,11 +110,11 @@
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
-      "ticker": "ANSALBU.NS",
+      "ticker": "ANNU.NS",
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
-      "ticker": "ANNU.NS",
+      "ticker": "ANSALBU.NS",
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
@@ -118,11 +122,11 @@
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
-      "ticker": "ARCIL.NS",
+      "ticker": "ARCL.NS",
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
-      "ticker": "ARCL.NS",
+      "ticker": "ARCIL.NS",
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
@@ -150,11 +154,11 @@
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
-      "ticker": "ASSAMENT.NS",
+      "ticker": "ASTAR.NS",
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
-      "ticker": "ASTAR.NS",
+      "ticker": "ASSAMENT.NS",
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
@@ -238,19 +242,19 @@
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
-      "ticker": "BNALTD.NS",
-      "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
-    },
-    {
       "ticker": "BNAGROCHEM.NS",
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
-      "ticker": "BPLPHARMA.NS",
+      "ticker": "BNALTD.NS",
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
       "ticker": "BRAHMINFRA.NS",
+      "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
+    },
+    {
+      "ticker": "BPLPHARMA.NS",
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
@@ -267,6 +271,10 @@
     },
     {
       "ticker": "CEINSYS.NS",
+      "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
+    },
+    {
+      "ticker": "CENTEXT-RE.NS",
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
@@ -358,11 +366,11 @@
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
-      "ticker": "DHATRE.NS",
+      "ticker": "DHOOTTRANS.NS",
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
-      "ticker": "DHOOTTRANS.NS",
+      "ticker": "DHATRE.NS",
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
@@ -394,11 +402,11 @@
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
-      "ticker": "EKI.NS",
+      "ticker": "ELCIDIN.NS",
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
-      "ticker": "ELCIDIN.NS",
+      "ticker": "EKI.NS",
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     },
     {
@@ -411,14 +419,6 @@
     },
     {
       "ticker": "EMPIND.NS",
-      "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
-    },
-    {
-      "ticker": "EMPOWER.NS",
-      "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
-    },
-    {
-      "ticker": "ENKEIWHEL.NS",
       "reason": "carrier script (window.most) not found — page may be gated, a challenge, or markup changed"
     }
   ]
