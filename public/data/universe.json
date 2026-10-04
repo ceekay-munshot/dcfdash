@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-09-27T07:37:10.659Z",
+  "generated_at": "2026-10-04T07:47:28.701Z",
   "list_source": "NSE archives EQUITY_L",
   "seed_fallback_used": false,
   "list_attempts": [
     {
       "name": "NSE archives EQUITY_L",
       "status": 200,
-      "rows": 2558
+      "rows": 2567
     }
   ],
-  "total": 2558,
+  "total": 2567,
   "by_exchange": {
-    "NSE": 2558
+    "NSE": 2567
   },
   "note": "Candidate list (no coverage-probe). Coverage is determined by the batch scrape; see dcf-metadata.json.",
-  "ms": 618,
+  "ms": 675,
   "tickers": [
     {
       "ticker": "20MICRONS.NS",
@@ -304,6 +304,11 @@
     {
       "ticker": "ADOR.NS",
       "name": "Ador Welding Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "ADROITIND.NS",
+      "name": "Adroit Industries (India) Limited",
       "exchange": "NSE"
     },
     {
@@ -807,6 +812,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "AONESTEELS.NS",
+      "name": "A-One Steels India Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "APARINDS.NS",
       "name": "Apar Industries Limited",
       "exchange": "NSE"
@@ -954,6 +964,11 @@
     {
       "ticker": "ARMANFIN.NS",
       "name": "Arman Financial Services Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "ARMEE.NS",
+      "name": "ArMee Infotech Limited",
       "exchange": "NSE"
     },
     {
@@ -3312,6 +3327,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "ELEVATE.NS",
+      "name": "Elevate Campuses Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "ELGIEQUIP.NS",
       "name": "Elgi Equipments Limited",
       "exchange": "NSE"
@@ -4349,6 +4369,11 @@
     {
       "ticker": "GSPCROP.NS",
       "name": "GSP Crop Science Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "GSPLTRANS.NS",
+      "name": "GSPL Transmission Limited",
       "exchange": "NSE"
     },
     {
@@ -7352,6 +7377,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "MONEYVIEW.NS",
+      "name": "Moneyview Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "MONTECARLO.NS",
       "name": "Monte Carlo Fashions Limited",
       "exchange": "NSE"
@@ -8994,6 +9024,11 @@
     {
       "ticker": "QUINT.NS",
       "name": "Quint Digital Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "QUINTEGRA.NS",
+      "name": "Quintegra Solutions Limited",
       "exchange": "NSE"
     },
     {
@@ -11102,6 +11137,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "SWASTIKAIN.NS",
+      "name": "Swastika Infra Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "SWELECTES.NS",
       "name": "Swelect Energy Systems Limited",
       "exchange": "NSE"
@@ -12079,6 +12119,11 @@
     {
       "ticker": "VARDMNPOLY.NS",
       "name": "Vardhman Polytex Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "VARMORA.NS",
+      "name": "Varmora Granito Limited",
       "exchange": "NSE"
     },
     {
