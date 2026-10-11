@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-10-04T07:47:28.701Z",
+  "generated_at": "2026-10-11T08:19:02.747Z",
   "list_source": "NSE archives EQUITY_L",
   "seed_fallback_used": false,
   "list_attempts": [
     {
       "name": "NSE archives EQUITY_L",
       "status": 200,
-      "rows": 2567
+      "rows": 2574
     }
   ],
-  "total": 2567,
+  "total": 2574,
   "by_exchange": {
-    "NSE": 2567
+    "NSE": 2574
   },
   "note": "Candidate list (no coverage-probe). Coverage is determined by the batch scrape; see dcf-metadata.json.",
-  "ms": 675,
+  "ms": 505,
   "tickers": [
     {
       "ticker": "20MICRONS.NS",
@@ -229,6 +229,11 @@
     {
       "ticker": "ACEINTEG.NS",
       "name": "Ace Integrated Solutions Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "ACEVECTOR.NS",
+      "name": "AceVector Limited",
       "exchange": "NSE"
     },
     {
@@ -449,6 +454,11 @@
     {
       "ticker": "AGL.NS",
       "name": "Allcargo Global Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "AGOL.NS",
+      "name": "Ashapuri Gold Ornament Limited",
       "exchange": "NSE"
     },
     {
@@ -1627,6 +1637,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "BELDING.NS",
+      "name": "Belding India Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "BELLACASA.NS",
       "name": "Bella Casa Fashion & Retail Limited",
       "exchange": "NSE"
@@ -2227,11 +2242,6 @@
       "exchange": "NSE"
     },
     {
-      "ticker": "CENTEXT-RE.NS",
-      "name": "Century Extrusions Limited-RE",
-      "exchange": "NSE"
-    },
-    {
       "ticker": "CENTEXT.NS",
       "name": "Century Extrusions Limited",
       "exchange": "NSE"
@@ -2619,11 +2629,6 @@
     {
       "ticker": "CROWN.NS",
       "name": "Crown Lifters Limited",
-      "exchange": "NSE"
-    },
-    {
-      "ticker": "CRSL.NS",
-      "name": "Cressanda Railway Solutions Limited",
       "exchange": "NSE"
     },
     {
@@ -3949,6 +3954,11 @@
     {
       "ticker": "GEOJITFSL.NS",
       "name": "Geojit Financial Services Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "GERMAN.NS",
+      "name": "German Green Steel and Power Limited",
       "exchange": "NSE"
     },
     {
@@ -7612,6 +7622,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "NATCO-RE.NS",
+      "name": "Natco Pharma Limited-RE",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "NATCOPHARM.NS",
       "name": "Natco Pharma Limited",
       "exchange": "NSE"
@@ -7912,6 +7927,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "NITYAS.NS",
+      "name": "Nityas Gems and Jewellery Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "NIVABUPA.NS",
       "name": "Niva Bupa Health Insurance Company Limited",
       "exchange": "NSE"
@@ -8202,6 +8222,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "ORIENTCABL.NS",
+      "name": "Orient Cables (India) Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "ORIENTCEM.NS",
       "name": "Orient Cement Limited",
       "exchange": "NSE"
@@ -8254,11 +8279,6 @@
     {
       "ticker": "ORTINGLOBE.NS",
       "name": "ORTIN GLOBAL LIMITED",
-      "exchange": "NSE"
-    },
-    {
-      "ticker": "OSIAHYPER.NS",
-      "name": "Osia Hyper Retail Limited",
       "exchange": "NSE"
     },
     {
@@ -9592,6 +9612,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "RUNWALENTR.NS",
+      "name": "Runwal Enterprises Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "RUPA.NS",
       "name": "Rupa & Company Limited",
       "exchange": "NSE"
@@ -10094,6 +10119,11 @@
     {
       "ticker": "SHAHALLOYS.NS",
       "name": "Shah Alloys Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "SHAHINVEST.NS",
+      "name": "Shah Investor's Home Limited",
       "exchange": "NSE"
     },
     {
@@ -10714,6 +10744,11 @@
     {
       "ticker": "SRIKPRIND.NS",
       "name": "Sri KPR Industries Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "SRIT.NS",
+      "name": "SRIT India Limited",
       "exchange": "NSE"
     },
     {
@@ -12447,6 +12482,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "VNL.NS",
+      "name": "Vishal Nirmiti Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "VOEPL.NS",
       "name": "Virtuoso Optoelectronics Limited",
       "exchange": "NSE"
@@ -12549,11 +12589,6 @@
     {
       "ticker": "WANBURY.NS",
       "name": "Wanbury Limited",
-      "exchange": "NSE"
-    },
-    {
-      "ticker": "WARDINMOBI.NS",
-      "name": "Wardwizard Innovations & Mobility Limited",
       "exchange": "NSE"
     },
     {
