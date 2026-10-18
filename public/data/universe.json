@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-10-11T08:19:02.747Z",
+  "generated_at": "2026-10-18T06:58:35.000Z",
   "list_source": "NSE archives EQUITY_L",
   "seed_fallback_used": false,
   "list_attempts": [
     {
       "name": "NSE archives EQUITY_L",
       "status": 200,
-      "rows": 2574
+      "rows": 2575
     }
   ],
-  "total": 2574,
+  "total": 2575,
   "by_exchange": {
-    "NSE": 2574
+    "NSE": 2575
   },
   "note": "Candidate list (no coverage-probe). Coverage is determined by the batch scrape; see dcf-metadata.json.",
-  "ms": 505,
+  "ms": 719,
   "tickers": [
     {
       "ticker": "20MICRONS.NS",
@@ -1882,6 +1882,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "BLUECHIP.NS",
+      "name": "Blue Chip India Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "BLUECLOUDS.NS",
       "name": "Blue Cloud Softech Solutions Limited",
       "exchange": "NSE"
@@ -2179,11 +2184,6 @@
     {
       "ticker": "CASTROLIND.NS",
       "name": "Castrol India Limited",
-      "exchange": "NSE"
-    },
-    {
-      "ticker": "CCAVENUE.NS",
-      "name": "AvenuesAI Limited",
       "exchange": "NSE"
     },
     {
@@ -3969,11 +3969,6 @@
     {
       "ticker": "GFLLIMITED.NS",
       "name": "GFL Limited",
-      "exchange": "NSE"
-    },
-    {
-      "ticker": "GFSTEELS.NS",
-      "name": "Grand Foundry Limited",
       "exchange": "NSE"
     },
     {
@@ -11587,6 +11582,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "TIKONA.NS",
+      "name": "Tikona Communication Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "TIL.NS",
       "name": "TIL Limited",
       "exchange": "NSE"
@@ -11794,6 +11794,11 @@
     {
       "ticker": "TRIVENI.NS",
       "name": "Triveni Engineering & Industries Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "TRIVENIPT.NS",
+      "name": "Triveni Power Transmission Limited",
       "exchange": "NSE"
     },
     {
