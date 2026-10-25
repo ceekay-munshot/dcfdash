@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-10-18T06:58:35.000Z",
+  "generated_at": "2026-10-25T07:17:24.375Z",
   "list_source": "NSE archives EQUITY_L",
   "seed_fallback_used": false,
   "list_attempts": [
     {
       "name": "NSE archives EQUITY_L",
       "status": 200,
-      "rows": 2575
+      "rows": 2580
     }
   ],
-  "total": 2575,
+  "total": 2580,
   "by_exchange": {
-    "NSE": 2575
+    "NSE": 2580
   },
   "note": "Candidate list (no coverage-probe). Coverage is determined by the batch scrape; see dcf-metadata.json.",
-  "ms": 719,
+  "ms": 1314,
   "tickers": [
     {
       "ticker": "20MICRONS.NS",
@@ -1952,6 +1952,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "BONFIG.NS",
+      "name": "Bonfiglioli Transmissions Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "BONLON.NS",
       "name": "Bonlon Industries Limited",
       "exchange": "NSE"
@@ -2184,6 +2189,11 @@
     {
       "ticker": "CASTROLIND.NS",
       "name": "Castrol India Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "CCAVENUE.NS",
+      "name": "AvenuesAI Limited",
       "exchange": "NSE"
     },
     {
@@ -3797,6 +3807,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "FUSIONCX.NS",
+      "name": "Fusion CX Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "GABRIEL.NS",
       "name": "Gabriel India Limited",
       "exchange": "NSE"
@@ -4497,11 +4512,6 @@
       "exchange": "NSE"
     },
     {
-      "ticker": "HAMPTON.NS",
-      "name": "Hampton Sky Realty Limited",
-      "exchange": "NSE"
-    },
-    {
       "ticker": "HAPPSTMNDS.NS",
       "name": "Happiest Minds Technologies Limited",
       "exchange": "NSE"
@@ -4619,6 +4629,11 @@
     {
       "ticker": "HDFCLIFE.NS",
       "name": "HDFC Life Insurance Company Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "HDFIRE.NS",
+      "name": "HD Fire Protect Limited",
       "exchange": "NSE"
     },
     {
@@ -4952,8 +4967,8 @@
       "exchange": "NSE"
     },
     {
-      "ticker": "ICICIPRULI.NS",
-      "name": "ICICI Prudential Life Insurance Company Limited",
+      "ticker": "ICICILIFE.NS",
+      "name": "ICICI Life Insurance Limited",
       "exchange": "NSE"
     },
     {
@@ -5044,6 +5059,11 @@
     {
       "ticker": "IIFLCAPS.NS",
       "name": "IIFL Capital Services Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "IIRM.NS",
+      "name": "IIRM Holdings India Limited",
       "exchange": "NSE"
     },
     {
@@ -7617,11 +7637,6 @@
       "exchange": "NSE"
     },
     {
-      "ticker": "NATCO-RE.NS",
-      "name": "Natco Pharma Limited-RE",
-      "exchange": "NSE"
-    },
-    {
       "ticker": "NATCOPHARM.NS",
       "name": "Natco Pharma Limited",
       "exchange": "NSE"
@@ -8092,6 +8107,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "OLAELEC-RE.NS",
+      "name": "Ola Electric Mobility Ltd-RE",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "OLAELEC.NS",
       "name": "Ola Electric Mobility Limited",
       "exchange": "NSE"
@@ -8409,11 +8429,6 @@
     {
       "ticker": "PARNAXLAB.NS",
       "name": "Parnax Lab Limited",
-      "exchange": "NSE"
-    },
-    {
-      "ticker": "PARSVNATH.NS",
-      "name": "Parsvnath Developers Limited",
       "exchange": "NSE"
     },
     {
@@ -10562,6 +10577,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "SMT.NS",
+      "name": "Sahajanand Medical Technologies Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "SNOWMAN.NS",
       "name": "Snowman Logistics Limited",
       "exchange": "NSE"
@@ -11682,6 +11702,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "TONBO.NS",
+      "name": "Tonbo Imaging India Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "TORNTPHARM.NS",
       "name": "Torrent Pharmaceuticals Limited",
       "exchange": "NSE"
@@ -12447,11 +12472,6 @@
       "exchange": "NSE"
     },
     {
-      "ticker": "VIVIMEDLAB.NS",
-      "name": "Vivimed Labs Limited",
-      "exchange": "NSE"
-    },
-    {
       "ticker": "VIVOBIOT.NS",
       "name": "Vivo Bio Tech Limited",
       "exchange": "NSE"
@@ -12834,6 +12854,11 @@
     {
       "ticker": "ZENTEC.NS",
       "name": "Zen Technologies Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "ZETWERK.NS",
+      "name": "Zetwerk Manufacturing Businesses Limited",
       "exchange": "NSE"
     },
     {
