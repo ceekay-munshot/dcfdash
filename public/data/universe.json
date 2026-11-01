@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-10-25T07:17:24.375Z",
+  "generated_at": "2026-11-01T08:44:17.853Z",
   "list_source": "NSE archives EQUITY_L",
   "seed_fallback_used": false,
   "list_attempts": [
     {
       "name": "NSE archives EQUITY_L",
       "status": 200,
-      "rows": 2580
+      "rows": 2587
     }
   ],
-  "total": 2580,
+  "total": 2587,
   "by_exchange": {
-    "NSE": 2580
+    "NSE": 2587
   },
   "note": "Candidate list (no coverage-probe). Coverage is determined by the batch scrape; see dcf-metadata.json.",
-  "ms": 1314,
+  "ms": 872,
   "tickers": [
     {
       "ticker": "20MICRONS.NS",
@@ -939,6 +939,11 @@
     {
       "ticker": "ARFIN.NS",
       "name": "Arfin India Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "ARHAM.NS",
+      "name": "Arham Technologies Limited",
       "exchange": "NSE"
     },
     {
@@ -1949,6 +1954,11 @@
     {
       "ticker": "BOMDYEING.NS",
       "name": "Bombay Dyeing & Mfg Company Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "BONDADA.NS",
+      "name": "Bondada Engineering Limited",
       "exchange": "NSE"
     },
     {
@@ -5257,6 +5267,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "INDTONER.NS",
+      "name": "Indian Toners & Developers Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "INDUSINDBK.NS",
       "name": "IndusInd Bank Limited",
       "exchange": "NSE"
@@ -5717,6 +5732,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "JPL.NS",
+      "name": "Jio Platforms Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "JPOLYINVST.NS",
       "name": "Jindal Poly Investment and Finance Company Limited",
       "exchange": "NSE"
@@ -6069,6 +6089,11 @@
     {
       "ticker": "KHANDSE.NS",
       "name": "Khandwala Securities Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "KHAZANCHI.NS",
+      "name": "Khazanchi Jewellers Limited",
       "exchange": "NSE"
     },
     {
@@ -8107,11 +8132,6 @@
       "exchange": "NSE"
     },
     {
-      "ticker": "OLAELEC-RE.NS",
-      "name": "Ola Electric Mobility Ltd-RE",
-      "exchange": "NSE"
-    },
-    {
       "ticker": "OLAELEC.NS",
       "name": "Ola Electric Mobility Limited",
       "exchange": "NSE"
@@ -8404,6 +8424,11 @@
     {
       "ticker": "PARAS.NS",
       "name": "Paras Defence and Space Technologies Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "PARASHLTH.NS",
+      "name": "Paras Healthcare Limited",
       "exchange": "NSE"
     },
     {
@@ -10262,6 +10287,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "SHIVAM-RE1.NS",
+      "name": "Shivam Autotech Ltd-RE",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "SHIVAMAUTO.NS",
       "name": "Shivam Autotech Limited",
       "exchange": "NSE"
@@ -10924,6 +10954,11 @@
     {
       "ticker": "SUDARSCHEM.NS",
       "name": "Sudarshan Chemical Industries Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "SUDARSHAN.NS",
+      "name": "Sudarshan Pharma Industries Limited",
       "exchange": "NSE"
     },
     {
