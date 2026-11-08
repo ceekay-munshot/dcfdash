@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-11-01T08:44:17.853Z",
+  "generated_at": "2026-11-08T08:37:43.737Z",
   "list_source": "NSE archives EQUITY_L",
   "seed_fallback_used": false,
   "list_attempts": [
     {
       "name": "NSE archives EQUITY_L",
       "status": 200,
-      "rows": 2587
+      "rows": 2598
     }
   ],
-  "total": 2587,
+  "total": 2598,
   "by_exchange": {
-    "NSE": 2587
+    "NSE": 2598
   },
   "note": "Candidate list (no coverage-probe). Coverage is determined by the batch scrape; see dcf-metadata.json.",
-  "ms": 872,
+  "ms": 568,
   "tickers": [
     {
       "ticker": "20MICRONS.NS",
@@ -162,8 +162,8 @@
       "exchange": "NSE"
     },
     {
-      "ticker": "ABCOTS.NS",
-      "name": "A B Cotspin India Limited",
+      "ticker": "ABCIND.NS",
+      "name": "ABC Industries India Limited",
       "exchange": "NSE"
     },
     {
@@ -1382,6 +1382,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "BAHETI.NS",
+      "name": "Baheti Recycling Industries Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "BAIDFIN.NS",
       "name": "Baid Finserv Limited",
       "exchange": "NSE"
@@ -1609,6 +1614,11 @@
     {
       "ticker": "BCPL.NS",
       "name": "BCPL Railway Infrastructure Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "BCSSL.NS",
+      "name": "Bombay Coated and Special Steels Limited",
       "exchange": "NSE"
     },
     {
@@ -1887,6 +1897,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "BLSPOLY.NS",
+      "name": "BLS Polymers Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "BLUECHIP.NS",
       "name": "Blue Chip India Limited",
       "exchange": "NSE"
@@ -2034,6 +2049,11 @@
     {
       "ticker": "BRIGHTBR.NS",
       "name": "Bright Brothers Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "BRIGHTOUTD.NS",
+      "name": "Bright Outdoor Media Limited",
       "exchange": "NSE"
     },
     {
@@ -3267,6 +3287,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "EDELALTS.NS",
+      "name": "EAAA India Alternatives Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "EDELWEISS.NS",
       "name": "Edelweiss Financial Services Limited",
       "exchange": "NSE"
@@ -3477,6 +3502,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "ENNATURE.NS",
+      "name": "Ennature Bio Pharma Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "ENRIN.NS",
       "name": "Siemens Energy India Limited",
       "exchange": "NSE"
@@ -3594,6 +3624,11 @@
     {
       "ticker": "EVERESTIND.NS",
       "name": "Everest Industries Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "EVONILE.NS",
+      "name": "Evonile Pharma Limited",
       "exchange": "NSE"
     },
     {
@@ -5054,6 +5089,11 @@
     {
       "ticker": "IGL.NS",
       "name": "Indraprastha Gas Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "IGLSPIRITS.NS",
+      "name": "IGL Spirits Limited",
       "exchange": "NSE"
     },
     {
@@ -7187,6 +7227,11 @@
       "exchange": "NSE"
     },
     {
+      "ticker": "MELSTAR.NS",
+      "name": "Melstar Information Technologies Limited",
+      "exchange": "NSE"
+    },
+    {
       "ticker": "MENNPIS.NS",
       "name": "Menon Pistons Limited",
       "exchange": "NSE"
@@ -7309,6 +7354,11 @@
     {
       "ticker": "MKEXIM.NS",
       "name": "M.K. Exim (India) Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "MKJEWELS.NS",
+      "name": "M. K. Sons Fine Jewels Limited",
       "exchange": "NSE"
     },
     {
@@ -8009,11 +8059,6 @@
     {
       "ticker": "NOVAAGRI.NS",
       "name": "Nova Agritech Limited",
-      "exchange": "NSE"
-    },
-    {
-      "ticker": "NOVARTIND.NS",
-      "name": "Novartis India Limited",
       "exchange": "NSE"
     },
     {
@@ -10104,6 +10149,11 @@
     {
       "ticker": "SEYAIND.NS",
       "name": "Seya Industries Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "SFCTECH.NS",
+      "name": "SFC Environmental Technologies Limited",
       "exchange": "NSE"
     },
     {
@@ -12274,6 +12324,11 @@
     {
       "ticker": "VEEDOL.NS",
       "name": "Veedol Corporation Limited",
+      "exchange": "NSE"
+    },
+    {
+      "ticker": "VEEFIN.NS",
+      "name": "Veefin Solutions Limited",
       "exchange": "NSE"
     },
     {
